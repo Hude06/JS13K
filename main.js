@@ -18,23 +18,45 @@ const particleEngine = new ParticleEngine(globals.ctx, {
     count: 50,
     duration: 0.25 // 2 seconds
 });
+const GameLevel1 = [
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+]
+// function CreateGameLevel(LevelHEIGHT, LevelWIDTH) {
+//     let GameLevel1 = [];
 
-function CreateGameLevel(LevelHEIGHT, LevelWIDTH) {
-    let GameLevel1 = [];
-
-    for (let i = 0; i < LevelHEIGHT; i++) {
-        const row = [];
-        for (let j = 0; j < LevelWIDTH; j++) {
-            let rando = Math.floor(Math.random() * 4);
-            row.push(rando);
-        }
-        GameLevel1.push(row);
-    }
+//     for (let i = 0; i < LevelHEIGHT; i++) {
+//         const row = [];
+//         for (let j = 0; j < LevelWIDTH; j++) {
+//             let rando = Math.floor(Math.random() * 4);
+//             row.push(rando);
+//         }
+//         GameLevel1.push(row);
+//     }
     
-
-    return GameLevel1; // Return the generated level data
-}
-let level1 = new Level(globals.blocks, CreateGameLevel(LevelHEIGHT, LevelWIDTH));
+//     console.log(GameLevel1)
+//     return GameLevel1; // Return the generated level data
+// }
+let level1 = new Level(globals.blocks,GameLevel1);
 function keyboardInit() {
     window.addEventListener("keydown", (e) => {
         globals.currentKey.set(e.key, true);
@@ -50,7 +72,7 @@ function loop() {
     globals.ctx.save()
     globals.ctx.translate(-globals.SCROLLX, -globals.SCROLLY);
     particleEngine.update(0.01);
-    player.update(globals.currentKey,globals.blocks);
+    player.update(globals.currentKey,level1);
     //DRAWING
     particleEngine.draw();
     globals.bullets.forEach(bullet => {
