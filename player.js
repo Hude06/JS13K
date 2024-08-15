@@ -28,14 +28,10 @@ export class Player {
         this.speed = 3;
         this.jumpHeight = 4;
         this.isJumping = false;
-        this.isCollidingDown = false;
         this.direction = 1;
         //1 = right
         //0 = left
-        this.ableToShoot = true;
         this.timeLeft = 0;
-        this.KnockBack = 50;
-        this.velocityX = 0;
         this.collidingDirection = '';
     }
     init() {
