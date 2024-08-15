@@ -3,6 +3,12 @@ export class Point {
     this.x = x;
     this.y = y;
   }
+  floor() {
+    return new Point(Math.floor(this.x), Math.floor(this.y));
+  }
+  add(x,y) {
+    return new Point(this.x + x, this.y + y);
+  }
 }
 export class Rect {
   constructor(x, y, w, h) {

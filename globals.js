@@ -9,5 +9,6 @@ export class Globals {
         this.bullets = [];
         this.mouseClicked = false
         this.BLOCKSIZE = 32;
+        this.debugBlocks = []
     }
 }

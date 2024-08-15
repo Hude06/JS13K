@@ -1,8 +1,5 @@
 import { Rect } from "./JudeUtils.js";
 const BLOCKSIZE = 32;
-class LevelGenerator {
-
-}
 export class Block {
     constructor(x,y,WHATBlockAmI) {
         this.bounds = new Rect(x, y, BLOCKSIZE, BLOCKSIZE);
@@ -25,6 +22,20 @@ export class Level {
     this.level = l;
     this.x = 1;
     this.y = 1;
+  }
+
+  get(tileIndex) {
+    // Extract x and y coordinates from the tileIndex object
+    let x = tileIndex.x;
+    let y = tileIndex.y;
+    // Find the block corresponding to this tile value
+    for (let block of this.blocks) {
+      // Check if the block's position matches the tile index
+      if (block.bounds.x === x * BLOCKSIZE && block.bounds.y === y * BLOCKSIZE) {
+        return block;
+      }
+    }
+      return null; // Return null or an appropriate default value if block not found
   }
 
   init() {
