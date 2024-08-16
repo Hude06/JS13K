@@ -3,22 +3,19 @@ import { globals } from "../main.js";
 import {zzfx} from "../Utils/globals.js"
 
 class Bullet {
-    constructor(gunSpeed, direction, x, y) {
+    constructor(gunSpeed, directionX,directionY, x, y) {
         this.visible = true;
         this.speed = gunSpeed
         this.x = x;
         this.y = y;
-        this.direction = direction;
+        this.directionX = directionX;
+        this.directionY = directionY;
     }
     update(ctx) {
         ctx.fillStyle = "white"
         ctx.fillRect(this.x, this.y, 5, 5);
-        if (this.direction >= 0) {
-            this.x += this.speed;
-        }
-        if (this.direction < 0) {
-            this.x -= this.speed;
-        }
+        this.x += this.directionX * this.speed;
+        this.y += this.directionY * this.speed;        
     }
 
 }
@@ -28,28 +25,54 @@ class Gun {
         this.gunSpeed = 10;
         this.direction = direction;
         this.pos = new Point(x, y);
-        this.width = 30
+        this.width = 40
         this.height = 10;
+        this.angle = 10;
+        this.directionX = 0;
+        this.directionY = 0;
     }
     shoot() {
         if (this.timeLeft <= 0) {
+
             zzfx(...[2.04,,475,.01,.03,.06,4,1.9,-8.7,,,,.09,,36,.2,.17,.67,.04]); // Shoot 118
-            globals.bullets.push(new Bullet(this.gunSpeed, this.direction, this.pos.x, this.pos.y));
+            this.directionX = Math.cos(this.angle);
+            this.directionY = Math.sin(this.angle);
+            globals.bullets.push(new Bullet(this.gunSpeed, this.directionX,this.directionY, this.pos.x, this.pos.y));
             this.timeLeft = 10;
         }
     }
-    draw(x,y,direction) {
+    draw(x, y, direction) {
+        this.timeLeft -= 0.5;
         this.pos.x = x;
         this.pos.y = y;
-        this.direction = direction
+        this.direction = direction;
+    
+        // Calculate the angle between the gun and the mouse
+        const dx = globals.mouseX - this.pos.x;
+        const dy = globals.mouseY - this.pos.y;
+        this.angle = Math.atan2(dy, dx);
+    
+        // Calculate the center and offsets
+        const centerX = this.pos.x + this.width / 2;
+        const centerY = this.pos.y + this.height / 2;
+        const offsetX = this.width / 2;
+        const offsetY = this.height / 2;
+    
+        // Save the current canvas state
+        globals.ctx.save();
+    
+        // Translate the context to the center of the gun
+        globals.ctx.translate(centerX, centerY);
+    
+        // Rotate the context around the center
+        globals.ctx.rotate(this.angle);
+    
+        // Draw the gun, adjusted to be centered around the new origin
         globals.ctx.fillStyle = "blue";
-        if (this.direction >= 0) {
-            globals.ctx.fillRect((this.pos.x+75) - this.width, this.pos.y, this.width, this.height);
-        }
-        if (this.direction < 0) {
-            globals.ctx.fillRect(this.pos.x-50, this.pos.y, this.width, this.height);
-        }
-        this.timeLeft -= 0.3;
+        globals.ctx.fillRect(0, 0, this.width, this.height);
+    
+        // Restore the canvas state to its original
+        globals.ctx.restore();
     }
 }
 export class Player {
@@ -70,9 +93,9 @@ export class Player {
 
     }
     draw(ctx) {
+        this.gun.draw(this.bounds.x,this.bounds.y,this.Xvelocity);
         ctx.fillStyle = "red";
         ctx.fillRect(this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
-        this.gun.draw(this.bounds.x,this.bounds.y,this.Xvelocity);
         ctx.strokeStyle = "yellow";
         ctx.lineWidth = 2;
         ctx.strokeRect(this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h)

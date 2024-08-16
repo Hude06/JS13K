@@ -18,6 +18,10 @@ globals.canvas.addEventListener("mousedown", (_) => {
 globals.canvas.addEventListener("mouseup", (_) => {
     globals.mouseClicked = false;
 })
+globals.canvas.addEventListener("mousemove", (e) => {
+    globals.mouseX = e.clientX;
+    globals.mouseY = e.clientY;
+})
 const particleEngine = new ParticleEngine(globals.ctx, {
     color: 'red',
     size: 3,

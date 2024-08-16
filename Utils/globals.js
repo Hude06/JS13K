@@ -12,6 +12,8 @@ export class Globals {
         this.BLOCKSIZE = 32;
         this.debugBlocks = []
         this.boss = null;
+        this.mouseX = 0;
+        this.mouseY = 0;
 
         
     }
