@@ -11,7 +11,7 @@ class Bullet {
     update(ctx) {
         ctx.fillStyle = "white"
         ctx.fillRect(this.x, this.y, 5, 5);
-        if (this.direction > 0) {
+        if (this.direction >= 0) {
             this.x += this.speed;
         }
         if (this.direction < 0) {
@@ -40,7 +40,7 @@ class Gun {
         this.pos.y = y;
         this.direction = direction
         globals.ctx.fillStyle = "blue";
-        if (this.direction > 0) {
+        if (this.direction >= 0) {
             globals.ctx.fillRect((this.pos.x+75) - this.width, this.pos.y, this.width, this.height);
         }
         if (this.direction < 0) {

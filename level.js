@@ -8,13 +8,13 @@ export class Block {
         this.tileSet.src = "./Tileset.png";
         this.WHATBlockAmI = WHATBlockAmI
     }
-    draw(ctx) {
+    draw(ctx,r,g,b) {
       ctx.imageSmoothingEnabled = false;
       if (this.WHATBlockAmI == 1) {
           ctx.drawImage(this.tileSet, 32, 8, 8, 8, this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
           ctx.save()
           ctx.globalCompositeOperation = 'source-atop'; 
-          ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+          ctx.fillStyle = 'rgba(' + r + ', ' + g + ', ' + b + ', 0.5)';
           ctx.fillRect(this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
 
           ctx.restore();
