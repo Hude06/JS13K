@@ -7,7 +7,7 @@ export class Boss {
         this.gravity = 0.27;
         this.Yvelocity = 0;
         this.Xvelocity = 0;
-        this.speed = 1;
+        this.speed = 2;
         this.jumpHeight = 3;
         this.grounded = false;
         this.player = follow;
@@ -25,42 +25,44 @@ export class Boss {
         const left_tile2 = level.get(tileIndex.add(0, 1));
         let bottom1 = level.get(tileIndex.add(0, 1));
         const bottom2 = level.get(tileIndex.add(1, 1));
-        globals.debugBlocks.push(right_tile1)
-        globals.debugBlocks.push(right_tile2)
-        globals.debugBlocks.push(left_tile1)
-        globals.debugBlocks.push(left_tile2)
-        globals.debugBlocks.push(bottom1)
-        globals.debugBlocks.push(bottom2)
-        this.isGrounded = bottom1.WHATBlockAmI == 1 || bottom2.WHATBlockAmI == 1;
+        //HORIZONTAL ALIGNMENT
+        if(right_tile1.WHATBlockAmI == 1 && right_tile2.WHATBlockAmI == 1) {
+            this.bounds.x = tileIndex.x * 32;
+            this.Xvelocity = 0
+            this.isGrounded = bottom1.WHATBlockAmI == 1;
+
+        } else if(left_tile1.WHATBlockAmI == 1 && left_tile2.WHATBlockAmI == 1) {
+            this.bounds.x = ((tileIndex.x+1)*32)
+            this.Xvelocity = 0
+            console.log("left")
+            this.isGrounded = bottom2.WHATBlockAmI == 1;
+        } else {
+            this.isGrounded = bottom1.WHATBlockAmI == 1 || bottom2.WHATBlockAmI == 1;
+        }
         if (this.isGrounded) {
             this.grounded = true;
             this.Yvelocity = 0;
             this.ableToJump = true;
             this.bounds.y = (tileIndex.y) * 32; // Adjust player position to sit on the top of the tile
-            //VERICAL ALIGNMENT
+            //VERICAL ALIGNMENTad
         } else {
             this.grounded = false;
-            this.Yvelocity += this.gravity;
+            this.applyGravity();
         }
-
-        //HORIZONTAL ALIGNMENT
-        if(right_tile1.WHATBlockAmI == 1 && right_tile2.WHATBlockAmI == 1) {
-            this.bounds.x = tileIndex.x * 32;
-            this.Xvelocity = 0
-        }
-        if(left_tile1.WHATBlockAmI == 1 && left_tile2.WHATBlockAmI == 1) {
-            this.bounds.x = ((tileIndex.x+1)*32)
-            this.Xvelocity = 0
-        }
-        this.bounds.x += this.Xvelocity;
-        if (this.bounds.x < this.player.bounds.x) {
-            this.Xvelocity = this.speed;
-        } else {
-            this.Xvelocity = -this.speed;
-        }
+        this.followPlayer();
         if (this.bounds.y > this.player.bounds.y) {
             this.jump();
         }
+    }
+    followPlayer() {
+        if (this.player.bounds.x > this.bounds.x) {
+            this.Xvelocity = this.speed;
+        } else {
+            this.Xvelocity = -this.speed
+        }
+    }
+    applyGravity() {
+        this.Yvelocity += this.gravity;
     }
     jump() {
         if (this.grounded) {
