@@ -1,0 +1,75 @@
+import { globals } from "./main.js";
+import { Rect, Point } from "./JudeUtils.js";
+
+export class Boss {
+    constructor(follow) {
+        this.bounds = new Rect(200, 200, 30, 30);
+        this.gravity = 0.27;
+        this.Yvelocity = 0;
+        this.Xvelocity = 0;
+        this.speed = 1;
+        this.jumpHeight = 3;
+        this.grounded = false;
+        this.player = follow;
+    }
+    update(level) {
+        this.bounds.y += this.Yvelocity;
+        this.bounds.x += this.Xvelocity;
+        const tileX = Math.floor(this.bounds.x / 32);
+        const tileY = Math.floor(this.bounds.y / 32);
+        const tileIndex = new Point(tileX, tileY);
+        const tileContents = level.get(tileIndex)
+        const right_tile1 = level.get(tileIndex.add(1, 0));
+        const right_tile2 = level.get(tileIndex.add(1, 1));
+        const left_tile1 = level.get(tileIndex.add(0, 0));
+        const left_tile2 = level.get(tileIndex.add(0, 1));
+        let bottom1 = level.get(tileIndex.add(0, 1));
+        const bottom2 = level.get(tileIndex.add(1, 1));
+        globals.debugBlocks.push(right_tile1)
+        globals.debugBlocks.push(right_tile2)
+        globals.debugBlocks.push(left_tile1)
+        globals.debugBlocks.push(left_tile2)
+        globals.debugBlocks.push(bottom1)
+        globals.debugBlocks.push(bottom2)
+        this.isGrounded = bottom1.WHATBlockAmI == 1 || bottom2.WHATBlockAmI == 1;
+        if (this.isGrounded) {
+            this.grounded = true;
+            this.Yvelocity = 0;
+            this.ableToJump = true;
+            this.bounds.y = (tileIndex.y) * 32; // Adjust player position to sit on the top of the tile
+            //VERICAL ALIGNMENT
+        } else {
+            this.grounded = false;
+            this.Yvelocity += this.gravity;
+        }
+
+        //HORIZONTAL ALIGNMENT
+        if(right_tile1.WHATBlockAmI == 1 && right_tile2.WHATBlockAmI == 1) {
+            this.bounds.x = tileIndex.x * 32;
+            this.Xvelocity = 0
+        }
+        if(left_tile1.WHATBlockAmI == 1 && left_tile2.WHATBlockAmI == 1) {
+            this.bounds.x = ((tileIndex.x+1)*32)
+            this.Xvelocity = 0
+        }
+        this.bounds.x += this.Xvelocity;
+        if (this.bounds.x < this.player.bounds.x) {
+            this.Xvelocity = this.speed;
+        } else {
+            this.Xvelocity = -this.speed;
+        }
+        if (this.bounds.y > this.player.bounds.y) {
+            this.jump();
+        }
+    }
+    jump() {
+        if (this.grounded) {
+            this.Yvelocity -= this.jumpHeight;
+            this.grounded = false;
+        }
+    }
+    draw() {
+        globals.ctx.fillStyle = "red";
+        globals.ctx.fillRect(this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
+    }
+}

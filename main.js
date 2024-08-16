@@ -2,9 +2,14 @@ import {Player} from './player.js';
 import {Level} from './level.js';
 import {Globals} from './globals.js';
 import { ParticleEngine } from './particalEngine.js';
+import { Boss } from './boss.js';
+import {zzfx} from "./globals.js"
+
 export let globals = new Globals();
+
 let player = new Player();
 var stats = new Stats();
+globals.boss = new Boss(player);
 stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild( stats.dom );
 globals.canvas.addEventListener("mousedown", (_) => {
@@ -115,10 +120,13 @@ function loop() {
         }
     }
     for (let i = 0; i < globals.blocks.length; i++) {
-        console.log(currentLevel.tint.r)
         globals.blocks[i].draw(globals.ctx,currentLevel.tint.r,currentLevel.tint.g,currentLevel.tint.b);
     }
     player.draw(globals.ctx,particleEngine);
+    if (globals.boss != null) {
+        globals.boss.update(level1);
+        globals.boss.draw();
+    }
     globals.SCROLLX = (player.bounds.x - canvas.width/2)/1.4;
     globals.ctx.restore();
     stats.end();

@@ -1,5 +1,7 @@
 import { Rect,Point } from "./JudeUtils.js";
 import { globals } from "./main.js";
+import {zzfx} from "./globals.js"
+
 class Bullet {
     constructor(gunSpeed, direction, x, y) {
         this.visible = true;
@@ -30,6 +32,7 @@ class Gun {
         this.height = 10;
     }
     shoot() {
+        zzfx(...[2.04,,475,.01,.03,.06,4,1.9,-8.7,,,,.09,,36,.2,.17,.67,.04]); // Shoot 118
         if (this.timeLeft <= 0) {
             globals.bullets.push(new Bullet(this.gunSpeed, this.direction, this.pos.x, this.pos.y));
             this.timeLeft = 10;
@@ -55,9 +58,9 @@ export class Player {
         this.gravity = 0.27;
         this.Yvelocity = 0;
         this.Xvelocity = 0;
-        this.speed = 1;
+        this.speed = 2;
         this.friction = 0.75;
-        this.jumpHeight = 3;
+        this.jumpHeight = 5;
         this.grounded = false;
         this.timeLeft = 0;
         this.maxSpeed = 2;
@@ -131,7 +134,6 @@ export class Player {
             this.Xvelocity = 0
             console.log("left")
         }
-        console.log("l1",left_tile1.WHATBlockAmI,"L2",left_tile2.WHATBlockAmI,"R1",right_tile1.WHATBlockAmI,"R2",right_tile2.WHATBlockAmI,"B1",bottom1.WHATBlockAmI)
         this.handleMovement(currentKey);
         this.bounds.x += this.Xvelocity;
     }
@@ -144,7 +146,6 @@ export class Player {
             this.Xvelocity += this.speed
         }
         if ((((currentKey.get(" ") || currentKey.get("ArrowUp") || currentKey.get("w")) && this.ableToJump) && this.grounded)) {
-            console.log("jump")
             this.jump();
         }
     }
