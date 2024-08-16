@@ -1,10 +1,10 @@
-import {Player} from './player.js';
-import {Level} from './level.js';
-import {Globals} from './globals.js';
-import { ParticleEngine } from './particalEngine.js';
-import { Boss } from './boss.js';
-import {zzfx} from "./globals.js"
-
+import {Player} from './Characters/player.js';
+import {Level} from './Utils/level.js';
+import {Globals} from './Utils/globals.js';
+import { ParticleEngine } from './Utils/particalEngine.js';
+import { Boss } from './Characters/boss.js';
+import {zzfx} from "./Utils/globals.js"
+import { drawText } from './Utils/font.js';
 export let globals = new Globals();
 
 let player = new Player();
@@ -58,27 +58,12 @@ const GameLevel1 = [
 const GameLevel1Options = {
     level: GameLevel1,
     tint: {
-        r: 255,
-        g: 0,
+        r: 0,
+        g: 255,
         b: 0
     }
 }
 let currentLevel = GameLevel1Options;
-// function CreateGameLevel(LevelHEIGHT, LevelWIDTH) {
-//     let GameLevel1 = [];
-
-//     for (let i = 0; i < LevelHEIGHT; i++) {
-//         const row = [];
-//         for (let j = 0; j < LevelWIDTH; j++) {
-//             let rando = Math.floor(Math.random() * 4);
-//             row.push(rando);
-//         }
-//         GameLevel1.push(row);
-//     }
-    
-//     console.log(GameLevel1)
-//     return GameLevel1; // Return the generated level data
-// }
 let level1 = new Level(globals.blocks,currentLevel.level);
 function keyboardInit() {
     window.addEventListener("keydown", (e) => {
@@ -127,6 +112,7 @@ function loop() {
         globals.boss.update(level1);
         globals.boss.draw();
     }
+    drawText("LEVEL1", 350, 200, 75,1);
     globals.SCROLLX = (player.bounds.x - canvas.width/2)/1.4;
     globals.ctx.restore();
     stats.end();

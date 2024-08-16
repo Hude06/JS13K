@@ -1,6 +1,6 @@
-import { Rect,Point } from "./JudeUtils.js";
-import { globals } from "./main.js";
-import {zzfx} from "./globals.js"
+import { Rect,Point } from "../Utils/JudeUtils.js";
+import { globals } from "../main.js";
+import {zzfx} from "../Utils/globals.js"
 
 class Bullet {
     constructor(gunSpeed, direction, x, y) {
@@ -32,8 +32,8 @@ class Gun {
         this.height = 10;
     }
     shoot() {
-        zzfx(...[2.04,,475,.01,.03,.06,4,1.9,-8.7,,,,.09,,36,.2,.17,.67,.04]); // Shoot 118
         if (this.timeLeft <= 0) {
+            zzfx(...[2.04,,475,.01,.03,.06,4,1.9,-8.7,,,,.09,,36,.2,.17,.67,.04]); // Shoot 118
             globals.bullets.push(new Bullet(this.gunSpeed, this.direction, this.pos.x, this.pos.y));
             this.timeLeft = 10;
         }

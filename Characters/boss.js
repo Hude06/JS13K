@@ -1,5 +1,5 @@
-import { globals } from "./main.js";
-import { Rect, Point } from "./JudeUtils.js";
+import { globals } from "../main.js";
+import { Rect, Point } from "../Utils/JudeUtils.js";
 
 export class Boss {
     constructor(follow) {

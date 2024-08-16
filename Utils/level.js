@@ -1,11 +1,11 @@
 import { Rect } from "./JudeUtils.js";
-import { globals } from "./main.js";
+import { globals } from "../main.js";
 const BLOCKSIZE = 32;
 export class Block {
     constructor(x,y,WHATBlockAmI) {
         this.bounds = new Rect(x, y, BLOCKSIZE, BLOCKSIZE);
         this.tileSet = new Image();
-        this.tileSet.src = "./Tileset.png";
+        this.tileSet.src = "../Assets/Tileset.png";
         this.WHATBlockAmI = WHATBlockAmI
     }
     draw(ctx,r,g,b) {
