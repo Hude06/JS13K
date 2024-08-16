@@ -53,6 +53,7 @@ class Gun {
 export class Player {
     constructor() {
         this.bounds = new Rect(500, 500, 30, 30);
+        this.animator = new Point(0, 0);
         this.gravity = 0.27;
         this.Yvelocity = 0;
         this.Xvelocity = 0;
@@ -66,19 +67,25 @@ export class Player {
         this.ableToJump = false;
         this.gun = new Gun(this.Xvelocity, this.bounds.x, this.bounds.y);
         this.image = new Image();
-        this.image.src = "../Assets/Player.png";
+        this.image.src = "../Assets/Player-Sheet.png";
+        this.frameRate = 60;
+        this.frames = 0
 
     }
     draw(ctx) {
+        if (Math.round(this.Xvelocity) !== 0) {
+            this.animate();
+        }
+        console.log(this.Xvelocity)
         this.gun.update(this.Xvelocity,this.bounds.x,this.bounds.y+12);
         ctx.fillStyle = "red";
-        if (this.Xvelocity < 0) {
-            ctx.drawImage(this.image,this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
+        if (this.Xvelocity > 0) {
+            ctx.drawImage(this.image,this.animator.x,this.animator.y,16, 16, this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
+
         } else {
             ctx.save();
-            ctx.translate(this.bounds.x + this.bounds.w, this.bounds.y);
             ctx.scale(-1, 1);
-            ctx.drawImage(this.image, 0, 0, this.bounds.w, this.bounds.h);
+            ctx.drawImage(this.image,this.animator.x,this.animator.y,16, 16, -this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
             ctx.restore();
         }
         if (globals.debug) {
@@ -86,6 +93,19 @@ export class Player {
             ctx.lineWidth = 2;
             ctx.strokeRect(this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h)        
         }
+    }
+    animate() {
+        this.frames += this.frameRate;
+
+        if (this.frames > 500) {
+            this.animator.x = 16;
+            if (this.frames > 1000) {
+                this.frames = 0;
+            }
+        } else {
+            this.animator.x = 0;
+        }
+
     }
     
 
@@ -128,7 +148,6 @@ export class Player {
         } else if(left_tile1.WHATBlockAmI == 1 && left_tile2.WHATBlockAmI == 1) {
             this.bounds.x = ((tileIndex.x+1)*32)
             this.Xvelocity = 0
-            console.log("left")
             this.isGrounded = bottom2.WHATBlockAmI == 1;
         } else {
             this.isGrounded = bottom1.WHATBlockAmI == 1 || bottom2.WHATBlockAmI == 1;

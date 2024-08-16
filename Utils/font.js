@@ -21,11 +21,6 @@ export function drawText(text, x, y, size, color) {
     if (color === 1) {
         font.src = "../Assets/WhiteFont.png";
     }
-
-    const GridW = 7;
-    const GridH = 4;
-
-    let charY = 0;
     for (let t = 0; t < text.length; t++) {
         let newText = text[t].toLowerCase();
         let char = newText;
@@ -33,8 +28,6 @@ export function drawText(text, x, y, size, color) {
         if (getIndex(char) !== null) {
             charX = getIndex(char) // Calculate index for 'a' to 'z'
         }
-        console.log(charX)
-
         let charY = 0
         //Tint the color
         ctx.drawImage(font,((charX*5)-5)-0.1,((charY*5)),5,5,x+(t*size),y+3,size,size);
