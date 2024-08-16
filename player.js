@@ -109,9 +109,19 @@ export class Player {
         globals.debugBlocks.push(left_tile2)
         globals.debugBlocks.push(bottom1)
         globals.debugBlocks.push(bottom2)
-        this.isGrounded = bottom1.WHATBlockAmI == 1 || bottom2.WHATBlockAmI == 1;
-        if (globals.mouseClicked) {
-            this.gun.shoot();
+        //HORIZONTAL ALIGNMENT
+        if(right_tile1.WHATBlockAmI == 1 && right_tile2.WHATBlockAmI == 1) {
+            this.bounds.x = tileIndex.x * 32;
+            this.Xvelocity = 0
+            this.isGrounded = bottom1.WHATBlockAmI == 1;
+
+        } else if(left_tile1.WHATBlockAmI == 1 && left_tile2.WHATBlockAmI == 1) {
+            this.bounds.x = ((tileIndex.x+1)*32)
+            this.Xvelocity = 0
+            console.log("left")
+            this.isGrounded = bottom2.WHATBlockAmI == 1;
+        } else {
+            this.isGrounded = bottom1.WHATBlockAmI == 1 || bottom2.WHATBlockAmI == 1;
         }
         if (this.isGrounded) {
             this.grounded = true;
@@ -123,16 +133,8 @@ export class Player {
             this.grounded = false;
             this.applyGravity();
         }
-
-        //HORIZONTAL ALIGNMENT
-        if(right_tile1.WHATBlockAmI == 1 && right_tile2.WHATBlockAmI == 1) {
-            this.bounds.x = tileIndex.x * 32;
-            this.Xvelocity = 0
-        }
-        if(left_tile1.WHATBlockAmI == 1 && left_tile2.WHATBlockAmI == 1) {
-            this.bounds.x = ((tileIndex.x+1)*32)
-            this.Xvelocity = 0
-            console.log("left")
+        if (globals.mouseClicked) {
+            this.gun.shoot();
         }
         this.handleMovement(currentKey);
         this.bounds.x += this.Xvelocity;
