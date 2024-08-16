@@ -70,6 +70,7 @@ export class Player {
         this.image.src = "../Assets/Player-Sheet.png";
         this.frameRate = 60;
         this.frames = 0
+        this.health = 3;
 
     }
     draw(ctx) {
@@ -77,6 +78,9 @@ export class Player {
             this.animate();
         }
         console.log(this.Xvelocity)
+        ctx.save();
+        globals.ctx.filter = 'contrast(120%)';
+
         this.gun.update(this.Xvelocity,this.bounds.x,this.bounds.y+12);
         ctx.fillStyle = "red";
         if (this.Xvelocity > 0) {
@@ -94,6 +98,9 @@ export class Player {
             ctx.lineWidth = 2;
             ctx.strokeRect(this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h)        
         }
+        ctx.restore();
+        ctx.fillStyle = "red";
+        ctx.fillRect(200+globals.SCROLLX,25,this.health*50,20)
     }
     animate() {
         this.frames += this.frameRate;
@@ -108,14 +115,28 @@ export class Player {
         }
 
     }
-    
+    knockback(Xvelocity) {
+        if (Math.round(Xvelocity) == 0) {
+            this.bounds.x += 100;
+            this.jump()
+        } else {
+            this.bounds.x += Xvelocity*(this.speed*3);
+            this.jump();
+        }
+    }
 
-    jump() {
+    jump() {    
         this.Yvelocity = -this.jumpHeight - 2;
         this.grounded = false
         this.bounds.y -= 5
     }
-
+    collision() {
+        if (this.bounds.intersects(globals.boss.bounds)) {
+            this.health -= 0.25;
+            zzfx(...[1.98,,523,.01,.01,.07,2,1.9,-8.7,,,,.09,,36,.2,.17,.67,.04]); // Hit 118
+            this.knockback(this.Xvelocity)
+        }
+    }
     update(currentKey, level) {
         this.Xvelocity *= this.friction;
         if (this.Xvelocity > this.maxSpeed) {
@@ -168,6 +189,12 @@ export class Player {
         }
         this.handleMovement(currentKey);
         this.bounds.x += this.Xvelocity;
+        this.collision();
+        if (this.health <= 0) {
+            zzfx(...[2,,727,.01,.03,.53,3,1.39,.9,.1,,,,1.9,-44,.4,.39,.31,.12]); // Explosion 334
+            alert("Game Over");
+            globals.reset();
+        }
     }
  
     handleMovement(currentKey) {

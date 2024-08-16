@@ -3,7 +3,7 @@ export class Globals {
         this.currentKey = new Map();
         this.blocks = [];
         this.SCROLLX = 200;
-        this.debug = true;
+        this.debug = false;
         this.SCROLLY = 0;
         this.canvas = document.getElementById("canvas");
         this.ctx = this.canvas.getContext("2d");
@@ -14,9 +14,9 @@ export class Globals {
         this.mouseX = 0;
         this.mouseY = 0;
         this.BLOCKSIZE = 32;
-
-
-        
+    }
+    reset() {
+        location.reload();
     }
 }
 export let // ZzFXMicro - Zuper Zmall Zound Zynth - v1.3.1 by Frank Force ~ 1000 bytes

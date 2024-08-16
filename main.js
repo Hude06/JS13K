@@ -62,9 +62,9 @@ const GameLevel1 = [
 const GameLevel1Options = {
     level: GameLevel1,
     tint: {
-        r: 0,
-        g: 255,
-        b: 0
+        r: 145,
+        g: 144,
+        b: 144
     }
 }
 let currentLevel = GameLevel1Options;
@@ -82,6 +82,7 @@ function loop() {
     stats.begin();
     globals.debugBlocks = []
     globals.ctx.fillStyle = "black";
+    globals.ctx.imageSmoothingEnabled = false;
     globals.ctx.fillRect(0,0,canvas.width,canvas.height);
     globals.ctx.save()
     globals.ctx.scale(1.25, 1.25) // Doubles size of anything draw to canvas.

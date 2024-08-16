@@ -8,7 +8,6 @@ export class Block {
         this.WHATBlockAmI = WHATBlockAmI
     }
     draw(ctx,r,g,b) {
-      ctx.imageSmoothingEnabled = false;
       if (this.WHATBlockAmI == 1) {
           ctx.drawImage(this.tileSet, 32, 8, 8, 8, this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
           ctx.save()
