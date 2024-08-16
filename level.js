@@ -1,4 +1,5 @@
 import { Rect } from "./JudeUtils.js";
+import { globals } from "./main.js";
 const BLOCKSIZE = 32;
 export class Block {
     constructor(x,y,WHATBlockAmI) {
@@ -8,11 +9,18 @@ export class Block {
         this.WHATBlockAmI = WHATBlockAmI
     }
     draw(ctx) {
-        ctx.imageSmoothingEnabled = false;
-        if (this.WHATBlockAmI == 1) {
-            ctx.drawImage(this.tileSet,32,8,8,8,this.bounds.x,this.bounds.y,this.bounds.w,this.bounds.h);
-        }
-    }
+      ctx.imageSmoothingEnabled = false;
+      if (this.WHATBlockAmI == 1) {
+          ctx.drawImage(this.tileSet, 32, 8, 8, 8, this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
+          ctx.save()
+          ctx.globalCompositeOperation = 'source-atop'; 
+          ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+          ctx.fillRect(this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
+
+          ctx.restore();
+      }
+  }
+  
 }
 export class Level {
   constructor(b, l) {
