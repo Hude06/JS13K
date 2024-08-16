@@ -1,9 +1,8 @@
 import { Rect } from "./JudeUtils.js";
 import { globals } from "../main.js";
-const BLOCKSIZE = 32;
 export class Block {
     constructor(x,y,WHATBlockAmI) {
-        this.bounds = new Rect(x, y, BLOCKSIZE, BLOCKSIZE);
+        this.bounds = new Rect(x, y, globals.BLOCKSIZE, globals.BLOCKSIZE);
         this.tileSet = new Image();
         this.tileSet.src = "../Assets/Tileset.png";
         this.WHATBlockAmI = WHATBlockAmI
@@ -39,7 +38,7 @@ export class Level {
     // Find the block corresponding to this tile value
     for (let block of this.blocks) {
       // Check if the block's position matches the tile index
-      if (block.bounds.x === x * BLOCKSIZE && block.bounds.y === y * BLOCKSIZE) {
+      if (block.bounds.x === x * globals.BLOCKSIZE && block.bounds.y === y * globals.BLOCKSIZE) {
         return block;
       }
     }
@@ -55,7 +54,7 @@ export class Level {
         let block = this.level[i][w];
         this.x = w;
         this.y = i;
-        this.blocks.push(new Block(this.x * BLOCKSIZE, this.y * BLOCKSIZE, block));
+        this.blocks.push(new Block(this.x * globals.BLOCKSIZE, this.y * globals.BLOCKSIZE, block));
       }
     }
   }

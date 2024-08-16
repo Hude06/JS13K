@@ -85,7 +85,8 @@ export class Player {
         } else {
             ctx.save();
             ctx.scale(-1, 1);
-            ctx.drawImage(this.image,this.animator.x,this.animator.y,16, 16, -this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
+            const flippedX = -this.bounds.x - this.bounds.w; // Flipped position considering width
+            ctx.drawImage(this.image,this.animator.x,this.animator.y,16, 16, flippedX, this.bounds.y, this.bounds.w, this.bounds.h);
             ctx.restore();
         }
         if (globals.debug) {
@@ -123,8 +124,8 @@ export class Player {
         if (this.Xvelocity < -this.maxSpeed) {
             this.Xvelocity = -this.maxSpeed;
         }
-        const tileX = Math.floor(this.bounds.x / 32);
-        const tileY = Math.floor(this.bounds.y / 32);
+        const tileX = Math.floor(this.bounds.x / globals.BLOCKSIZE);
+        const tileY = Math.floor(this.bounds.y / globals.BLOCKSIZE);
         const tileIndex = new Point(tileX, tileY);
         const tileContents = level.get(tileIndex)
         const right_tile1 = level.get(tileIndex.add(1, 0));
@@ -141,12 +142,12 @@ export class Player {
         globals.debugBlocks.push(bottom2)
         //HORIZONTAL ALIGNMENT
         if(right_tile1.WHATBlockAmI == 1 && right_tile2.WHATBlockAmI == 1) {
-            this.bounds.x = tileIndex.x * 32;
+            this.bounds.x = tileIndex.x * globals.BLOCKSIZE;
             this.Xvelocity = 0
             this.isGrounded = bottom1.WHATBlockAmI == 1;
 
         } else if(left_tile1.WHATBlockAmI == 1 && left_tile2.WHATBlockAmI == 1) {
-            this.bounds.x = ((tileIndex.x+1)*32)
+            this.bounds.x = ((tileIndex.x+1)*globals.BLOCKSIZE)
             this.Xvelocity = 0
             this.isGrounded = bottom2.WHATBlockAmI == 1;
         } else {
@@ -156,7 +157,7 @@ export class Player {
             this.grounded = true;
             this.Yvelocity = 0;
             this.ableToJump = true;
-            this.bounds.y = (tileIndex.y) * 32; // Adjust player position to sit on the top of the tile
+            this.bounds.y = (tileIndex.y) * globals.BLOCKSIZE; // Adjust player position to sit on the top of the tile
             //VERICAL ALIGNMENT
         } else {
             this.grounded = false;

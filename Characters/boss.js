@@ -15,8 +15,8 @@ export class Boss {
     update(level) {
         this.bounds.y += this.Yvelocity;
         this.bounds.x += this.Xvelocity;
-        const tileX = Math.floor(this.bounds.x / 32);
-        const tileY = Math.floor(this.bounds.y / 32);
+        const tileX = Math.floor(this.bounds.x / globals.BLOCKSIZE);
+        const tileY = Math.floor(this.bounds.y / globals.BLOCKSIZE);
         const tileIndex = new Point(tileX, tileY);
         const tileContents = level.get(tileIndex)
         const right_tile1 = level.get(tileIndex.add(1, 0));
@@ -27,12 +27,12 @@ export class Boss {
         const bottom2 = level.get(tileIndex.add(1, 1));
         //HORIZONTAL ALIGNMENT
         if(right_tile1.WHATBlockAmI == 1 && right_tile2.WHATBlockAmI == 1) {
-            this.bounds.x = tileIndex.x * 32;
+            this.bounds.x = tileIndex.x * globals.BLOCKSIZE;
             this.Xvelocity = 0
             this.isGrounded = bottom1.WHATBlockAmI == 1;
 
         } else if(left_tile1.WHATBlockAmI == 1 && left_tile2.WHATBlockAmI == 1) {
-            this.bounds.x = ((tileIndex.x+1)*32)
+            this.bounds.x = ((tileIndex.x+1)*globals.BLOCKSIZE)
             this.Xvelocity = 0
             this.isGrounded = bottom2.WHATBlockAmI == 1;
         } else {
@@ -42,7 +42,7 @@ export class Boss {
             this.grounded = true;
             this.Yvelocity = 0;
             this.ableToJump = true;
-            this.bounds.y = (tileIndex.y) * 32; // Adjust player position to sit on the top of the tile
+            this.bounds.y = (tileIndex.y) * globals.BLOCKSIZE; // Adjust player position to sit on the top of the tile
             //VERICAL ALIGNMENTad
         } else {
             this.grounded = false;
