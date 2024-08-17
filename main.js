@@ -5,8 +5,8 @@ import { ParticleEngine } from './Utils/particalEngine.js';
 import { Boss } from './Characters/boss.js';
 import {zzfx} from "./Utils/globals.js"
 import { drawText } from './Utils/font.js';
+import { Bomb } from './Utils/bomb.js';
 export let globals = new Globals();
-
 let player = new Player();
 var stats = new Stats();
 globals.boss = new Boss(player);
@@ -89,6 +89,9 @@ function loop() {
     globals.ctx.translate(-globals.SCROLLX, -globals.SCROLLY);
     particleEngine.update(0.01);
     player.update(globals.currentKey,level1);
+    for (let i = 0; i < globals.bombs.length; i++) {
+        globals.bombs[i].update();
+    }
     //DRAWING
     particleEngine.draw();
     globals.bullets.forEach(bullet => {
@@ -118,6 +121,9 @@ function loop() {
         globals.boss.draw();
     }
     drawText("LEVEL1", 350, 200, 75,1);
+    for (let i = 0; i < globals.bombs.length; i++) {
+        globals.bombs[i].draw();
+    }
     globals.SCROLLX = (player.bounds.x - canvas.width/2)/1.4;
     globals.ctx.restore();
     stats.end();

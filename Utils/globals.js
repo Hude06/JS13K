@@ -14,6 +14,7 @@ export class Globals {
         this.mouseX = 0;
         this.mouseY = 0;
         this.BLOCKSIZE = 32;
+        this.bombs = []
     }
     reset() {
         location.reload();

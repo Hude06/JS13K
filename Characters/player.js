@@ -1,6 +1,7 @@
 import { Rect,Point } from "../Utils/JudeUtils.js";
 import { globals } from "../main.js";
 import {zzfx} from "../Utils/globals.js"
+import { Bomb } from "../Utils/bomb.js";
 
 class Bullet {
     constructor(gunSpeed, directionX, x, y) {
@@ -77,7 +78,6 @@ export class Player {
         if (Math.round(this.Xvelocity) !== 0) {
             this.animate();
         }
-        console.log(this.Xvelocity)
         ctx.save();
         globals.ctx.filter = 'contrast(120%)';
 
@@ -143,6 +143,7 @@ export class Player {
         }
     }
     update(currentKey, level) {
+        this.timeLeft -= 0.5;
         this.Xvelocity *= this.friction;
         if (this.Xvelocity > this.maxSpeed) {
             this.Xvelocity = this.maxSpeed;
@@ -203,6 +204,12 @@ export class Player {
     }
  
     handleMovement(currentKey) {
+        if (this.timeLeft < 0) {
+            if (currentKey.get("Enter")) {
+                globals.bombs.push(new Bomb(globals.mouseX,globals.mouseY));
+                this.timeLeft = 10
+            }
+        }
         if (currentKey.get("a") || currentKey.get("ArrowLeft")) {
             this.Xvelocity -= this.speed
         } 
