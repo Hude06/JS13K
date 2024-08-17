@@ -2,14 +2,14 @@ import {Player} from './Characters/player.js';
 import {Level} from './Utils/level.js';
 import {Globals} from './Utils/globals.js';
 import { ParticleEngine } from './Utils/particalEngine.js';
-import { Boss } from './Characters/boss.js';
+import { Enemy } from './Characters/enemy.js';
 import {zzfx} from "./Utils/globals.js"
 import { drawText } from './Utils/font.js';
 import { Bomb } from './Utils/bomb.js';
 export let globals = new Globals();
 let player = new Player();
 var stats = new Stats();
-globals.boss = new Boss(player);
+globals.enemys.push(new Enemy(player));
 stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild( stats.dom );
 globals.canvas.addEventListener("mousedown", (_) => {
@@ -116,9 +116,10 @@ function loop() {
         globals.blocks[i].draw(globals.ctx,currentLevel.tint.r,currentLevel.tint.g,currentLevel.tint.b);
     }
     player.draw(globals.ctx,particleEngine);
-    if (globals.boss != null) {
-        globals.boss.update(level1);
-        globals.boss.draw();
+    for (let i = 0; i < globals.enemys.length; i++) {
+        globals.enemys[i].draw();
+        globals.enemys[i].update(level1);
+
     }
     drawText("LEVEL1", 350, 200, 75,1);
     for (let i = 0; i < globals.bombs.length; i++) {

@@ -1,7 +1,7 @@
 import { globals } from "../main.js";
 import { Rect, Point } from "../Utils/JudeUtils.js";
 
-export class Boss {
+export class Enemy {
     constructor(follow) {
         this.bounds = new Rect(200, 200, 30, 30);
         this.gravity = 0.27;
@@ -11,8 +11,23 @@ export class Boss {
         this.jumpHeight = 3;
         this.grounded = false;
         this.player = follow;
+        this.sprite = new Image();
+        this.alive = true
+        this.sprite.src = "../Assets/Tileset.png";
     }
     update(level) {
+        if (!this.alive) {
+            globals.enemys.splice(globals.enemys.indexOf(this), 1);
+        }
+        for (let i  = 0; i < globals.bullets.length; i++) {
+            let bulletBounds = new Rect(globals.bullets[i].x, globals.bullets[i].y, globals.bullets[i].w, globals.bullets[i].h);
+            if (bulletBounds.intersects(this.bounds) || this.bounds.intersects(bulletBounds)) {
+                console.log("hit")
+                globals.bullets.splice(i, 1);
+                this.alive = false;
+
+            }
+        }
         this.bounds.y += this.Yvelocity;
         this.bounds.x += this.Xvelocity;
         const tileX = Math.floor(this.bounds.x / globals.BLOCKSIZE);
@@ -69,8 +84,19 @@ export class Boss {
             this.grounded = false;
         }
     }
-    draw() {
-        globals.ctx.fillStyle = "red";
-        globals.ctx.fillRect(this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
+    draw() {    
+        if (globals.debug == true) {
+            globals.ctx.strokeStyle = "red";
+            globals.ctx.strokeRect(this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
+        }
+        if (this.Xvelocity < 0) {
+            globals.ctx.drawImage(this.sprite, 0, 8*7, 8, 8, this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
+        } else {
+            globals.ctx.save();
+            globals.ctx.scale(-1, 1);
+            const flippedX = -this.bounds.x - this.bounds.w; // Flipped position considering width
+            globals.ctx.drawImage(this.sprite, 0, 8*7, 8, 8, flippedX, this.bounds.y, this.bounds.w, this.bounds.h);
+            globals.ctx.restore();
+        }
     }
 }

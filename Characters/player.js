@@ -2,6 +2,7 @@ import { Rect,Point } from "../Utils/JudeUtils.js";
 import { globals } from "../main.js";
 import {zzfx} from "../Utils/globals.js"
 import { Bomb } from "../Utils/bomb.js";
+import { drawText } from "../Utils/font.js";
 
 class Bullet {
     constructor(gunSpeed, directionX, x, y) {
@@ -9,17 +10,19 @@ class Bullet {
         this.speed = gunSpeed
         this.x = x;
         this.y = y;
+        this.w = 5;
+        this.h = 5;
         this.directionX = directionX;
     }
     update(ctx) {
         ctx.fillStyle = "white"
-        ctx.fillRect(this.x, this.y, 5, 5);
+        ctx.fillRect(this.x, this.y, this.w, this.h);
         this.x += this.directionX * this.speed;
     }
 
 }
 class Gun {
-    constructor(direction, x, y) {
+    constructor(direction, x, y,player) {
         this.timeLeft = 0;
         this.gunSpeed = 10;
         this.direction = direction;
@@ -28,15 +31,20 @@ class Gun {
         this.height = 10;
         this.angle = 10;
         this.directionX = 0;
+        this.player = player;
     }
     shoot() {
-        if (this.timeLeft <= 0) {
-
-            zzfx(...[2.04,,475,.01,.03,.06,4,1.9,-8.7,,,,.09,,36,.2,.17,.67,.04]); // Shoot 118
-            this.directionX = Math.cos(this.angle);
-            this.directionY = Math.sin(this.angle);
-            globals.bullets.push(new Bullet(this.gunSpeed, this.directionX, this.pos.x, this.pos.y));
-            this.timeLeft = 10;
+        if (this.player.bulletsLeft > 0) {
+            if (this.timeLeft <= 0) {
+                this.player.bulletsLeft -= 1;
+                zzfx(...[2.04,,475,.01,.03,.06,4,1.9,-8.7,,,,.09,,36,.2,.17,.67,.04]); // Shoot 118
+                this.directionX = Math.cos(this.angle);
+                this.directionY = Math.sin(this.angle);
+                globals.bullets.push(new Bullet(this.gunSpeed, this.directionX, this.pos.x, this.pos.y));
+                this.timeLeft = 10;
+            }
+        } else {
+            this.player.grow();
         }
     }
     update(direction,x,y) {
@@ -66,13 +74,20 @@ export class Player {
         this.maxSpeed = 2;
         this.isGrounded = false;
         this.ableToJump = false;
-        this.gun = new Gun(this.Xvelocity, this.bounds.x, this.bounds.y);
+        this.gun = new Gun(this.Xvelocity, this.bounds.x, this.bounds.y,this);
         this.image = new Image();
         this.image.src = "../Assets/Player-Sheet.png";
         this.frameRate = 60;
         this.frames = 0
         this.health = 3;
+        this.bulletsLeft = 13;
 
+    }
+    grow() {
+        this.bounds.w += 0.75;
+        setTimeout(() => {
+            this.grow();
+        },100)
     }
     draw(ctx) {
         if (Math.round(this.Xvelocity) !== 0) {
@@ -101,6 +116,8 @@ export class Player {
         ctx.restore();
         ctx.fillStyle = "red";
         ctx.fillRect(200+globals.SCROLLX,25,this.health*50,20)
+        drawText("Bullets - ", 75 + globals.SCROLLX, 75, 25,1);
+        drawText(this.bulletsLeft + "",75+globals.SCROLLX,100,25,1);
     }
     animate() {
         this.frames += this.frameRate;
@@ -136,13 +153,19 @@ export class Player {
         this.jumpHeight = savedJumped
     }
     collision() {
-        if (this.bounds.intersects(globals.boss.bounds)) {
-            this.health -= 0.25;
-            zzfx(...[1.98,,523,.01,.01,.07,2,1.9,-8.7,,,,.09,,36,.2,.17,.67,.04]); // Hit 118
-            this.knockback(this.Xvelocity)
+        for (let i = 0; i < globals.enemys.length; i++) {
+            if (this.bounds.intersects(globals.enemys[i].bounds)) {
+                this.health -= 0.25;
+                zzfx(...[1.98,,523,.01,.01,.07,2,1.9,-8.7,,,,.09,,36,.2,.17,.67,.04]); // Hit 118
+                this.knockback(this.Xvelocity)
+            }
         }
     }
     update(currentKey, level) {
+        if (this.bounds.w > 300) {
+            globals.reset();
+            alert("You got to big from the phobia of Triskaidekaphobia")
+        }
         this.timeLeft -= 0.5;
         this.Xvelocity *= this.friction;
         if (this.Xvelocity > this.maxSpeed) {
@@ -184,7 +207,7 @@ export class Player {
             this.grounded = true;
             this.Yvelocity = 0;
             this.ableToJump = true;
-            this.bounds.y = (tileIndex.y) * globals.BLOCKSIZE; // Adjust player position to sit on the top of the tile
+            this.bounds.y = ((tileIndex.y)*globals.BLOCKSIZE); // Adjust player position to sit on the top of the tile
             //VERICAL ALIGNMENT
         } else {
             this.grounded = false;
