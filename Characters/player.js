@@ -117,18 +117,23 @@ export class Player {
     }
     knockback(Xvelocity) {
         if (Math.round(Xvelocity) == 0) {
-            this.bounds.x += 100;
-            this.jump()
+            this.Xvelocity += this.speed*30;
+            this.jump(10)
         } else {
-            this.bounds.x += Xvelocity*(this.speed*3);
-            this.jump();
+            this.Xvelocity += (this.speed*30);
+            this.jump(10);
         }
     }
 
-    jump() {    
+    jump(h) {   
+        const savedJumped = this.jumpHeight; 
+        if (h) {
+            this.jumpHeight = h
+        }
         this.Yvelocity = -this.jumpHeight - 2;
         this.grounded = false
         this.bounds.y -= 5
+        this.jumpHeight = savedJumped
     }
     collision() {
         if (this.bounds.intersects(globals.boss.bounds)) {
