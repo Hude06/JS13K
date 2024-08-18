@@ -21,13 +21,14 @@ export class Block {
   
 }
 export class Level {
-  constructor(b, l) {
+  constructor(b,l,o) {
     this.width;
     this.height;
     this.blocks = b;
     this.level = l;
     this.x = 1;
     this.y = 1;
+    this.options = o 
   }
 
   get(tileIndex) {

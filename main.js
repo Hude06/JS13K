@@ -6,12 +6,16 @@ import {zzfx} from "./Utils/globals.js"
 import { drawText } from './Utils/font.js';
 import { Bomb } from './Utils/bomb.js';
 import { startTyping } from './Utils/font.js';
+
 export let globals = new Globals();
 let player = new Player();
 let stats = new Stats();
 
 globals.enemys.push(new Enemy(player));
-stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+globals.enemys.push(new Enemy(player));
+globals.enemys.push(new Enemy(player));
+
+stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild( stats.dom );
 globals.canvas.addEventListener("mousedown", (_) => {
     globals.mouseClicked = true;
@@ -23,47 +27,8 @@ globals.canvas.addEventListener("mousemove", (e) => {
     globals.mouseX = e.clientX;
     globals.mouseY = e.clientY;
 })
-const rowPattern = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
-const emptyRow = [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1];
-const GameLevel1 = [
-    rowPattern,
-    rowPattern,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    emptyRow,
-    rowPattern,
-    rowPattern,
-]
-const GameLevel1Options = {
-    level: GameLevel1,
-    tint: {
-        r: 145,
-        g: 144,
-        b: 144
-    }
-}
-let currentLevel = GameLevel1Options;
-let level1 = new Level(globals.blocks,currentLevel.level);
+let level1 = new Level(globals.blocks,globals.GameLevel1Options.level,globals.GameLevel1Options);
+globals.currentLevel = level1;
 function keyboardInit() {
     window.addEventListener("keydown", (e) => {
         globals.currentKey.set(e.key, true);
@@ -74,6 +39,11 @@ function keyboardInit() {
         globals.navKey.set(e.key, false);
     });
 }
+const song = globals.currentLevel.options.song;
+let mySongData = zzfxM(...song);
+
+// Play the song (returns a AudioBufferSourceNode)
+let myAudioNode = zzfxP(...mySongData);
 
 function loop() {
     //SETUP Canvas
@@ -86,8 +56,9 @@ function loop() {
     //Translating the canvas to the player position
     //UPDATE
     if (globals.currentScreen == "splash") {
-        drawText("JS13K by Jude Hill", globals.canvas.width/7, globals.canvas.height/2-50, 75,1);
-        drawText("Press Enter to start", globals.canvas.width/4.5, globals.canvas.height/2+50, 50,1);
+        drawText("The 13th Challenge", globals.canvas.width/6, globals.canvas.height/2-50, 75,1);
+        drawText("JS13K by Jude Hill", globals.canvas.width/4, globals.canvas.height/2+50, 50,1);
+        drawText("Press Enter to start", globals.canvas.width/3.25, globals.canvas.height/2+125, 35,1);
         if (globals.currentKey.get("Enter")) {
             setTimeout(() => {
                 globals.currentScreen = "game";
@@ -95,6 +66,8 @@ function loop() {
         }
     }
     if (globals.currentScreen == "game") {
+        if (globals.currentLevel == 1) {
+        }
         globals.ctx.save()
         globals.ctx.scale(1.25, 1.25) // Doubles size of anything draw to canvas.
         globals.ctx.translate(-globals.SCROLLX, -globals.SCROLLY);
@@ -131,7 +104,7 @@ function loop() {
             }
         }
         for (let i = 0; i < globals.blocks.length; i++) {
-            globals.blocks[i].draw(globals.ctx,currentLevel.tint.r,currentLevel.tint.g,currentLevel.tint.b);
+            globals.blocks[i].draw(globals.ctx,globals.currentLevel.options.tint.r,globals.currentLevel.options.tint.g,globals.currentLevel.options.tint.b);
         }
         player.draw(globals.ctx,globals.particleEngine);
         for (let i = 0; i < globals.enemys.length; i++) {
