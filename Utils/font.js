@@ -15,21 +15,45 @@ function getIndex(char) {
         return null; // or throw an error, depending on your needs
     }
 }
-export function drawText(text, x, y, size, color) {
+
+
+export function startTyping() {
+    setInterval(()=>{
+        console.log("Typing")
+        globals.type_distance += 1
+    },150)
+}
+export function drawText(text, x, y, size, typeing) {
     let ctx = globals.ctx;
     const font = new Image();
-    if (color === 1) {
-        font.src = "../Assets/WhiteFont.png";
-    }
-    for (let t = 0; t < text.length; t++) {
-        let newText = text[t].toLowerCase();
-        let char = newText;
-        let charX = 0;
-        if (getIndex(char) !== null) {
-            charX = getIndex(char) // Calculate index for 'a' to 'z'
+    font.src = "../Assets/WhiteFont.png";
+    if (typeing) {
+        for (let t = 0; t < text.length; t++) {
+            if(t > globals.type_distance) {
+                break;
+            }
+            let newText = text[t].toLowerCase();
+            let char = newText;
+            let charX = 0;
+            if (getIndex(char) !== null) {
+                charX = getIndex(char) // Calculate index for 'a' to 'z'
+            }
+            let charY = 0
+            //Tint the color
+            ctx.drawImage(font,((charX*5)-5)-0.1,((charY*5)),5,5,x+(t*size),y+3,size,size);
+
         }
-        let charY = 0
-        //Tint the color
-        ctx.drawImage(font,((charX*5)-5)-0.1,((charY*5)),5,5,x+(t*size),y+3,size,size);
+    } else {
+        for (let t = 0; t < text.length; t++) {
+            let newText = text[t].toLowerCase();
+            let char = newText;
+            let charX = 0;
+            if (getIndex(char) !== null) {
+                charX = getIndex(char) // Calculate index for 'a' to 'z'
+            }
+            let charY = 0
+            //Tint the color
+            ctx.drawImage(font,((charX*5)-5)-0.1,((charY*5)),5,5,x+(t*size),y+3,size,size);
+        }
     }
 }

@@ -81,6 +81,7 @@ export class Player {
         this.frames = 0
         this.health = 3;
         this.bulletsLeft = 13;
+        this.bombsLeft = 5;
 
     }
     grow() {
@@ -115,9 +116,14 @@ export class Player {
         }
         ctx.restore();
         ctx.fillStyle = "red";
-        ctx.fillRect(200+globals.SCROLLX,25,this.health*50,20)
-        drawText("Bullets - ", 75 + globals.SCROLLX, 75, 25,1);
-        drawText(this.bulletsLeft + "",75+globals.SCROLLX,100,25,1);
+        ctx.fillRect(75+globals.SCROLLX,50,this.health*50,20)
+        ctx.strokeStyle = "white"
+        ctx.lineWidth = 4;
+        ctx.strokeRect(75+globals.SCROLLX,50,150,20)
+        drawText("Bullets - ", 75 + globals.SCROLLX, 75, 25);
+        drawText(this.bulletsLeft + "",75+globals.SCROLLX,100,25);
+        drawText("Bombs - ", 75 + globals.SCROLLX, 125, 25);
+        drawText(this.bombsLeft + "",75+globals.SCROLLX,150,25);
     }
     animate() {
         this.frames += this.frameRate;
@@ -227,10 +233,13 @@ export class Player {
     }
  
     handleMovement(currentKey) {
-        if (this.timeLeft < 0) {
-            if (currentKey.get("Enter")) {
-                globals.bombs.push(new Bomb(globals.mouseX,globals.mouseY));
-                this.timeLeft = 10
+        if (this.bombsLeft > 0) {
+            if (this.timeLeft < 0) {
+                if (globals.navKey.get("e")) {
+                    globals.bombs.push(new Bomb(globals.mouseX,globals.mouseY,this.bounds.x,this.bounds.y));
+                    this.timeLeft = 15
+                    this.bombsLeft -= 1
+                }
             }
         }
         if (currentKey.get("a") || currentKey.get("ArrowLeft")) {

@@ -1,21 +1,33 @@
+import { ParticleEngine } from "./particalEngine.js";
 export class Globals {
     constructor() {
         this.currentKey = new Map();
         this.blocks = [];
         this.SCROLLX = 200;
-        this.debug = true;
+        this.debug = false;
         this.SCROLLY = 0;
         this.canvas = document.getElementById("canvas");
         this.ctx = this.canvas.getContext("2d");
         this.bullets = [];
         this.mouseClicked = false
         this.debugBlocks = []
+        this.debugBlocksBomb = []
         this.enemys = [];
         this.mouseX = 0;
         this.mouseY = 0;
         this.BLOCKSIZE = 32;
         this.bombs = []
+        this.currentScreen = "splash";
+        this.type_distance = 0;
+        this.navKey = new Map();
+        this.particleEngine = new ParticleEngine(this.ctx, {
+            color: 'red',
+            size: 3,
+            count: 100,
+            duration: 0.5// 2 seconds
+        });
     }
+
     reset() {
         location.reload();
     }
