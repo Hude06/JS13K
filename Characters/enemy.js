@@ -3,7 +3,7 @@ import { Rect, Point } from "../Utils/JudeUtils.js";
 
 export class Enemy {
     constructor(follow) {
-        this.bounds = new Rect((Math.random()*200)+100, 200, 30, 30);
+        this.bounds = new Rect((Math.random()*(1000))+100, 200, 30, 30);
         this.gravity = 0.27;
         this.Yvelocity = 0;
         this.Xvelocity = 0;

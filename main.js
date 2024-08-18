@@ -10,11 +10,7 @@ import { startTyping } from './Utils/font.js';
 export let globals = new Globals();
 let player = new Player();
 let stats = new Stats();
-
-globals.enemys.push(new Enemy(player));
-globals.enemys.push(new Enemy(player));
-globals.enemys.push(new Enemy(player));
-
+let totalEnemies = 0;
 stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild( stats.dom );
 globals.canvas.addEventListener("mousedown", (_) => {
@@ -44,7 +40,21 @@ let mySongData = zzfxM(...song);
 
 // Play the song (returns a AudioBufferSourceNode)
 let myAudioNode = zzfxP(...mySongData);
-
+function spawnEnemy() {
+    if (globals.currentScreen == "game") {
+        if (totalEnemies <= 11) {
+            totalEnemies += 1;
+            globals.enemys.push(new Enemy(player));
+            setTimeout(() => {
+                spawnEnemy();
+            } , 1000);
+        }
+    } else {
+        setTimeout(() => {
+            spawnEnemy();
+        },2000);
+    }
+}
 function loop() {
     //SETUP Canvas
     stats.begin();
@@ -125,6 +135,7 @@ function loop() {
     requestAnimationFrame(loop);
 }    
 function init() {
+    spawnEnemy();
     if (globals.currentScreen == "splash") {
         console.log("Splash Screen");
         startTyping()
