@@ -1,76 +1,92 @@
-// UtilityAI class with action weights
-// UtilityAI class with action weights
+import { Rect } from "./JudeUtils.js";
+function calculateDistance(rect1, rect2) {
+    const centerX1 = rect1.x + rect1.width / 2;
+    const centerY1 = rect1.y + rect1.height / 2;
+    const centerX2 = rect2.x + rect2.width / 2;
+    const centerY2 = rect2.y + rect2.height / 2;
+    const dx = centerX2 - centerX1;
+    const dy = centerY2 - centerY1;
+    return Math.sqrt(dx * dx + dy * dy); // Euclidean distance
+}
+function determineGameState(health) {
+    if (health > 60) return 'safe';
+    if (health > 30) return 'warning';
+    return 'risky'; // Health <= 40
+}
 function evaluateAction(action, factors) {
-    let score = 0; // Initialize score to 0 for actions not explicitly handled
+    let score = 0;
 
-    // Check if the action is 'attack'
-    if (action === 'attack') {
-        // Increase score if health is above 50, indicating a strong offensive position
-        if (factors.health > 50) {
-            score += 5; // Base score for attacking with sufficient health
-            // Further increase score if the character is close to the enemy
-            if (factors.position === 'closeToEnemy') {
-                score += 10; // Bonus for attacking when close to the enemy
+    switch (action) {
+        case 'attack':
+            if (factors.health > 50) {
+                score += 5; // Base score for attacking with sufficient health
+                if (factors.position === 'closeToEnemy') {
+                    score += 10; // Bonus for attacking when close to the enemy
+                }
             }
-        }
-    } 
-    // Check if the action is 'defend'
-    else if (action === 'defend') {
-        // Increase score if health is below 40, suggesting a need for defense
-        if (factors.health < 40) {
-            score += 10; // Base score for defending with low health
-            // Further increase score if the game state is considered risky
-            if (factors.gameState === 'risky') {
-                score += 5; // Bonus for defending during a risky game state
+            break;
+
+        case 'defend':
+            if (factors.health < 40) {
+                score += 10; // Base score for defending with low health
+                if (factors.gameState === 'risky') {
+                    score += 5; // Bonus for defending during a risky game state
+                }
             }
-        }
-    } 
-    // Check if the action is 'run'
-    else if (action === 'run') {
-        // Increase score if health is very low, indicating a need to escape
-        if (factors.health < 30) {
-            score += 15; // High score for running when health is critically low
-        } 
-        // Otherwise, increase score if the character is far from the enemy
-        else if (factors.position === 'farFromEnemy') {
-            score += 8; // Bonus for running when distant from enemies
-        }
-    } 
-    // Handle unknown actions
-    else {
-        console.warn(`Unknown action: ${action}`); // Log a warning for unknown actions
+            break;
+
+        case 'run':
+            if (factors.health < 30) {
+                score += 15; // High score for running when health is critically low
+                if (factors.position === 'closeToEnemy') {
+                    score += 5; // Additional bonus for running when close to the enemy
+                }
+            } else if (factors.position === 'farFromEnemy') {
+                score += 8; // Bonus for running when distant from enemies
+            }
+            break;
+
+        case 'idle':
+            score = 1; // Minimal score for idling, representing a passive action
+            break;
+
+        default:
+            console.warn(`Unknown action: ${action}`); // Log a warning for unknown actions
     }
 
-    // Ensure the score is non-negative before returning
-    return Math.max(0, score); // Return the final score, ensuring it is not negative
+    return Math.max(0, score); // Ensure the score is non-negative
 }
 
-class UtilityAI {
-    constructor(actions, weights, evaluateAction) {
-        this.actions = actions;
-        this.weights = weights; // Action weights
-        this.evaluateAction = evaluateAction;
+export class UtilityAI {
+    constructor(actionWeights) {
+        this.actionWeights = actionWeights;
+        this.actions = Object.keys(actionWeights); // Extract the action names from the weights
     }
 
-    // Choose an action based on the evaluation of current factors and weights
     update(factors) {
-        // Create an array to store scores for each action
-        let scores = [];
-        
-        // Calculate the score for each action
-        for (let action of this.actions) {
-            // Get the utility score for the action
-            const utilityScore = this.evaluateAction(action, factors);
-            // Apply the action weight
-            const weightedScore = utilityScore * this.weights[action];
-            // Add the weighted score to the scores array
-            scores.push(weightedScore);
-        }
+        // Determine the position relative to the enemy
+        const distance = calculateDistance(factors.characterPosition, factors.playerPosition);
+        const closeDistanceThreshold = 50; // Example threshold for being 'closeToEnemy'
+
+        // Set position factor based on distance
+        factors.position = distance < closeDistanceThreshold ? 'closeToEnemy' : 'farFromEnemy';
+
+        // Determine the game state based on health
+        factors.gameState = determineGameState(factors.health);
+
+        // Calculate the weighted score for each action
+        const scores = this.actions.map(action => {
+            const utilityScore = evaluateAction(action, factors);
+            const weight = this.actionWeights[action] || 1; // Default weight to 1 if not defined
+            return utilityScore * weight;
+        });
 
         // Calculate the total score
         const totalScore = scores.reduce((sum, score) => sum + score, 0);
 
-        // Randomly select an action based on the weighted scores
+        if (totalScore === 0) return this.actions[0]; // Handle the case where all scores are zero
+
+        // Select an action based on the weighted scores
         let randomValue = Math.random() * totalScore;
         let accumulatedScore = 0;
 
@@ -81,23 +97,31 @@ class UtilityAI {
             }
         }
 
-        // Fallback: return the first action if something goes wrong
-        return this.actions[0];
+        return this.actions[0]; // Fallback: return the first action if something goes wrong
     }
 }
-const actions = ["attack", "defend", "run"];
-const actionWeights = {
-    "attack": 1, // Example weight for 'attack'
-    "defend": 1, // Example weight for 'defend'
-    "run": 5     // Example weight for 'run'
-};
+
 // Example usage
-const factors = {
-    health: 75,           // Boss's current health
-    gameState: 'risky',   // Current game state
-    position: 'closeToEnemy' // Boss's position relative to enemies
+const actionWeights = {
+    "attack": 10, // Weight for 'attack'
+    "defend": 3, // Weight for 'defend'
+    "run": 1,    // Weight for 'run'
+    "idle": 10  // Weight for 'idle'
 };
 
-const bossAI = new UtilityAI(actions, actionWeights, evaluateAction);
+// Define positions using Rect
+const characterPosition = new Rect(10, 10, 10, 10); // Example position for character
+const playerPosition = new Rect(100, 20, 10, 10); // Example position for player
+
+const factors = {
+    health: 65, // Example health value (critically low)
+    characterPosition: characterPosition,
+    playerPosition: playerPosition,
+    position: '', // Will be set in the update method
+    gameState: '' // Will be set in the update method
+};
+
+const bossAI = new UtilityAI(actionWeights);
 const nextAction = bossAI.update(factors);
-console.log(nextAction);
+console.log(nextAction); // Expected output based on the factors and weights
+console.log(factors)

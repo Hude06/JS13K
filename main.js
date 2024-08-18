@@ -9,10 +9,7 @@ import { startTyping } from './Utils/font.js';
 
 export let globals = new Globals();
 let player = new Player();
-let stats = new Stats();
 let totalEnemies = 0;
-stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-document.body.appendChild( stats.dom );
 globals.canvas.addEventListener("mousedown", (_) => {
     globals.mouseClicked = true;
 })
@@ -57,7 +54,6 @@ function spawnEnemy() {
 }
 function loop() {
     //SETUP Canvas
-    stats.begin();
     globals.debugBlocks = []
     globals.ctx.fillStyle = "black";
     globals.ctx.imageSmoothingEnabled = false;
@@ -130,7 +126,6 @@ function loop() {
         globals.SCROLLX = (player.bounds.x - canvas.width/2)/1.4;
         globals.ctx.restore();
     }
-    stats.end();
     globals.navKey.clear();
     requestAnimationFrame(loop);
 }    
