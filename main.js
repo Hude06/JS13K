@@ -2,13 +2,17 @@ import {Player} from './Characters/player.js';
 import {Level} from './Utils/level.js';
 import {Globals} from './Utils/globals.js';
 import { Enemy } from './Characters/enemy.js';
-import {zzfx} from "./Utils/globals.js"
 import { drawText } from './Utils/font.js';
-import { Bomb } from './Utils/bomb.js';
 import { startTyping } from './Utils/font.js';
-
+import { Boss } from './Utils/boss.js';
 export let globals = new Globals();
 let player = new Player();
+let actions = {
+    "attack": 12,
+    "defend": 10,
+    "run": 5,
+    "idle": 4
+}
 let totalEnemies = 0;
 globals.canvas.addEventListener("mousedown", (_) => {
     globals.mouseClicked = true;
@@ -22,6 +26,8 @@ globals.canvas.addEventListener("mousemove", (e) => {
 })
 let level1 = new Level(globals.blocks,globals.GameLevel1Options.level,globals.GameLevel1Options);
 globals.currentLevel = level1;
+let boss = new Boss(100,player,actions)
+console.log("Boss next actions is ",boss.update(globals.currentLevel));
 function keyboardInit() {
     window.addEventListener("keydown", (e) => {
         globals.currentKey.set(e.key, true);
@@ -41,7 +47,7 @@ function spawnEnemy() {
     if (globals.currentScreen == "game") {
         if (totalEnemies <= 11) {
             totalEnemies += 1;
-            globals.enemys.push(new Enemy(player));
+            // globals.enemys.push(new Enemy(player));
             setTimeout(() => {
                 spawnEnemy();
             } , 1000);
@@ -72,16 +78,15 @@ function loop() {
         }
     }
     if (globals.currentScreen == "game") {
-        if (globals.currentLevel == 1) {
-        }
         globals.ctx.save()
         globals.ctx.scale(1.25, 1.25) // Doubles size of anything draw to canvas.
         globals.ctx.translate(-globals.SCROLLX, -globals.SCROLLY);
         globals.particleEngine.update(0.01);
-        player.update(globals.currentKey,level1);
+        player.update(globals.currentKey,globals.currentLevel);
         for (let i = 0; i < globals.bombs.length; i++) {
-            globals.bombs[i].update(level1);
+            globals.bombs[i].update(globals.currentLevel);
         }
+        boss.update(globals.currentLevel);
         //DRAWING
         globals.particleEngine.draw();
         globals.bullets.forEach(bullet => {
@@ -115,13 +120,14 @@ function loop() {
         player.draw(globals.ctx,globals.particleEngine);
         for (let i = 0; i < globals.enemys.length; i++) {
             globals.enemys[i].draw();
-            globals.enemys[i].update(level1);
+            globals.enemys[i].update(globals.currentLevel);
 
         }
         drawText("LEVEL1", 350, 200, 75);
         for (let i = 0; i < globals.bombs.length; i++) {
             globals.bombs[i].draw();
         }
+        boss.draw();
         //END DRAWING
         globals.SCROLLX = (player.bounds.x - canvas.width/2)/1.4;
         globals.ctx.restore();

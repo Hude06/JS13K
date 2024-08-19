@@ -19,7 +19,6 @@ function getIndex(char) {
 
 export function startTyping() {
     setInterval(()=>{
-        console.log("Typing")
         globals.type_distance += 1
     },150)
 }

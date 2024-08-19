@@ -32,6 +32,7 @@ class Gun {
         this.angle = 10;
         this.directionX = 0;
         this.player = player;
+        this.damage = 3;
     }
     shoot() {
         if (this.player.bulletsLeft > 0) {
@@ -80,7 +81,7 @@ export class Player {
         this.frameRate = 60;
         this.frames = 0
         this.health = 3;
-        this.bulletsLeft = 13;
+        this.bulletsLeft = 14;
         this.bombsLeft = 5;
 
     }

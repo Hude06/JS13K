@@ -9,8 +9,8 @@ function calculateDistance(rect1, rect2) {
     return Math.sqrt(dx * dx + dy * dy); // Euclidean distance
 }
 function determineGameState(health) {
-    if (health > 60) return 'safe';
-    if (health > 30) return 'warning';
+    if (health > 50) return 'safe';
+    if (health > 25) return 'warning';
     return 'risky'; // Health <= 40
 }
 function evaluateAction(action, factors) {
@@ -27,11 +27,8 @@ function evaluateAction(action, factors) {
             break;
 
         case 'defend':
-            if (factors.health < 40) {
+            if (factors.health < 50) {
                 score += 10; // Base score for defending with low health
-                if (factors.gameState === 'risky') {
-                    score += 5; // Bonus for defending during a risky game state
-                }
             }
             break;
 
@@ -41,8 +38,6 @@ function evaluateAction(action, factors) {
                 if (factors.position === 'closeToEnemy') {
                     score += 5; // Additional bonus for running when close to the enemy
                 }
-            } else if (factors.position === 'farFromEnemy') {
-                score += 8; // Bonus for running when distant from enemies
             }
             break;
 
@@ -61,12 +56,14 @@ export class UtilityAI {
     constructor(actionWeights) {
         this.actionWeights = actionWeights;
         this.actions = Object.keys(actionWeights); // Extract the action names from the weights
+        this.timer = 10
     }
 
     update(factors) {
+        this.timer += 0.1
         // Determine the position relative to the enemy
         const distance = calculateDistance(factors.characterPosition, factors.playerPosition);
-        const closeDistanceThreshold = 50; // Example threshold for being 'closeToEnemy'
+        const closeDistanceThreshold = 25; // Example threshold for being 'closeToEnemy'
 
         // Set position factor based on distance
         factors.position = distance < closeDistanceThreshold ? 'closeToEnemy' : 'farFromEnemy';
@@ -93,35 +90,34 @@ export class UtilityAI {
         for (let i = 0; i < this.actions.length; i++) {
             accumulatedScore += scores[i];
             if (randomValue < accumulatedScore) {
-                return this.actions[i];
+                if (this.timer > 15) {
+                    this.timer = 0;
+                    return this.actions[i];
+                }
             }
         }
-
-        return this.actions[0]; // Fallback: return the first action if something goes wrong
     }
 }
 
 // Example usage
-const actionWeights = {
-    "attack": 10, // Weight for 'attack'
-    "defend": 3, // Weight for 'defend'
-    "run": 1,    // Weight for 'run'
-    "idle": 10  // Weight for 'idle'
-};
+// const actionWeights = {
+//     "attack": 10, // Weight for 'attack'
+//     "defend": 3, // Weight for 'defend'
+//     "run": 1,    // Weight for 'run'
+//     "idle": 3  // Weight for 'idle'
+// };
 
-// Define positions using Rect
-const characterPosition = new Rect(10, 10, 10, 10); // Example position for character
-const playerPosition = new Rect(100, 20, 10, 10); // Example position for player
+// // Define positions using Rect
+// const characterPosition = new Rect(10, 10, 10, 10); // Example position for character
+// const playerPosition = new Rect(100, 20, 10, 10); // Example position for player
 
-const factors = {
-    health: 65, // Example health value (critically low)
-    characterPosition: characterPosition,
-    playerPosition: playerPosition,
-    position: '', // Will be set in the update method
-    gameState: '' // Will be set in the update method
-};
+// const factors = {
+//     health: 65, // Example health value (critically low)
+//     characterPosition: characterPosition,
+//     playerPosition: playerPosition,
+//     position: '', // Will be set in the update method
+//     gameState: '' // Will be set in the update method
+// };
 
-const bossAI = new UtilityAI(actionWeights);
-const nextAction = bossAI.update(factors);
-console.log(nextAction); // Expected output based on the factors and weights
-console.log(factors)
+// // const bossAI = new UtilityAI(actionWeights);
+// // const nextAction = bossAI.update(factors);
