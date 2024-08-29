@@ -1,17 +1,18 @@
 import { globals } from "../main.js";
 import { Point, Rect } from "./JudeUtils.js";
 import { UtilityAI } from "./utilityAI.js";
+
 export class Boss {
-    constructor(health,player,actions) {
-        this.bounds = new Rect(200, 150, 30, 30);
-        this.speed = player.speed;
-        this.actions = actions 
-        this.Velocity = new Point(0,0);
-        this.gravity = 0.2
-        this.image = new Image()
-        this.image.src = "../Assets/Trash Man.png"
+    constructor(health, player, actions) {
+        this.bounds = new Rect(200, 150, 100, 100);
+        this.speed = 0.25;
+        this.actions = actions;
+        this.Velocity = new Point(0, 0);
+        this.gravity = 0.2;
+        this.image = new Image();
+        this.image.src = "../Assets/BabyDuck.png";
         this.factors = {
-            health: health, // Example health value (critically low)
+            health: health,
             characterPosition: this.bounds,
             playerPosition: player.bounds,
             position: '', // Will be set in the update method
@@ -20,105 +21,144 @@ export class Boss {
         this.ai = new UtilityAI(this.actions);
         this.player = player;
         this.alive = true;
+        this.isGrounded = false; // Initialize isGrounded
+        this.currentAction = null;
     }
+
     draw() {
         if (this.alive) {
-            globals.ctx.drawImage(this.image,this.bounds.x,this.bounds.y,this.bounds.w,this.bounds.h)
+            globals.ctx.drawImage(this.image, this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
         }
     }
+
     update(level) {
         if (this.factors.health <= 0) {
             this.alive = false;
+            return;
         }
+
         if (this.alive) {
-            const tileX = Math.floor(this.bounds.x / globals.BLOCKSIZE);
-            const tileY = Math.floor(this.bounds.y / globals.BLOCKSIZE);
+            this.bounds.x += this.Velocity.x;
+            if (this.Velocity.x > 5) {
+                this.Velocity.x = 4.5;
+            }
+            if (this.Velocity.x < -5) {
+                this.Velocity.x = -4.5;
+            }
+            console.log(this.factors.health);
+            const tileX = Math.floor((this.bounds.x + this.bounds.w / 2) / globals.BLOCKSIZE);
+            const tileY = Math.floor((this.bounds.y) / globals.BLOCKSIZE);
             const tileIndex = new Point(tileX, tileY);
-            const tileContents = level.get(tileIndex)
+
             const right_tile1 = level.get(tileIndex.add(1, 0));
             const right_tile2 = level.get(tileIndex.add(1, 1));
             const left_tile1 = level.get(tileIndex.add(0, 0));
             const left_tile2 = level.get(tileIndex.add(0, 1));
-            let bottom1 = level.get(tileIndex.add(0, 1));
-            const bottom2 = level.get(tileIndex.add(1, 1));
-            //HORIZONTAL ALIGNMENT
-            if (right_tile1) {
-                if(right_tile1.WHATBlockAmI == 1 && right_tile2.WHATBlockAmI == 1) {
-                    this.bounds.x = tileIndex.x * globals.BLOCKSIZE;
-                    this.Xvelocity = 0
-                    this.isGrounded = bottom1.WHATBlockAmI == 1;
-                } else if(left_tile1.WHATBlockAmI == 1 && left_tile2.WHATBlockAmI == 1) {
-                    this.bounds.x = ((tileIndex.x+1)*globals.BLOCKSIZE)
-                    this.Xvelocity = 0
-                    this.isGrounded = bottom2.WHATBlockAmI == 1;
-                } else {
-                    this.isGrounded = bottom1.WHATBlockAmI == 1 || bottom2.WHATBlockAmI == 1;
+
+            let bottomTiles = [];
+            const numRows = Math.floor(this.bounds.h / (globals.BLOCKSIZE-5));
+            const numCols = Math.floor(this.bounds.w / (globals.BLOCKSIZE-5));
+            for (let i = 0; i < numRows; i++) {
+                for (let j = 0; j < numCols; j++) {
+                    bottomTiles.push(level.get(tileIndex.add(j - 1, i+1)));
                 }
-                if (this.isGrounded) {
-                    this.grounded = true;
-                    this.Yvelocity = 0;
-                    this.ableToJump = true;
-                    this.bounds.y = ((tileIndex.y)*globals.BLOCKSIZE); // Adjust player position to sit on the top of the tile
-                    //VERICAL ALIGNMENT
-                } else {
-                    this.grounded = false;
-                    this.applyGravity();
-                }
-        
             }
+            for (let i = 0; i < bottomTiles.length; i++) {
+                globals.debugBlocks.push(bottomTiles[i]);
+            }   
+            // HORIZONTAL ALIGNMENT
+            this.isGrounded = false; // Reset isGrounded at the start of update
+
+            if (right_tile1 && right_tile1.WHATBlockAmI === 1 && right_tile2 && right_tile2.WHATBlockAmI === 1) {
+                this.bounds.x = (tileIndex.x-2) * globals.BLOCKSIZE;
+                this.Velocity.x = 0;
+            } else if (left_tile1 && left_tile1.WHATBlockAmI === 1 && left_tile2 && left_tile2.WHATBlockAmI === 1) {
+                this.bounds.x = (tileIndex.x + 1) * globals.BLOCKSIZE;
+                this.Velocity.x = 0;
+            } else {
+                // Check if boss is grounded
+                for (let tile of bottomTiles) {
+                    if (tile.WHATBlockAmI !== 0) {
+                        this.isGrounded = true;
+                    }
+                }
+            }
+            if (this.currentAction) {
+                this.currentAction();
+            }
+            // VERTICAL ALIGNMENT
+            if (this.isGrounded) {
+                this.bounds.y = Math.floor(this.bounds.y / globals.BLOCKSIZE) * globals.BLOCKSIZE;
+                this.Velocity.y = 0;
+                this.ableToJump = true;
+            } else {
+                this.applyGravity();
+            }
+
             this.factors.characterPosition = this.bounds;
             this.factors.playerPosition = this.player.bounds;
+
             let action = this.ai.update(this.factors);
             if (action === "attack") {
-                this.attack();
+                this.currentAction = this.attack
+            } else if (action === "defend") {
+                this.currentAction = this.defend;
+            } else if (action === "run") {
+                this.currentAction = this.runAway;
+            } else if (action === "idle") {
+                this.currentAction = this.idle;
             }
-            if (action === "defend") {
-                this.defend();
-            } 
-            if (action === "run") {
-                this.runAway();
-            }
+
             this.collision();
         }
     }
+
     hit(n) {
         this.factors.health -= n;
-        console.log(this.health)
     }
+
     collision() {
-        for (let i = 0; i < globals.bullets.length; i++) {
-            let bullets = new Rect(globals.bullets[i].x,globals.bullets[i].y,globals.bullets[i].w,globals.bullets[i].h)
-            if (bullets.intersects(this.bounds) || this.bounds.intersects(bullets)) {
+        for (let bullet of globals.bullets) {
+            let bulletRect = new Rect(bullet.x, bullet.y, bullet.w, bullet.h);
+            if (this.bounds.intersects(bulletRect)) {
                 this.hit(this.player.gun.damage);
+                // Optionally, you can remove or deactivate the bullet here
+                // globals.bullets.splice(globals.bullets.indexOf(bullet), 1);
             }
         }
     }
+
     applyGravity() {
-        this.Velocity.y += this.gravity
-        this.bounds.y += this.Velocity.y
+        this.Velocity.y += this.gravity;
+        this.bounds.y += this.Velocity.y;
+
     }
+
     attack() {
-        console.log("Attack")
+        console.log("Attack");
+        if (this.player.bounds.x > this.bounds.x) {
+            this.Velocity.x += this.speed;
+        }
+        else {
+            this.Velocity.x -= this.speed;
+        }
     }
+
     defend() {
-        console.log("defend")
+        console.log("Defend");
     }
+
     runAway() {
-        console.log("run away")
+        console.log("Run away");
+        if (this.player.Xvelocity > 0) {
+            this.Velocity.x -= this.speed;
+        }
+        else {
+            this.Velocity.x += this.speed;
+        }
     }
+
     idle() {
-        console.log("do nothing")
+        console.log("Do nothing");
     }
 }
-
-// let player = {
-//     bounds: new Rect(100,100,30,30)
-// }
-// let actions = {
-//     "attack": 10,
-//     "defend": 3,
-//     "run": 1,
-//     "idle": 10
-// }
-// let boss = new Boss(80,player,actions);
-// boss.update();

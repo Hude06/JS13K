@@ -8,12 +8,13 @@ import { Boss } from './Utils/boss.js';
 export let globals = new Globals();
 let player = new Player();
 let actions = {
-    "attack": 12,
+    "attack": 15,
     "defend": 10,
     "run": 5,
     "idle": 4
 }
 let totalEnemies = 0;
+let boss = new Boss(100,player,actions);
 globals.canvas.addEventListener("mousedown", (_) => {
     globals.mouseClicked = true;
 })
@@ -26,8 +27,6 @@ globals.canvas.addEventListener("mousemove", (e) => {
 })
 let level1 = new Level(globals.blocks,globals.GameLevel1Options.level,globals.GameLevel1Options);
 globals.currentLevel = level1;
-let boss = new Boss(100,player,actions)
-console.log("Boss next actions is ",boss.update(globals.currentLevel));
 function keyboardInit() {
     window.addEventListener("keydown", (e) => {
         globals.currentKey.set(e.key, true);
