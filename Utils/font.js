@@ -17,10 +17,10 @@ function getIndex(char) {
 }
 
 
-export function startTyping() {
+export function startTyping(speed) {
     setInterval(()=>{
         globals.type_distance += 1
-    },150)
+    },speed)
 }
 export function drawText(text, x, y, size, typeing) {
     let ctx = globals.ctx;

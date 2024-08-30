@@ -2,8 +2,8 @@ import { globals } from "../main.js";
 import { Rect, Point } from "../Utils/JudeUtils.js";
 
 export class Enemy {
-    constructor(follow) {
-        this.bounds = new Rect((Math.random()*(1000))+100, 200, 30, 30);
+    constructor(follow,src) {
+        this.bounds = new Rect((Math.random()*(1000))+100, 200, 40, 40);
         this.gravity = 0.27;
         this.Yvelocity = 0;
         this.Xvelocity = 0;
@@ -12,10 +12,14 @@ export class Enemy {
         this.grounded = false;
         this.player = follow;
         this.sprite = new Image();
+        this.sprite.src = src
+        this.sprite.addEventListener("load", () => {
+            console.log("the image is loaded now")
+        })
         this.alive = true
-        this.sprite.src = "../Assets/Tileset.png";
     }
     update(level) {
+        console.log(this.sprite)
         if (!this.alive) {
             globals.enemys.splice(globals.enemys.indexOf(this), 1);
         }
@@ -93,12 +97,12 @@ export class Enemy {
             globals.ctx.strokeRect(this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
         }
         if (this.Xvelocity < 0) {
-            globals.ctx.drawImage(this.sprite, 0, 8*7, 8, 8, this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
+            globals.ctx.drawImage(this.sprite, this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
         } else {
             globals.ctx.save();
             globals.ctx.scale(-1, 1);
             const flippedX = -this.bounds.x - this.bounds.w; // Flipped position considering width
-            globals.ctx.drawImage(this.sprite, 0, 8*7, 8, 8, flippedX, this.bounds.y, this.bounds.w, this.bounds.h);
+            globals.ctx.drawImage(this.sprite, flippedX, this.bounds.y, this.bounds.w, this.bounds.h);
             globals.ctx.restore();
         }
     }

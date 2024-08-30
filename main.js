@@ -42,21 +42,6 @@ let mySongData = zzfxM(...song);
 
 // Play the song (returns a AudioBufferSourceNode)
 let myAudioNode = zzfxP(...mySongData);
-function spawnEnemy() {
-    if (globals.currentScreen == "game") {
-        if (totalEnemies <= 11) {
-            totalEnemies += 1;
-            // globals.enemys.push(new Enemy(player));
-            setTimeout(() => {
-                spawnEnemy();
-            } , 1000);
-        }
-    } else {
-        setTimeout(() => {
-            spawnEnemy();
-        },2000);
-    }
-}
 function loop() {
     //SETUP Canvas
     globals.debugBlocks = []
@@ -135,10 +120,9 @@ function loop() {
     requestAnimationFrame(loop);
 }    
 function init() {
-    spawnEnemy();
     if (globals.currentScreen == "splash") {
         console.log("Splash Screen");
-        startTyping()
+        startTyping(100)
     }
     level1.init();
     keyboardInit();

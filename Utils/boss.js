@@ -1,11 +1,21 @@
+import { Enemy } from "../Characters/enemy.js";
 import { globals } from "../main.js";
 import { Point, Rect } from "./JudeUtils.js";
 import { UtilityAI } from "./utilityAI.js";
+function spawnEnemy(player,e) {
+    let newE = e.toLowerCase();
+    if (newE == "chicken" || newE == "duck") {
+        globals.enemys.push(new Enemy(player,"../Assets/Duck.png"))
+    }
+    if (newE == "baby chicken" || newE == "baby duck") {
+        globals.enemys.push(new Enemy(player,"../Assets/BabyDuck.png"))
+    }
 
+}
 export class Boss {
     constructor(health, player, actions) {
         this.bounds = new Rect(200, 150, 100, 100);
-        this.speed = 0.25;
+        this.speed = 1.25;
         this.actions = actions;
         this.Velocity = new Point(0, 0);
         this.gravity = 0.2;
@@ -18,6 +28,7 @@ export class Boss {
             position: '', // Will be set in the update method
             gameState: '' // Will be set in the update method
         };
+        this.ableToAttack = true;
         this.ai = new UtilityAI(this.actions);
         this.player = player;
         this.alive = true;
@@ -39,11 +50,11 @@ export class Boss {
 
         if (this.alive) {
             this.bounds.x += this.Velocity.x;
-            if (this.Velocity.x > 5) {
-                this.Velocity.x = 4.5;
+            if (this.Velocity.x > this.speed) {
+                this.Velocity.x = this.speed-0.1;
             }
-            if (this.Velocity.x < -5) {
-                this.Velocity.x = -4.5;
+            if (this.Velocity.x < -this.speed) {
+                this.Velocity.x = -this.speed+0.1;
             }
             console.log(this.factors.health);
             const tileX = Math.floor((this.bounds.x + this.bounds.w / 2) / globals.BLOCKSIZE);
@@ -136,6 +147,15 @@ export class Boss {
 
     attack() {
         console.log("Attack");
+        if (this.ableToAttack) {
+            spawnEnemy(this.player, "baby duck");
+            this.ableToAttack = false
+            setTimeout(() => {
+                this.ableToAttack = true;
+            },2000);
+        }
+
+        
         if (this.player.bounds.x > this.bounds.x) {
             this.Velocity.x += this.speed;
         }
@@ -150,11 +170,10 @@ export class Boss {
 
     runAway() {
         console.log("Run away");
-        if (this.player.Xvelocity > 0) {
-            this.Velocity.x -= this.speed;
-        }
-        else {
+        if (this.bounds.x > this.player.bounds.x) {
             this.Velocity.x += this.speed;
+        } else {
+            this.Velocity.x -= this.speed;
         }
     }
 
