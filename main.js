@@ -5,6 +5,7 @@ import { Enemy } from './Characters/enemy.js';
 import { drawText } from './Utils/font.js';
 import { startTyping } from './Utils/font.js';
 import { Boss } from './Utils/boss.js';
+import { alert_box } from './Utils/alert_box.js';
 export let globals = new Globals();
 let player = new Player();
 let actions = {
@@ -54,7 +55,7 @@ function loop() {
     if (globals.currentScreen == "splash") {
         drawText("The 13th Challenge", globals.canvas.width/6, globals.canvas.height/2-50, 75,1);
         drawText("JS13K by Jude Hill", globals.canvas.width/4, globals.canvas.height/2+50, 50,1);
-        drawText("Press Enter to start", globals.canvas.width/3.25, globals.canvas.height/2+125, 35,1);
+        drawText("Press Enter to start", globals.canvas.width/3.25, globals.canvas.height/2+125, 35,1,0);
         if (globals.currentKey.get("Enter")) {
             setTimeout(() => {
                 globals.currentScreen = "game";
@@ -70,13 +71,14 @@ function loop() {
         for (let i = 0; i < globals.bombs.length; i++) {
             globals.bombs[i].update(globals.currentLevel);
         }
-        boss.update(globals.currentLevel);
+        // boss.update(globals.currentLevel);
         //DRAWING
         globals.particleEngine.draw();
         globals.bullets.forEach(bullet => {
             bullet.update(globals.ctx);
         });
         if (globals.debug == true) {
+            alert_box("Debug Mode is on right now this is centered and this is cool");
             for (let i = 0; i < globals.debugBlocks.length; i++) {
                 globals.ctx.lineWidth = 5
                 globals.ctx.strokeStyle = "red";
@@ -111,7 +113,7 @@ function loop() {
         for (let i = 0; i < globals.bombs.length; i++) {
             globals.bombs[i].draw();
         }
-        boss.draw();
+        // boss.draw();
         //END DRAWING
         globals.SCROLLX = (player.bounds.x - canvas.width/2)/1.4;
         globals.ctx.restore();

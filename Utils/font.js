@@ -22,7 +22,7 @@ export function startTyping(speed) {
         globals.type_distance += 1
     },speed)
 }
-export function drawText(text, x, y, size, typeing) {
+export function drawText(text, x, y, size, typeing, flicker) {
     let ctx = globals.ctx;
     const font = new Image();
     font.src = "../Assets/WhiteFont.png";
@@ -39,7 +39,17 @@ export function drawText(text, x, y, size, typeing) {
             }
             let charY = 0
             //Tint the color
-            ctx.drawImage(font,((charX*5)-5)-0.1,((charY*5)),5,5,x+(t*size),y+3,size,size);
+            if (Number.isInteger(flicker)) {
+                globals.flicking += 0.1
+                if (globals.flicking > 10) {
+                    ctx.drawImage(font,((charX*5)-5)-0.1,((charY*5)),5,5,x+(t*size),y+3,size,size)
+                    setTimeout(()=>{
+                        globals.flicking = 0;
+                    },1000)
+                } 
+            } else {
+                ctx.drawImage(font,((charX*5)-5)-0.1,((charY*5)),5,5,x+(t*size),y+3,size,size);
+            }
 
         }
     } else {

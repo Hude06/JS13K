@@ -1,4 +1,5 @@
 import { globals } from "../main.js";
+import { alert_box } from "../Utils/alert_box.js";
 import { Rect, Point } from "../Utils/JudeUtils.js";
 
 export class Enemy {

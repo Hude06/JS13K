@@ -3,6 +3,8 @@ import { globals } from "../main.js";
 import {zzfx} from "../Utils/globals.js"
 import { Bomb } from "../Utils/bomb.js";
 import { drawText } from "../Utils/font.js";
+import {alert_box} from "../Utils/alert_box.js";
+
 
 class Bullet {
     constructor(gunSpeed, directionX, x, y) {
@@ -81,7 +83,7 @@ export class Player {
         this.frameRate = 60;
         this.frames = 0
         this.health = 3;
-        this.bulletsLeft = 14;
+        this.bulletsLeft = 13;
         this.bombsLeft = 5;
 
     }
@@ -96,8 +98,7 @@ export class Player {
             this.animate();
         }
         ctx.save();
-        globals.ctx.filter = 'contrast(120%)';
-
+        globals.ctx.filter = `grayscale(${100 - (this.bulletsLeft * 7.69)}%)`;
         this.gun.update(this.Xvelocity,this.bounds.x,this.bounds.y+12);
         ctx.fillStyle = "red";
         if (this.Xvelocity > 0) {
@@ -170,8 +171,7 @@ export class Player {
     }
     update(currentKey, level) {
         if (this.bounds.w > 300) {
-            globals.reset();
-            alert("You got to big from the phobia of Triskaidekaphobia")
+            alert_box("You got to big from the phobia of Triskaidekaphobia")
         }
         this.timeLeft -= 0.5;
         this.Xvelocity *= this.friction;
@@ -228,8 +228,7 @@ export class Player {
         this.collision();
         if (this.health <= 0) {
             zzfx(...[2,,727,.01,.03,.53,3,1.39,.9,.1,,,,1.9,-44,.4,.39,.31,.12]); // Explosion 334
-            alert("Game Over");
-            globals.reset();
+            alert_box("Game Over");
         }
     }
  
