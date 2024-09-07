@@ -1,7 +1,6 @@
 import {Player} from './Characters/player.js';
 import {Level} from './Utils/level.js';
 import {Globals} from './Utils/globals.js';
-import { Enemy } from './Characters/enemy.js';
 import { drawText } from './Utils/font.js';
 import { startTyping } from './Utils/font.js';
 import { Boss } from './Utils/boss.js';
@@ -14,7 +13,6 @@ let actions = {
     "run": 5,
     "idle": 4
 }
-let totalEnemies = 0;
 let boss = new Boss(100,player,actions);
 globals.canvas.addEventListener("mousedown", (_) => {
     globals.mouseClicked = true;
@@ -27,7 +25,7 @@ globals.canvas.addEventListener("mousemove", (e) => {
     globals.mouseY = e.clientY;
 })
 let level1 = new Level(globals.blocks,globals.GameLevel1Options.level,globals.GameLevel1Options);
-globals.currentLevel = level1;
+let intro = new Level(globals.blocks,globals.IntroOptions.level,globals.IntroOptions)
 function keyboardInit() {
     window.addEventListener("keydown", (e) => {
         globals.currentKey.set(e.key, true);
@@ -38,11 +36,8 @@ function keyboardInit() {
         globals.navKey.set(e.key, false);
     });
 }
-const song = globals.currentLevel.options.song;
-let mySongData = zzfxM(...song);
-
-// Play the song (returns a AudioBufferSourceNode)
-let myAudioNode = zzfxP(...mySongData);
+let part = 0;
+let music = false;
 function loop() {
     //SETUP Canvas
     globals.debugBlocks = []
@@ -58,11 +53,82 @@ function loop() {
         drawText("Press Enter to start", globals.canvas.width/3.25, globals.canvas.height/2+125, 35,1,0);
         if (globals.currentKey.get("Enter")) {
             setTimeout(() => {
-                globals.currentScreen = "game";
+                globals.currentScreen = "intro";
             }, 200);
         }
     }
+    if (globals.currentScreen == "intro") {
+        // music = true;
+        globals.ctx.save()
+        globals.ctx.scale(1.25, 1.25) // Doubles size of anything draw to canvas.
+        globals.ctx.translate(-globals.SCROLLX, -globals.SCROLLY);
+        globals.currentLevel = intro
+        if (part === 0) {
+            drawText("This is your player he has gravity",200,400,20)
+        }
+        if (part === 1) {
+            drawText("Use W A S D or The Arrow Keys",275,400,20)
+            drawText("to run around and jump",330,425,20)
+        }
+        if (part === 2) {
+            drawText("Click to shoot a bullet",325,400,20)
+        }
+        if (part === 3) {
+            drawText("You have a phobia about running out of bullets",100,400,20)
+            drawText("You only have 13 left ....",325,425,20)
+
+        }
+        if (part === 4) {
+            drawText("dont run out or else",350,400,20)
+
+        }
+        if (part == 5) {
+            player.reset();
+            globals.currentScreen = "game";
+            part = null
+        }
+        for (let i = 0; i < globals.blocks.length; i++) {
+            globals.blocks[i].draw(globals.ctx,globals.currentLevel.options.tint.r,globals.currentLevel.options.tint.g,globals.currentLevel.options.tint.b);
+        }
+        player.draw(globals.ctx);
+        
+        globals.bullets.forEach(bullet => {
+            bullet.update(globals.ctx);
+        });
+        
+        setTimeout(() => {
+            player.update(globals.currentKey,globals.currentLevel);
+            setTimeout(() => {
+                if (part < 1) {
+                    part = 1
+                }
+                setTimeout(() => {
+                    if (part < 2) {
+                        part = 2
+                    }
+                    setTimeout(() => {
+                        if (part < 3) {
+                            part = 3
+                        }
+                        setTimeout(() => {
+                            if (part < 4) {
+                                part = 4
+                            }
+                            setTimeout(() => {
+                                if (part < 5) {
+                                    part = 5
+                                }
+                            },4000)
+                        },4000)
+                    },2500)
+                },2500)
+            }, 2000);
+        }, 1000);    
+        globals.SCROLLX = (player.bounds.x - canvas.width/2)/1.4;
+        globals.ctx.restore();
+    }
     if (globals.currentScreen == "game") {
+        globals.currentLevel = level1;
         globals.ctx.save()
         globals.ctx.scale(1.25, 1.25) // Doubles size of anything draw to canvas.
         globals.ctx.translate(-globals.SCROLLX, -globals.SCROLLY);
@@ -117,6 +183,12 @@ function loop() {
         //END DRAWING
         globals.SCROLLX = (player.bounds.x - canvas.width/2)/1.4;
         globals.ctx.restore();
+    }
+    if (music == true) {
+        // Play the song (returns a AudioBufferSourceNode)
+        // const song = globals.currentLevel.options.song;
+        // let mySongData = zzfxM(...song);
+        // let myAudioNode = zzfxP(...mySongData);
     }
     globals.navKey.clear();
     requestAnimationFrame(loop);

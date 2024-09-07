@@ -5,7 +5,6 @@ import { Bomb } from "../Utils/bomb.js";
 import { drawText } from "../Utils/font.js";
 import {alert_box} from "../Utils/alert_box.js";
 
-
 class Bullet {
     constructor(gunSpeed, directionX, x, y) {
         this.visible = true;
@@ -85,13 +84,46 @@ export class Player {
         this.health = 3;
         this.bulletsLeft = 13;
         this.bombsLeft = 5;
+        this.moveable = true;
+
+    }
+    reset() {
+        this.bounds = new Rect(500, 500, 30, 30);
+        this.animator = new Point(0, 0);
+        this.gravity = 0.27;
+        this.Yvelocity = 0;
+        this.Xvelocity = 0;
+        this.speed = 2;
+        this.friction = 0.75;
+        this.jumpHeight = 5;
+        this.grounded = false;
+        this.timeLeft = 0;
+        this.maxSpeed = 2;
+        this.isGrounded = false;
+        this.ableToJump = false;
+        this.gun = new Gun(this.Xvelocity, this.bounds.x, this.bounds.y,this);
+        this.image = new Image();
+        this.image.src = "../Assets/Player-Sheet.png";
+        this.frameRate = 60;
+        this.frames = 0
+        this.health = 3;
+        this.bulletsLeft = 13;
+        this.bombsLeft = 5;
+        this.moveable = true;
 
     }
     grow() {
-        this.bounds.w += 0.75;
+        this.moveable = false;
+        this.bounds.x = 550 - this.bounds.w/2
+        this.bounds.y = 500 - this.bounds.h/2
+        this.bounds.w += 0.25
+        this.bounds.h += 0.25
         setTimeout(() => {
-            this.grow();
-        },100)
+                if (this.bulletsLeft < 13) {
+                    this.grow();
+
+                }
+        },75)
     }
     draw(ctx) {
         if (Math.round(this.Xvelocity) !== 0) {
@@ -170,9 +202,6 @@ export class Player {
         }
     }
     update(currentKey, level) {
-        if (this.bounds.w > 300) {
-            alert_box("You got to big from the phobia of Triskaidekaphobia")
-        }
         this.timeLeft -= 0.5;
         this.Xvelocity *= this.friction;
         if (this.Xvelocity > this.maxSpeed) {
@@ -218,12 +247,16 @@ export class Player {
             //VERICAL ALIGNMENT
         } else {
             this.grounded = false;
-            this.applyGravity();
+            if (this.moveable) {
+                this.applyGravity();
+            }
         }
         if (globals.mouseClicked) {
             this.gun.shoot();
         }
-        this.handleMovement(currentKey);
+        if (this.moveable) {
+            this.handleMovement(currentKey);
+        }
         this.bounds.x += this.Xvelocity;
         this.collision();
         if (this.health <= 0) {
@@ -235,10 +268,12 @@ export class Player {
     handleMovement(currentKey) {
         if (this.bombsLeft > 0) {
             if (this.timeLeft < 0) {
-                if (globals.navKey.get("e")) {
-                    globals.bombs.push(new Bomb(globals.mouseX,globals.mouseY,this.bounds.x,this.bounds.y));
-                    this.timeLeft = 15
-                    this.bombsLeft -= 1
+                if (globals.currentScreen == "game") {
+                    if (globals.navKey.get("e")) {
+                        globals.bombs.push(new Bomb(globals.mouseX,globals.mouseY,this.bounds.x,this.bounds.y));
+                        this.timeLeft = 15
+                        this.bombsLeft -= 1
+                    }
                 }
             }
         }
@@ -254,6 +289,7 @@ export class Player {
     }
 
     applyGravity() {
+        console.log("Gravity")
         this.Yvelocity += this.gravity;
         this.bounds.y += this.Yvelocity;
     }
