@@ -37,14 +37,12 @@ function keyboardInit() {
     });
 }
 let part = 0;
-let music = false;
 function loop() {
     //SETUP Canvas
     globals.debugBlocks = []
     globals.ctx.fillStyle = "black";
     globals.ctx.imageSmoothingEnabled = false;
     globals.ctx.fillRect(0,0,canvas.width,canvas.height);
-    globals.debugBlocksBomb = []
     //Translating the canvas to the player position
     //UPDATE
     if (globals.currentScreen == "splash") {
@@ -58,7 +56,6 @@ function loop() {
         }
     }
     if (globals.currentScreen == "intro") {
-        // music = true;
         globals.ctx.save()
         globals.ctx.scale(1.25, 1.25) // Doubles size of anything draw to canvas.
         globals.ctx.translate(-globals.SCROLLX, -globals.SCROLLY);
@@ -134,10 +131,7 @@ function loop() {
         globals.ctx.translate(-globals.SCROLLX, -globals.SCROLLY);
         globals.particleEngine.update(0.01);
         player.update(globals.currentKey,globals.currentLevel);
-        for (let i = 0; i < globals.bombs.length; i++) {
-            globals.bombs[i].update(globals.currentLevel);
-        }
-        // boss.update(globals.currentLevel);
+        boss.update(globals.currentLevel);
         //DRAWING
         globals.particleEngine.draw();
         globals.bullets.forEach(bullet => {
@@ -158,13 +152,6 @@ function loop() {
                 }
                 globals.ctx.strokeRect(globals.debugBlocks[i].bounds.x, globals.debugBlocks[i].bounds.y, globals.debugBlocks[i].bounds.w, globals.debugBlocks[i].bounds.h);
             }
-            for (let i = 0; i < globals.debugBlocksBomb.length; i++) {
-                globals.ctx.lineWidth = 5
-                globals.ctx.strokeStyle = "red";
-                if (globals.debugBlocksBomb[i] !== null) {
-                    globals.ctx.strokeRect(globals.debugBlocksBomb[i].bounds.x, globals.debugBlocksBomb[i].bounds.y, globals.debugBlocksBomb[i].bounds.w, globals.debugBlocksBomb[i].bounds.h);
-                }
-            }
         }
         for (let i = 0; i < globals.blocks.length; i++) {
             globals.blocks[i].draw(globals.ctx,globals.currentLevel.options.tint.r,globals.currentLevel.options.tint.g,globals.currentLevel.options.tint.b);
@@ -176,20 +163,12 @@ function loop() {
 
         }
         drawText("LEVEL1", 350, 200, 75);
-        for (let i = 0; i < globals.bombs.length; i++) {
-            globals.bombs[i].draw();
-        }
-        // boss.draw();
+        boss.draw();
         //END DRAWING
         globals.SCROLLX = (player.bounds.x - canvas.width/2)/1.4;
         globals.ctx.restore();
     }
-    if (music == true) {
-        // Play the song (returns a AudioBufferSourceNode)
-        // const song = globals.currentLevel.options.song;
-        // let mySongData = zzfxM(...song);
-        // let myAudioNode = zzfxP(...mySongData);
-    }
+
     globals.navKey.clear();
     requestAnimationFrame(loop);
 }    

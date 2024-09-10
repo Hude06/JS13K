@@ -1,7 +1,6 @@
 import { Rect,Point } from "../Utils/JudeUtils.js";
 import { globals } from "../main.js";
 import {zzfx} from "../Utils/globals.js"
-import { Bomb } from "../Utils/bomb.js";
 import { drawText } from "../Utils/font.js";
 import {alert_box} from "../Utils/alert_box.js";
 
@@ -83,7 +82,6 @@ export class Player {
         this.frames = 0
         this.health = 3;
         this.bulletsLeft = 13;
-        this.bombsLeft = 5;
         this.moveable = true;
 
     }
@@ -108,7 +106,6 @@ export class Player {
         this.frames = 0
         this.health = 3;
         this.bulletsLeft = 13;
-        this.bombsLeft = 5;
         this.moveable = true;
 
     }
@@ -156,8 +153,6 @@ export class Player {
         ctx.strokeRect(75+globals.SCROLLX,50,150,20)
         drawText("Bullets - ", 75 + globals.SCROLLX, 75, 25);
         drawText(this.bulletsLeft + "",75+globals.SCROLLX,100,25);
-        drawText("Bombs - ", 75 + globals.SCROLLX, 125, 25);
-        drawText(this.bombsLeft + "",75+globals.SCROLLX,150,25);
     }
     animate() {
         this.frames += this.frameRate;
@@ -266,17 +261,6 @@ export class Player {
     }
  
     handleMovement(currentKey) {
-        if (this.bombsLeft > 0) {
-            if (this.timeLeft < 0) {
-                if (globals.currentScreen == "game") {
-                    if (globals.navKey.get("e")) {
-                        globals.bombs.push(new Bomb(globals.mouseX,globals.mouseY,this.bounds.x,this.bounds.y));
-                        this.timeLeft = 15
-                        this.bombsLeft -= 1
-                    }
-                }
-            }
-        }
         if (currentKey.get("a") || currentKey.get("ArrowLeft")) {
             this.Xvelocity -= this.speed
         } 

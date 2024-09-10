@@ -90,12 +90,10 @@ export class Globals {
         this.bullets = [];
         this.mouseClicked = false
         this.debugBlocks = []
-        this.debugBlocksBomb = []
         this.enemys = [];
         this.mouseX = 0;
         this.mouseY = 0;
         this.BLOCKSIZE = 32;
-        this.bombs = []
         this.currentScreen = "splash";
         this.type_distance = 0;
         this.flicking = 0;
