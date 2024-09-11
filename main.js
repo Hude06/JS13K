@@ -1,10 +1,15 @@
 import {Player} from './Characters/player.js';
 import {Level} from './Utils/level.js';
 import {Globals} from './Utils/globals.js';
-import { drawText } from './Utils/font.js';
-import { startTyping } from './Utils/font.js';
 import { Boss } from './Utils/boss.js';
-import { alert_box } from './Utils/alert_box.js';
+import { Text } from './Utils/font.js';
+// Get the current URL
+const currentUrl = window.location.href;
+
+// Extract the base URL
+const baseUrl = new URL(currentUrl).origin;
+
+console.log(baseUrl,currentUrl);
 export let globals = new Globals();
 let player = new Player();
 let actions = {
@@ -24,8 +29,11 @@ globals.canvas.addEventListener("mousemove", (e) => {
     globals.mouseX = e.clientX;
     globals.mouseY = e.clientY;
 })
-let level1 = new Level(globals.blocks,globals.GameLevel1Options.level,globals.GameLevel1Options);
-let intro = new Level(globals.blocks,globals.IntroOptions.level,globals.IntroOptions)
+let level1 = new Level(globals.blocks,globals.GameLevel1Options.level,globals.GameLevel1Options,"level1");
+let intro = new Level(globals.blocks,globals.IntroOptions.level,globals.IntroOptions,"intro");
+let challangeText = new Text("The 13th Challenge",globals.canvas.width/6,globals.canvas.height/2-50,75,500,false);
+let js13k = new Text("JS13K by Jude Hill",globals.canvas.width/4,globals.canvas.height/2+50,50,5,false);
+let pressEnter = new Text("Press Enter to start",globals.canvas.width/3.25,globals.canvas.height/2+125,35,5,false);
 function keyboardInit() {
     window.addEventListener("keydown", (e) => {
         globals.currentKey.set(e.key, true);
@@ -46,25 +54,30 @@ function loop() {
     //Translating the canvas to the player position
     //UPDATE
     if (globals.currentScreen == "splash") {
-        drawText("The 13th Challenge", globals.canvas.width/6, globals.canvas.height/2-50, 75,1);
-        drawText("JS13K by Jude Hill", globals.canvas.width/4, globals.canvas.height/2+50, 50,1);
-        drawText("Press Enter to start", globals.canvas.width/3.25, globals.canvas.height/2+125, 35,1,0);
+        let challangeText = new Text("The 13th Challenge",globals.canvas.width/6,globals.canvas.height/2-50,75,5,false);
+        let js13k = new Text("JS13K by Jude Hill",globals.canvas.width/4,globals.canvas.height/2+50,50,5,false);
+        let pressEnter = new Text("Press Enter to start",globals.canvas.width/3.25,globals.canvas.height/2+125,35,5,false);
+        challangeText.draw();
+        js13k.draw();
+        pressEnter.draw();
+
+        // drawText("The 13th Challenge", globals.canvas.width/6, globals.canvas.height/2-50, 75,1);
+        // drawText("JS13K by Jude Hill", globals.canvas.width/4, globals.canvas.height/2+50, 50,1);
+        // drawText("Press Enter to start", globals.canvas.width/3.25, globals.canvas.height/2+125, 35,1,0);
         if (globals.currentKey.get("Enter")) {
             setTimeout(() => {
                 if (globals.debug) {
                     globals.currentLevel = level1;
+                    globals.currentScreen = "game";
+                    console.log("Music is starting")
                     const song = globals.currentLevel.options.song;
                     let mySongData = zzfxM(...song);                    
                     let myAudioNode = zzfxP(...mySongData);
-                    console.log("Music is starting")
-
+                } else {
+                    globals.currentScreen = "intro";
                 }
-            }, 200);
-            if (globals.debug) {
-                globals.currentScreen = "game";
-            } else {
-                globals.currentScreen = "intro";
-            }
+                
+            }, 10);
         }
     }
     if (globals.currentScreen == "intro") {
@@ -72,6 +85,7 @@ function loop() {
         globals.ctx.scale(1.25, 1.25) // Doubles size of anything draw to canvas.
         globals.ctx.translate(-globals.SCROLLX, -globals.SCROLLY);
         globals.currentLevel = intro
+        
         if (part === 0) {
             drawText("This is your player he has gravity",200,400,20)
         }
@@ -95,8 +109,9 @@ function loop() {
             player.reset();
             globals.currentScreen = "game";
             globals.currentLevel = level1;
-            const buffer = zzfxM(globals.currentLevel.options.music);
-            const node = zzfxP(...buffer);
+            const song = globals.currentLevel.options.song;
+            let mySongData = zzfxM(...song);                    
+            let myAudioNode = zzfxP(...mySongData);
             part = null
         }
         for (let i = 0; i < globals.blocks.length; i++) {
@@ -139,6 +154,15 @@ function loop() {
         globals.SCROLLX = (player.bounds.x - canvas.width/2)/1.4;
         globals.ctx.restore();
     }
+    if (globals.currentScreen === "big") {
+        challangeText.draw();
+        js13k.draw();
+        pressEnter.draw();
+        challangeText.startTyping();
+        // drawText("As the last bullet fires and the weapon falls silent",500,100,20)
+        // drawText("an overwhelming dread engulfs him",650,125,20)
+        // drawText("and he feels himself growing larger",300,150,20)
+    }
     if (globals.currentScreen == "game") {
         globals.ctx.save()
         globals.ctx.scale(1.25, 1.25) // Doubles size of anything draw to canvas.
@@ -152,7 +176,6 @@ function loop() {
             bullet.update(globals.ctx);
         });
         if (globals.debug == true) {
-            alert_box("Debug Mode is on right now this is centered and this is cool");
             for (let i = 0; i < globals.debugBlocks.length; i++) {
                 globals.ctx.lineWidth = 5
                 globals.ctx.strokeStyle = "red";
@@ -176,7 +199,12 @@ function loop() {
             globals.enemys[i].update(globals.currentLevel);
 
         }
-        drawText("LEVEL1", 350, 200, 75);
+        if (globals.PlayerToBig) {
+            globals.currentScreen = "big"
+        }
+        if (!globals.PlayerToBig) {
+            drawText(globals.currentLevel.id, 350, 200, 75);
+        }
         boss.draw();
         //END DRAWING
         globals.SCROLLX = (player.bounds.x - canvas.width/2)/1.4;

@@ -1,8 +1,6 @@
 import { Rect,Point } from "../Utils/JudeUtils.js";
 import { globals } from "../main.js";
 import {zzfx} from "../Utils/globals.js"
-import { drawText } from "../Utils/font.js";
-import {alert_box} from "../Utils/alert_box.js";
 
 class Bullet {
     constructor(gunSpeed, directionX, x, y) {
@@ -45,7 +43,10 @@ class Gun {
                 this.timeLeft = 10;
             }
         } else {
-            this.player.grow();
+            if (globals.currentScreen !== "intro") {
+                this.player.grow();
+                globals.PlayerToBig = true;
+            }
         }
     }
     update(direction,x,y) {
@@ -108,19 +109,32 @@ export class Player {
         this.bulletsLeft = 13;
         this.moveable = true;
 
+
+        console.log("RESET",this.gravity,this.Xvelocity,this.Yvelocity)
+    }
+    toBig() {
+        setTimeout(() => {
+            console.log("Drawing")
+            drawText("As the last bullet fires and the weapon falls silent",200,100,10)
+            drawText("an overwhelming dread engulfs him",200,125,10)
+            drawText("and he feels himself growing larger",200,150,10)
+            drawText("a physical manifestation of his terror at running out of ammunition.",200,200,10)
+            this.toBig();
+        },10)
     }
     grow() {
         this.moveable = false;
-        this.bounds.x = 550 - this.bounds.w/2
+        this.bounds.x = 700 - this.bounds.w/2
         this.bounds.y = 500 - this.bounds.h/2
-        this.bounds.w += 0.25
-        this.bounds.h += 0.25
+        this.bounds.w += 0.12
+        this.bounds.h += 0.12
+
         setTimeout(() => {
                 if (this.bulletsLeft < 13) {
                     this.grow();
-
                 }
         },75)
+
     }
     draw(ctx) {
         if (Math.round(this.Xvelocity) !== 0) {
@@ -208,7 +222,7 @@ export class Player {
         const tileX = Math.floor(this.bounds.x / globals.BLOCKSIZE);
         const tileY = Math.floor(this.bounds.y / globals.BLOCKSIZE);
         const tileIndex = new Point(tileX, tileY);
-        const tileContents = level.get(tileIndex)
+        // const tileContents = level.get(tileIndex)
         const right_tile1 = level.get(tileIndex.add(1, 0));
         const right_tile2 = level.get(tileIndex.add(1, 1));
         const left_tile1 = level.get(tileIndex.add(0, 0));
@@ -256,7 +270,6 @@ export class Player {
         this.collision();
         if (this.health <= 0) {
             zzfx(...[2,,727,.01,.03,.53,3,1.39,.9,.1,,,,1.9,-44,.4,.39,.31,.12]); // Explosion 334
-            alert_box("Game Over");
         }
     }
  

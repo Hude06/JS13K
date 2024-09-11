@@ -1,14 +1,13 @@
 import { globals } from "../main.js";
-import { alert_box } from "../Utils/alert_box.js";
 import { Rect, Point } from "../Utils/JudeUtils.js";
 
 export class Enemy {
     constructor(follow,src) {
-        this.bounds = new Rect((Math.random()*(1000))+100, 200, 40, 40);
+        this.bounds = new Rect((Math.random()*(1000))+100, 500, 40, 40);
         this.gravity = 0.27;
         this.Yvelocity = 0;
         this.Xvelocity = 0;
-        this.speed = 2;
+        this.speed = 0.75;
         this.jumpHeight = 3;
         this.grounded = false;
         this.player = follow;
