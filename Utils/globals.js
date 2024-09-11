@@ -79,7 +79,9 @@ export const IntroOptions = {
 }
 export class Globals {
     constructor() {
+        this.boss = []
         this.currentKey = new Map();
+        this.mobsLeft = 0;
         this.blocks = [];
         this.SCROLLX = 200;
         this.debug = true;

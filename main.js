@@ -13,6 +13,8 @@ let actions = {
     "idle": 4
 }
 let boss = new Boss(100,player,actions);
+globals.boss = boss;
+globals.mobsLeft += 1;
 globals.canvas.addEventListener("mousedown", (_) => {
     globals.mouseClicked = true;
 })
@@ -212,7 +214,10 @@ function loop() {
         globals.SCROLLX = (player.bounds.x - canvas.width/2)/1.4;
         globals.ctx.restore();
     }
-
+    console.log(globals.mobsLeft)
+    if (globals.mobsLeft < 1) {
+        // console.log("You have killed all the mobs")
+    }
     globals.navKey.clear();
     requestAnimationFrame(loop);
 }    

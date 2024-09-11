@@ -24,6 +24,7 @@ export class Enemy {
             if (bulletBounds.intersects(this.bounds) || this.bounds.intersects(bulletBounds)) {
                 globals.bullets.splice(i, 1);
                 this.alive = false;
+                globals.mobsLeft -= 1;
 
             }
         }

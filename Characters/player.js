@@ -31,7 +31,7 @@ class Gun {
         this.angle = 10;
         this.directionX = 0;
         this.player = player;
-        this.damage = 3;
+        this.damage = 15;
     }
     shoot() {
         if (this.player.bulletsLeft > 0) {
@@ -209,6 +209,11 @@ export class Player {
     collision() {
         for (let i = 0; i < globals.enemys.length; i++) {
             if (this.bounds.intersects(globals.enemys[i].bounds)) {
+                this.health -= 0.25;
+                zzfx(...[1.98,,523,.01,.01,.07,2,1.9,-8.7,,,,.09,,36,.2,.17,.67,.04]); // Hit 118
+                this.knockback(this.Xvelocity)
+            }
+            if (this.bounds.intersects(globals.boss.bounds) || globals.boss.bounds.intersects(this.bounds)) {
                 this.health -= 0.25;
                 zzfx(...[1.98,,523,.01,.01,.07,2,1.9,-8.7,,,,.09,,36,.2,.17,.67,.04]); // Hit 118
                 this.knockback(this.Xvelocity)

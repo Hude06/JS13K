@@ -6,9 +6,11 @@ function spawnEnemy(player,e) {
     let newE = e.toLowerCase();
     if (newE == "chicken" || newE == "duck") {
         globals.enemys.push(new Enemy(player,"../Assets/Duck.png"))
+        globals.mobsLeft += 1
     }
     if (newE == "baby chicken" || newE == "baby duck") {
         globals.enemys.push(new Enemy(player,"../Assets/BabyDuck.png"))
+        globals.mobsLeft += 1
     }
 
 }
@@ -35,7 +37,13 @@ export class Boss {
         this.isGrounded = false; // Initialize isGrounded
         this.currentAction = null;
     }
-
+    knockBack() {
+        if (this.Velocity.x > 0) {
+            this.bounds.x -= this.speed*50
+        } else {
+            this.bounds.x += this.speed*50
+        }
+    }
     draw() {
         if (this.alive) {
             globals.ctx.drawImage(this.image, this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
@@ -125,13 +133,16 @@ export class Boss {
 
     hit(n) {
         this.factors.health -= n;
+        this.knockBack();
+        globals.mobsLeft -= 1;
     }
 
     collision() {
-        for (let bullet of globals.bullets) {
-            let bulletRect = new Rect(bullet.x, bullet.y, bullet.w, bullet.h);
+        for (let i = 0; i < globals.bullets.length; i++) {
+            let bulletRect = new Rect(globals.bullets[i].x, globals.bullets[i].y, globals.bullets[i].w, globals.bullets[i].h);
             if (this.bounds.intersects(bulletRect)) {
                 this.hit(this.player.gun.damage);
+                globals.bullets.splice(i, 1);
                 // Optionally, you can remove or deactivate the bullet here
                 // globals.bullets.splice(globals.bullets.indexOf(bullet), 1);
             }
