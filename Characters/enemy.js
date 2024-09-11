@@ -14,20 +14,15 @@ export class Enemy {
         this.player = follow;
         this.sprite = new Image();
         this.sprite.src = src
-        this.sprite.addEventListener("load", () => {
-            console.log("the image is loaded now")
-        })
         this.alive = true
     }
     update(level) {
-        console.log(this.sprite)
         if (!this.alive) {
             globals.enemys.splice(globals.enemys.indexOf(this), 1);
         }
         for (let i  = 0; i < globals.bullets.length; i++) {
             let bulletBounds = new Rect(globals.bullets[i].x, globals.bullets[i].y, globals.bullets[i].w, globals.bullets[i].h);
             if (bulletBounds.intersects(this.bounds) || this.bounds.intersects(bulletBounds)) {
-                console.log("hit")
                 globals.bullets.splice(i, 1);
                 this.alive = false;
 

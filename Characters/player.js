@@ -273,7 +273,6 @@ export class Player {
     }
 
     applyGravity() {
-        console.log("Gravity")
         this.Yvelocity += this.gravity;
         this.bounds.y += this.Yvelocity;
     }

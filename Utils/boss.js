@@ -56,7 +56,6 @@ export class Boss {
             if (this.Velocity.x < -this.speed) {
                 this.Velocity.x = -this.speed+0.1;
             }
-            console.log(this.factors.health);
             const tileX = Math.floor((this.bounds.x + this.bounds.w / 2) / globals.BLOCKSIZE);
             const tileY = Math.floor((this.bounds.y) / globals.BLOCKSIZE);
             const tileIndex = new Point(tileX, tileY);
@@ -146,7 +145,6 @@ export class Boss {
     }
 
     attack() {
-        console.log("Attack");
         if (this.ableToAttack) {
             spawnEnemy(this.player, "baby duck");
             this.ableToAttack = false

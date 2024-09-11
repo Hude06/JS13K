@@ -51,8 +51,20 @@ function loop() {
         drawText("Press Enter to start", globals.canvas.width/3.25, globals.canvas.height/2+125, 35,1,0);
         if (globals.currentKey.get("Enter")) {
             setTimeout(() => {
-                globals.currentScreen = "intro";
+                if (globals.debug) {
+                    globals.currentLevel = level1;
+                    const song = globals.currentLevel.options.song;
+                    let mySongData = zzfxM(...song);                    
+                    let myAudioNode = zzfxP(...mySongData);
+                    console.log("Music is starting")
+
+                }
             }, 200);
+            if (globals.debug) {
+                globals.currentScreen = "game";
+            } else {
+                globals.currentScreen = "intro";
+            }
         }
     }
     if (globals.currentScreen == "intro") {
@@ -82,6 +94,9 @@ function loop() {
         if (part == 5) {
             player.reset();
             globals.currentScreen = "game";
+            globals.currentLevel = level1;
+            const buffer = zzfxM(globals.currentLevel.options.music);
+            const node = zzfxP(...buffer);
             part = null
         }
         for (let i = 0; i < globals.blocks.length; i++) {
@@ -125,7 +140,6 @@ function loop() {
         globals.ctx.restore();
     }
     if (globals.currentScreen == "game") {
-        globals.currentLevel = level1;
         globals.ctx.save()
         globals.ctx.scale(1.25, 1.25) // Doubles size of anything draw to canvas.
         globals.ctx.translate(-globals.SCROLLX, -globals.SCROLLY);
@@ -174,7 +188,6 @@ function loop() {
 }    
 function init() {
     if (globals.currentScreen == "splash") {
-        console.log("Splash Screen");
         startTyping(100)
     }
     level1.init();
