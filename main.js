@@ -4,12 +4,6 @@ import {Globals} from './Utils/globals.js';
 import { Boss } from './Utils/boss.js';
 import { Text } from './Utils/font.js';
 // Get the current URL
-const currentUrl = window.location.href;
-
-// Extract the base URL
-const baseUrl = new URL(currentUrl).origin;
-
-console.log(baseUrl,currentUrl);
 export let globals = new Globals();
 let player = new Player();
 let actions = {
@@ -31,9 +25,13 @@ globals.canvas.addEventListener("mousemove", (e) => {
 })
 let level1 = new Level(globals.blocks,globals.GameLevel1Options.level,globals.GameLevel1Options,"level1");
 let intro = new Level(globals.blocks,globals.IntroOptions.level,globals.IntroOptions,"intro");
-let challangeText = new Text("The 13th Challenge",globals.canvas.width/6,globals.canvas.height/2-50,75,500,false);
-let js13k = new Text("JS13K by Jude Hill",globals.canvas.width/4,globals.canvas.height/2+50,50,5,false);
-let pressEnter = new Text("Press Enter to start",globals.canvas.width/3.25,globals.canvas.height/2+125,35,5,false);
+let challangeText = new Text("The 13th Challenge",globals.canvas.width/6,globals.canvas.height/2-50,75,10,false);
+let js13k = new Text("JS13K by a 15 year old",globals.canvas.width/4.5,globals.canvas.height/2+50,50,5,false);
+let pressEnter = new Text("Press Enter to start",globals.canvas.width/3.25,globals.canvas.height/2+125,35,5,true);
+
+let AsTheLast = new Text("As the last bullet fires and the weapon falls silent",400,100,20,15,false)
+let AnOverwhelming = new Text("an overwhelming dread engulfs him",600,125,20,15,false)
+let AndHeFeels = new Text("and he feels himself growing larger",585,150,20,15,false)
 function keyboardInit() {
     window.addEventListener("keydown", (e) => {
         globals.currentKey.set(e.key, true);
@@ -54,16 +52,12 @@ function loop() {
     //Translating the canvas to the player position
     //UPDATE
     if (globals.currentScreen == "splash") {
-        let challangeText = new Text("The 13th Challenge",globals.canvas.width/6,globals.canvas.height/2-50,75,5,false);
-        let js13k = new Text("JS13K by Jude Hill",globals.canvas.width/4,globals.canvas.height/2+50,50,5,false);
-        let pressEnter = new Text("Press Enter to start",globals.canvas.width/3.25,globals.canvas.height/2+125,35,5,false);
         challangeText.draw();
         js13k.draw();
         pressEnter.draw();
-
-        // drawText("The 13th Challenge", globals.canvas.width/6, globals.canvas.height/2-50, 75,1);
-        // drawText("JS13K by Jude Hill", globals.canvas.width/4, globals.canvas.height/2+50, 50,1);
-        // drawText("Press Enter to start", globals.canvas.width/3.25, globals.canvas.height/2+125, 35,1,0);
+        challangeText.startTyping();
+        js13k.startTyping();
+        pressEnter.startTyping();
         if (globals.currentKey.get("Enter")) {
             setTimeout(() => {
                 if (globals.debug) {
@@ -155,10 +149,17 @@ function loop() {
         globals.ctx.restore();
     }
     if (globals.currentScreen === "big") {
-        challangeText.draw();
-        js13k.draw();
-        pressEnter.draw();
-        challangeText.startTyping();
+        AsTheLast.draw();
+        AnOverwhelming.draw();
+        AndHeFeels.draw();
+
+            AsTheLast.startTyping();
+            setTimeout(() => {
+                AnOverwhelming.startTyping();
+                setTimeout(() => {
+                    AndHeFeels.startTyping();
+                },3500)
+            }, 6000);  
         // drawText("As the last bullet fires and the weapon falls silent",500,100,20)
         // drawText("an overwhelming dread engulfs him",650,125,20)
         // drawText("and he feels himself growing larger",300,150,20)
@@ -203,8 +204,9 @@ function loop() {
             globals.currentScreen = "big"
         }
         if (!globals.PlayerToBig) {
-            drawText(globals.currentLevel.id, 350, 200, 75);
-        }
+            let leveltext = new Text(globals.currentLevel.id, 350, 200, 75,500,false);
+            leveltext.draw();
+            }
         boss.draw();
         //END DRAWING
         globals.SCROLLX = (player.bounds.x - canvas.width/2)/1.4;
@@ -215,9 +217,6 @@ function loop() {
     requestAnimationFrame(loop);
 }    
 function init() {
-    if (globals.currentScreen == "splash") {
-        startTyping(100)
-    }
     level1.init();
     keyboardInit();
     loop();

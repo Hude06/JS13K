@@ -2,7 +2,7 @@ import { globals } from "../main.js";
 export class Text {
     constructor(text,x,y,size,typing_speed,AmFlickering) {
         this.speed = typing_speed;
-        this.distance = 0;
+        this.distance = -0.1;
         this.text = text
         this.x = x
         this.y = y
@@ -12,7 +12,7 @@ export class Text {
         this.flicking = 0;
     }
     startTyping() {
-        this.distance += 0.1
+        this.distance += this.speed/100
     }
     draw() {
         let ctx = globals.ctx;
@@ -32,7 +32,7 @@ export class Text {
                 if (this.AmFlickering) {
                     this.flicking += 0.1
                     if (this.flicking > 10) {
-                        ctx.drawImage(font,((charX*5)-5)-0.1,((charY*5)),5,5,this.x+(t*size),this.y+3,this.size,this.size)
+                        ctx.drawImage(font,((charX*5)-5)-0.1,((charY*5)),5,5,this.x+(t*this.size),this.y+3,this.size,this.size)
                         setTimeout(()=>{
                             this.flicking = 0;
                         },1000)

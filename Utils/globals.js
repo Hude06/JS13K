@@ -94,9 +94,12 @@ export class Globals {
         this.mouseY = 0;
         this.PlayerToBig = false;
         this.BLOCKSIZE = 32;
-        this.currentScreen = "big";
+        this.currentScreen = "splash";
         this.type_distance = 0;
         this.flicking = 0;
+        this.currentUrl = window.location.href;
+        this.baseUrl = new URL(this.currentUrl).origin;
+        
         this.navKey = new Map();
         this.currentLevel = null;
         this.particleEngine = new ParticleEngine(this.ctx, {

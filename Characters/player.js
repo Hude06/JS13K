@@ -1,6 +1,7 @@
 import { Rect,Point } from "../Utils/JudeUtils.js";
 import { globals } from "../main.js";
 import {zzfx} from "../Utils/globals.js"
+import { Text } from "../Utils/font.js";
 
 class Bullet {
     constructor(gunSpeed, directionX, x, y) {
@@ -45,7 +46,9 @@ class Gun {
         } else {
             if (globals.currentScreen !== "intro") {
                 this.player.grow();
-                globals.PlayerToBig = true;
+                setTimeout(() => {
+                    globals.PlayerToBig = true;
+                },5000)
             }
         }
     }
@@ -84,6 +87,7 @@ export class Player {
         this.health = 3;
         this.bulletsLeft = 13;
         this.moveable = true;
+        this.bulletsText = new Text("Bullets - ", 75 + globals.SCROLLX, 75, 25, 500, false);
 
     }
     reset() {
@@ -108,8 +112,7 @@ export class Player {
         this.health = 3;
         this.bulletsLeft = 13;
         this.moveable = true;
-
-
+        this.bulletsText = new Text("Bullets - ", 75 + globals.SCROLLX, 10, 25, 500, false);
         console.log("RESET",this.gravity,this.Xvelocity,this.Yvelocity)
     }
     toBig() {
@@ -165,8 +168,10 @@ export class Player {
         ctx.strokeStyle = "white"
         ctx.lineWidth = 4;
         ctx.strokeRect(75+globals.SCROLLX,50,150,20)
-        drawText("Bullets - ", 75 + globals.SCROLLX, 75, 25);
-        drawText(this.bulletsLeft + "",75+globals.SCROLLX,100,25);
+        this.bulletsText.x = 75 + globals.SCROLLX;
+        this.bulletsText.text = "Bullets " + this.bulletsLeft;
+        this.bulletsText.draw();
+        this.bulletsText.startTyping();
     }
     animate() {
         this.frames += this.frameRate;
@@ -260,7 +265,7 @@ export class Player {
                 this.applyGravity();
             }
         }
-        if (globals.mouseClicked) {
+        if (globals.mouseClicked || globals.currentKey.get("e")) {
             this.gun.shoot();
         }
         if (this.moveable) {
@@ -270,6 +275,10 @@ export class Player {
         this.collision();
         if (this.health <= 0) {
             zzfx(...[2,,727,.01,.03,.53,3,1.39,.9,.1,,,,1.9,-44,.4,.39,.31,.12]); // Explosion 334
+            alert("You died")
+            setTimeout(() => {
+                location.reload();
+            },1000)
         }
     }
  
