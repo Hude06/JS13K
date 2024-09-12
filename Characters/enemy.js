@@ -25,6 +25,7 @@ export class Enemy {
                 globals.bullets.splice(i, 1);
                 this.alive = false;
                 globals.mobsLeft -= 1;
+                globals.kills += 1;
 
             }
         }

@@ -1,1 +1,1237 @@
-(()=>{var u=class O{constructor(t,s){this.x=t,this.y=s}floor(){return new O(Math.floor(this.x),Math.floor(this.y))}add(t,s){return new O(this.x+t,this.y+s)}},r=class{constructor(t,s,e,i){this.x=t,this.y=s,this.w=e,this.h=i}intersects(t){return this.contains(new u(t.x,t.y))||this.contains(new u(t.x+t.w,t.y))||this.contains(new u(t.x,t.y+t.h))||this.contains(new u(t.x+t.w,t.y+t.h))||t.contains(new u(this.x,this.y))||t.contains(new u(this.x+this.w,this.y))||t.contains(new u(this.x,this.y+this.h))||t.contains(new u(this.x+this.w,this.y+this.h))}contains(t){return t.x>=this.x&&t.x<=this.x+this.w&&t.y>=this.y&&t.y<=this.y+this.h}},t=class{constructor(t,s){this.ctx=t,this.color=s.color||"white",this.size=s.size||5,this.count=s.count||10,this.duration=s.duration||1,this.particles=[],this.spawnParticles()}spawnParticles(s,e){for(let t=0;t<this.count;t++){var i=2*Math.random()*Math.PI,h=2*Math.random()+1;this.particles.push({x:s,y:e,vx:Math.cos(i)*h,vy:Math.sin(i)*h,size:this.size,life:Math.random()*this.duration,maxLife:this.duration})}}update(s){this.particles=this.particles.filter(t=>0<t.life),this.particles.forEach(t=>{t.x+=t.vx,t.y+=t.vy,t.life-=s})}draw(){this.ctx.clearRect(0,0,this.ctx.canvas.width,this.ctx.canvas.height),this.particles.forEach(t=>{this.ctx.fillStyle=this.color,this.ctx.beginPath(),this.ctx.arc(t.x,t.y,t.size,0,2*Math.PI),this.ctx.fill()})}},s=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],e=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],z=44100,i={level:[],tint:{r:200,g:200,b:0},song:[[[,0,77,,,.7,2,.41,,,,,,,,.06],[,0,43,.01,,.3,2,,,,,,,,,.02,.01],[,0,170,.003,,.008,,.97,-35,53,,,,,,.1],[.8,0,270,,,.12,3,1.65,-2,,,,,4.5,,.02],[,0,86,,,,,.7,,,,.5,,6.7,1,.05],[,0,41,,.05,.4,2,0,,,9,.01,,,,.08,.02],[,0,2200,,,.04,3,2,,,800,.02,,4.8,,.01,.1],[.3,0,16,,,.3,3]],[[[1,-1,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33],[3,1,22,,,,,,,,,,,,,,,,,,,,,,,,,,,,24,,,,24,,,,,,,,,,,,,,,,,,,,,,,,22,,22,,22,,,,],[5,-1,21,,,,,,,,,,,,,,,,,,,,,,,,,,,,24,,,,23,,,,,,,,,,,,,,,,,,,,,,,,24,,23,,21,,,,],[,1,21,,,,,,,,,,,,,,,,,,,,,,,,,,,,24,,,,23,,,,,,,,,,,,,,,,,,,,,,,,24,,23,,21,,,,]],[[1,-1,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33],[3,1,24,,,,,,,,27,,,,,,,,,,,,,,,,27,,,,24,,,,24,,,,,,,,27,,,,,,,,,,,,,,,,24,,24,,24,,,,],[5,-1,21,,,,,,,,,,,,,,,,,,,,,,,,,,,,24,,,,23,,,,,,,,,,,,,,,,,,,,,,,,24,,23,,21,,,,],[,1,21,,,,,,,,,,,,,,,,,,,,,,,,,,,,24,,,,23,,,,,,,,,,,,,,,,,,,,,,,,24,,23,,21,,,,],[6,1,,,34,34,34,,,,,,34,34,,,,,34,,,,34,34,,,,,34,,,,34,,,,34,34,34,,,,,,34,,,,,,34,34,,,34,34,,,,,,,,,34,34],[4,1,,,,,,,24,,,,,,24,,24,,,,24,,,,24,,,,,,,,,,,,,,,,24,,,,,,24,,24,,,,24,,,,24,,,,,,,,,,]],[[1,-1,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,23,23,35,23,23,36,23,23,35,23,23,36,23,23,35,35,23,23,35,23,23,35,23,23,36,23,23,35,23,23,36,36],[5,-1,21,,,19,,,21,,,,,,,,,,21,,,19,,,17,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,],[3,1,24,,,24,,,24,,,,,,,,,,24,,,24,,,24,,,,24.75,24.5,24.26,24.01,24.01,24.01,,,,,25,,,,,,,,25,,,,,,,,25,,,,,,,,25,25,25,25],[4,-1,,,,,,,,,,,,,,,,,,,,,,,,,,,24.75,24.5,24.26,24.01,24.01,24.01,24.01,24,,24,24,,24,24,24,24,,24,24,,24,,24,24,,24,24,,24,24,24,24,,24,24,,24,24],[7,-1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,23,,21,23,,35,,23,,21,23,,35,,35,,23,,21,23,,35,,21,23,,35,,21,23,,,],[6,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,34,36,34,,33,34,34,36,31,36,34,,31,34,32,,33,36,34,,31,34,34,36,33,36,33,,31,,,]],[[1,-1,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,17,17,29,17,17,29,17,17,29,17,17,29,17,17,29,29,17,17,29,17,17,29,17,17,29,17,17,29,17,17,29,29],[4,1,24,24,,24,24,,24,24,24,24,,24,24,,24,,24,24,,24,24,,24,24,24,24,,24,24,,24,24,24,24,,24,24,,24,24,24,,,24,24,,24,,24,24,,24,24,,24,24,24,24,,24,24,,24,24],[7,-1,21,,19,21,,33,,21,,19,21,,33,,33,,21,,19,21,,33,,21,,19,21,,33,,33,,17,,17,17,29,17,17,29,17,,17,17,29,17,17,29,17,,17,17,29,17,17,29,17,,17,17,29,17,17,29],[2,1,,34,34,34,,34,34,34,,34,34,34,,34,34,34,,34,34,34,,34,34,34,,34,34,34,,34,,,,34,34,34,,34,34,34,,34,34,34,,34,34,34,,34,34,34,,34,34,34,,34,34,34,,34,,,],[6,1,,,36,,,,,,36,,36,,,,,,,,36,,,,,,36,,36,,,,,,,,36,,,,,,,,,,,,,,,,36,,,,,,36,,36,,,,,,],[3,1,,,,,25,,,,,,,,25,,,,,,,,25,,,,,,,,25,25,25,25,,,,,25,,,,,25,,,25,,,,,,,,25,,,,,,,,25,25,25,25]],[[1,-1,14,14,26,14,14,26,14,14,26,14,14,26,14,14,26,26,14,14,26,14,14,26,14,14,26,14,14,26,14,14,26,26,17,17,29,17,17,29,17,17,29,17,17,29,17,17,29,29,19,19,31,19,19,31,19,19,31,19,19,31,19,19,31,31],[4,1,24,24,,24,24,,24,24,24,24,,24,24,,24,,24,24,,24,24,,24,24,24,24,,24,24,,24,24,24,24,,24,24,,24,24,24,24,,24,24,,36,,24,24,,24,24,,24,24,24,24,,24,24,,24,24],[7,-1,14,,14,14,26,14,14,26,14,,14,14,26,14,14,26,14,,14,14,26,14,14,26,14,,14,14,26,14,14,26,17,,17,17,29,17,17,29,17,,17,17,29,17,17,29,19,,19,19,31,19,19,31,19,,19,19,31,19,19,31],[2,1,,36,36,36,,36,36,36,,36,36,36,,36,36,36,,36,36,36,,36,36,36,,36,36,36,,36,,,,36,36,36,,36,36,36,,36,36,36,,36,36,36,,36,36,36,,36,36,36,,36,36,36,,36,,,],[3,1,,,,,25,,,,,,,,25,,,,,,,,25,,,,,,,,25,25,25,25,,,,,25,,,,,,,,25,,,,,,,,25,,,,,,,,25,25,25,25],[6,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,34,,,,,,34,,34,,,,,,,,34,,,,,,34,,34,,,,,,]]],[0,1,1,2,3,4,4],,{title:"Depp",Notes:"Unknown author"}]},X={level:[e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,[1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],e,e,e,e,[1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1],e,e,s,s],tint:{r:255,g:0,b:0},song:[[[,0,77,,,.7,2,.41,,,,,,,,.06],[,0,43,.01,,.3,2,,,,,,,,,.02,.01],[,0,170,.003,,.008,,.97,-35,53,,,,,,.1],[.8,0,270,,,.12,3,1.65,-2,,,,,4.5,,.02],[,0,86,,,,,.7,,,,.5,,6.7,1,.05],[,0,41,,.05,.4,2,0,,,9,.01,,,,.08,.02],[,0,2200,,,.04,3,2,,,800,.02,,4.8,,.01,.1],[.3,0,16,,,.3,3]],[[[1,-1,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33],[3,1,22,,,,,,,,,,,,,,,,,,,,,,,,,,,,24,,,,24,,,,,,,,,,,,,,,,,,,,,,,,22,,22,,22,,,,],[5,-1,21,,,,,,,,,,,,,,,,,,,,,,,,,,,,24,,,,23,,,,,,,,,,,,,,,,,,,,,,,,24,,23,,21,,,,],[,1,21,,,,,,,,,,,,,,,,,,,,,,,,,,,,24,,,,23,,,,,,,,,,,,,,,,,,,,,,,,24,,23,,21,,,,]],[[1,-1,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33],[3,1,24,,,,,,,,27,,,,,,,,,,,,,,,,27,,,,24,,,,24,,,,,,,,27,,,,,,,,,,,,,,,,24,,24,,24,,,,],[5,-1,21,,,,,,,,,,,,,,,,,,,,,,,,,,,,24,,,,23,,,,,,,,,,,,,,,,,,,,,,,,24,,23,,21,,,,],[,1,21,,,,,,,,,,,,,,,,,,,,,,,,,,,,24,,,,23,,,,,,,,,,,,,,,,,,,,,,,,24,,23,,21,,,,],[6,1,,,34,34,34,,,,,,34,34,,,,,34,,,,34,34,,,,,34,,,,34,,,,34,34,34,,,,,,34,,,,,,34,34,,,34,34,,,,,,,,,34,34],[4,1,,,,,,,24,,,,,,24,,24,,,,24,,,,24,,,,,,,,,,,,,,,,24,,,,,,24,,24,,,,24,,,,24,,,,,,,,,,]],[[1,-1,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,23,23,35,23,23,36,23,23,35,23,23,36,23,23,35,35,23,23,35,23,23,35,23,23,36,23,23,35,23,23,36,36],[5,-1,21,,,19,,,21,,,,,,,,,,21,,,19,,,17,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,],[3,1,24,,,24,,,24,,,,,,,,,,24,,,24,,,24,,,,24.75,24.5,24.26,24.01,24.01,24.01,,,,,25,,,,,,,,25,,,,,,,,25,,,,,,,,25,25,25,25],[4,-1,,,,,,,,,,,,,,,,,,,,,,,,,,,24.75,24.5,24.26,24.01,24.01,24.01,24.01,24,,24,24,,24,24,24,24,,24,24,,24,,24,24,,24,24,,24,24,24,24,,24,24,,24,24],[7,-1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,23,,21,23,,35,,23,,21,23,,35,,35,,23,,21,23,,35,,21,23,,35,,21,23,,,],[6,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,34,36,34,,33,34,34,36,31,36,34,,31,34,32,,33,36,34,,31,34,34,36,33,36,33,,31,,,]],[[1,-1,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,21,21,33,21,21,33,21,21,33,21,21,33,21,21,33,33,17,17,29,17,17,29,17,17,29,17,17,29,17,17,29,29,17,17,29,17,17,29,17,17,29,17,17,29,17,17,29,29],[4,1,24,24,,24,24,,24,24,24,24,,24,24,,24,,24,24,,24,24,,24,24,24,24,,24,24,,24,24,24,24,,24,24,,24,24,24,,,24,24,,24,,24,24,,24,24,,24,24,24,24,,24,24,,24,24],[7,-1,21,,19,21,,33,,21,,19,21,,33,,33,,21,,19,21,,33,,21,,19,21,,33,,33,,17,,17,17,29,17,17,29,17,,17,17,29,17,17,29,17,,17,17,29,17,17,29,17,,17,17,29,17,17,29],[2,1,,34,34,34,,34,34,34,,34,34,34,,34,34,34,,34,34,34,,34,34,34,,34,34,34,,34,,,,34,34,34,,34,34,34,,34,34,34,,34,34,34,,34,34,34,,34,34,34,,34,34,34,,34,,,],[6,1,,,36,,,,,,36,,36,,,,,,,,36,,,,,,36,,36,,,,,,,,36,,,,,,,,,,,,,,,,36,,,,,,36,,36,,,,,,],[3,1,,,,,25,,,,,,,,25,,,,,,,,25,,,,,,,,25,25,25,25,,,,,25,,,,,25,,,25,,,,,,,,25,,,,,,,,25,25,25,25]],[[1,-1,14,14,26,14,14,26,14,14,26,14,14,26,14,14,26,26,14,14,26,14,14,26,14,14,26,14,14,26,14,14,26,26,17,17,29,17,17,29,17,17,29,17,17,29,17,17,29,29,19,19,31,19,19,31,19,19,31,19,19,31,19,19,31,31],[4,1,24,24,,24,24,,24,24,24,24,,24,24,,24,,24,24,,24,24,,24,24,24,24,,24,24,,24,24,24,24,,24,24,,24,24,24,24,,24,24,,36,,24,24,,24,24,,24,24,24,24,,24,24,,24,24],[7,-1,14,,14,14,26,14,14,26,14,,14,14,26,14,14,26,14,,14,14,26,14,14,26,14,,14,14,26,14,14,26,17,,17,17,29,17,17,29,17,,17,17,29,17,17,29,19,,19,19,31,19,19,31,19,,19,19,31,19,19,31],[2,1,,36,36,36,,36,36,36,,36,36,36,,36,36,36,,36,36,36,,36,36,36,,36,36,36,,36,,,,36,36,36,,36,36,36,,36,36,36,,36,36,36,,36,36,36,,36,36,36,,36,36,36,,36,,,],[3,1,,,,,25,,,,,,,,25,,,,,,,,25,,,,,,,,25,25,25,25,,,,,25,,,,,,,,25,,,,,,,,25,,,,,,,,25,25,25,25],[6,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,34,,,,,,34,,34,,,,,,,,34,,,,,,34,,34,,,,,,]]],[0,1,1,2,3,4,4],,{title:"Depp",Notes:"Unknown author"}]},F=.3,q=new AudioContext,l=(t=1,s=.05,e=220,i=0,h=0,o=.1,n=0,P=1,a=0,r=0,l=0,c=0,d=0,H=0,u=0,W=0,y=0,b=1,g=0,m=0,p=0)=>{let v=Math,w=2*v.PI,x=44100,R=a*=500*w/x/x,f=e*=(1-s+2*s*v.random(s=[]))*w/x,k=0,G=0,L=0,T=1,Z=0,Y=0,S=0,A=p<0?-1:1,B=w*A*p*2/x,I=v.cos(B),C=v.sin,M=C(B)/4,E=1+M,V=-2*I/E,j=(1-M)/E,O=(1+A*I)/2/E,D=-(A+I)/E,U=O,X=0,z=0,K=0,J=0;for(r*=500*w/x**3,u*=w/x,l*=w/x,c*=x,d=x*d|0,t*=F,A=(i=x*i+9)+(g*=x)+(h*=x)+(o*=x)+(y*=x)|0;L<A;s[L++]=S*t)++Y%(100*W|0)||(S=n?1<n?2<n?3<n?C(k**3):v.max(v.min(v.tan(k),1),-1):1-(2*k/w%2+2)%2:1-4*v.abs(v.round(k/w)-k/w):C(k),S=(d?1-m+m*C(w*L/d):1)*(S<0?-1:1)*v.abs(S)**P*(L<i?L/i:L<i+g?1-(L-i)/g*(1-b):L<i+g+h?b:L<A-y?(A-L-y)/o*b:0),S=y?S/2+(y>L?0:(L<A-y?1:(A-L)/y)*s[L-y|0]/2/t):S,p&&(S=J=U*X+D*(X=z)+O*(z=S)-j*K-V*(K=J))),B=(e+=a+=r)*v.cos(u*G++),k+=B+B*H*C(L**5),T&&++T>c&&(e+=l,f+=l,T=0),!d||++Z%d||(e=f,a=R,T=T||1);(t=q.createBuffer(1,A,x)).getChannelData(0).set(s),(e=q.createBufferSource()).buffer=t,e.connect(q.destination),e.start()},h=class{constructor(t,s,e,i,h,o){this.speed=h,this.distance=-.1,this.text=t,this.x=s,this.y=e,this.size=i,this.AmFlickering=o,this.flicking=0}startTyping(){this.distance+=this.speed/100}draw(){var e=b.ctx,i=new Image;i.src="./WhiteFont.png";for(let s=0;s<this.text.length&&!(s>this.distance);s++){var h=this.text[s].toLowerCase();let t=0;null!==o(h)&&(t=o(h));this.AmFlickering?(this.flicking+=.1,10<this.flicking&&(e.drawImage(i,5*t-5-.1,0,5,5,this.x+s*this.size,this.y+3,this.size,this.size),setTimeout(()=>{this.flicking=0},1e3))):e.drawImage(i,5*t-5-.1,0,5,5,this.x+s*this.size,this.y+3,this.size,this.size)}}};function o(t){return"a"<=t&&t<="z"?t.charCodeAt(0)-"a".charCodeAt(0)+1:"0"<=t&&t<="9"?t.charCodeAt(0)-"0".charCodeAt(0)+27:null}var K=class{constructor(t,s,e,i){this.visible=!0,this.speed=t,this.x=e,this.y=i,this.w=5,this.h=5,this.directionX=s}update(t){t.fillStyle="white",t.fillRect(this.x,this.y,this.w,this.h),this.x+=this.directionX*this.speed}},n=class{constructor(t,s,e,i){this.timeLeft=0,this.gunSpeed=10,this.direction=t,this.pos=new u(s,e),this.width=40,this.height=10,this.angle=10,this.directionX=0,this.player=i,this.damage=15}shoot(){0<this.player.bulletsLeft?this.timeLeft<=0&&(--this.player.bulletsLeft,l(2.04,void 0,475,.01,.03,.06,4,1.9,-8.7,void 0,void 0,void 0,.09,void 0,36,.2,.17,.67,.04),this.directionX=Math.cos(this.angle),this.directionY=Math.sin(this.angle),b.bullets.push(new K(this.gunSpeed,this.directionX,this.pos.x,this.pos.y)),this.timeLeft=10):"intro"!==b.currentScreen&&(this.player.grow(),setTimeout(()=>{b.PlayerToBig=!0},5e3))}update(t,s,e){this.pos.x=s,this.pos.y=e,this.directionX=t,this.timeLeft-=.5,0<t?this.angle=0:t<0&&(this.angle=Math.PI)}},P=class{constructor(t,s,e){this.bounds=new r(t,s,b.BLOCKSIZE,b.BLOCKSIZE),this.tileSet=new Image,this.tileSet.src="./Tileset.png",this.WHATBlockAmI=e}draw(t,s,e,i){1==this.WHATBlockAmI&&(t.drawImage(this.tileSet,32,8,8,8,this.bounds.x,this.bounds.y,this.bounds.w,this.bounds.h),t.save(),t.globalCompositeOperation="source-atop",t.fillStyle="rgba("+s+", "+e+", "+i+", 0.5)",t.fillRect(this.bounds.x,this.bounds.y,this.bounds.w,this.bounds.h),t.restore())}},e=class{constructor(t,s,e,i){this.width,this.height,this.blocks=t,this.level=s,this.x=1,this.y=1,this.options=e,this.id=i}get(t){var s,e=t.x,i=t.y;for(s of this.blocks)if(s.bounds.x===e*b.BLOCKSIZE&&s.bounds.y===i*b.BLOCKSIZE)return s;return null}init(){console.log("Level is",this.id),this.height=this.level.length,this.width=this.level[0].length;for(let s=0;s<this.level.length;s++)for(let t=0;t<this.level[s].length;t++){var e=this.level[s][t];this.x=t,this.y=s,this.blocks.push(new P(this.x*b.BLOCKSIZE,this.y*b.BLOCKSIZE,e))}}},y=class{constructor(t,s){this.bounds=new r(1e3*Math.random()+100,500,40,40),this.gravity=.27,this.Yvelocity=0,this.Xvelocity=0,this.speed=.75,this.jumpHeight=3,this.grounded=!1,this.player=t,this.sprite=new Image,this.sprite.src=s,this.alive=!0}update(t){this.alive||b.enemys.splice(b.enemys.indexOf(this),1);for(let t=0;t<b.bullets.length;t++){var s=new r(b.bullets[t].x,b.bullets[t].y,b.bullets[t].w,b.bullets[t].h);(s.intersects(this.bounds)||this.bounds.intersects(s))&&(b.bullets.splice(t,1),this.alive=!1,--b.mobsLeft)}this.bounds.y+=this.Yvelocity,this.bounds.x+=this.Xvelocity;var e=Math.floor(this.bounds.x/b.BLOCKSIZE),i=Math.floor(this.bounds.y/b.BLOCKSIZE),e=new u(e,i),i=(t.get(e),t.get(e.add(1,0))),h=t.get(e.add(1,1)),o=t.get(e.add(0,0)),n=t.get(e.add(0,1)),a=t.get(e.add(0,1)),t=t.get(e.add(1,1));1==i.WHATBlockAmI&&1==h.WHATBlockAmI?(this.bounds.x=e.x*b.BLOCKSIZE,this.Xvelocity=0,this.isGrounded=1==a.WHATBlockAmI):1==o.WHATBlockAmI&&1==n.WHATBlockAmI?(this.bounds.x=(e.x+1)*b.BLOCKSIZE,this.Xvelocity=0,this.isGrounded=1==t.WHATBlockAmI):this.isGrounded=1==a.WHATBlockAmI||1==t.WHATBlockAmI,this.isGrounded?(this.grounded=!0,this.Yvelocity=0,this.ableToJump=!0,this.bounds.y=e.y*b.BLOCKSIZE):(this.grounded=!1,this.applyGravity()),this.followPlayer(),this.bounds.y>this.player.bounds.y&&this.jump()}followPlayer(){this.player.bounds.x>this.bounds.x?this.Xvelocity=this.speed+(5*Math.random()-2.5):this.Xvelocity=-this.speed+(5*Math.random()-2.5)}applyGravity(){this.Yvelocity+=this.gravity}jump(){this.grounded&&(this.Yvelocity-=this.jumpHeight,this.grounded=!1)}draw(){var t;1==b.debug&&(b.ctx.strokeStyle="red",b.ctx.strokeRect(this.bounds.x,this.bounds.y,this.bounds.w,this.bounds.h)),this.Xvelocity<0?b.ctx.drawImage(this.sprite,this.bounds.x,this.bounds.y,this.bounds.w,this.bounds.h):(b.ctx.save(),b.ctx.scale(-1,1),t=-this.bounds.x-this.bounds.w,b.ctx.drawImage(this.sprite,t,this.bounds.y,this.bounds.w,this.bounds.h),b.ctx.restore())}};var H=class{constructor(t){this.actionWeights=t,this.actions=Object.keys(t),this.timer=10}update(s){this.timer+=.1;e=s.characterPosition,h=s.playerPosition,t=e.x+e.width/2,t=h.x+h.width/2-t,h=h.y+h.height/2-(e.y+e.height/2);var t,e=Math.sqrt(t*t+h*h),i=(s.position=e<25?"closeToEnemy":"farFromEnemy",s.gameState=50<(t=s.health)?"safe":25<t?"warning":"risky",this.actions.map(t=>((t,s)=>{let e=0;switch(t){case"attack":50<s.health&&(e+=5,"closeToEnemy"===s.position)&&(e+=10);break;case"defend":s.health<50&&(e+=10);break;case"run":s.health<30&&(e+=15,"closeToEnemy"===s.position)&&(e+=5);break;case"idle":e=1;break;default:console.warn("Unknown action: "+t)}return Math.max(0,e)})(t,s)*(this.actionWeights[t]||1))),h=i.reduce((t,s)=>t+s,0);if(0===h)return this.actions[0];var o=Math.random()*h;let n=0;for(let t=0;t<this.actions.length;t++)if(o<(n+=i[t])&&15<this.timer)return this.timer=0,this.actions[t]}};var s=class{constructor(t,s,e){this.bounds=new r(200,150,100,100),this.speed=1,this.actions=e,this.Velocity=new u(0,0),this.gravity=.2,this.image=new Image,this.image.src="./BabyDuck.png",this.factors={health:t,characterPosition:this.bounds,playerPosition:s.bounds,position:"",gameState:""},this.ableToAttack=!1,setTimeout(()=>{this.ableToAttack=!0},3e3),this.ai=new H(this.actions),this.player=s,this.alive=!0,this.isGrounded=!1,this.currentAction=null}knockBack(){0<this.Velocity.x?this.bounds.x-=50*this.speed:this.bounds.x+=50*this.speed}draw(){this.alive&&b.ctx.drawImage(this.image,this.bounds.x,this.bounds.y,this.bounds.w,this.bounds.h)}update(e){if(this.ableToAttack&&(t=this.player,"chicken"!=(s=(s="baby duck").toLowerCase())&&"duck"!=s||(b.enemys.push(new y(t,"./Duck.png")),b.mobsLeft+=1),"baby chicken"!=s&&"baby duck"!=s||(b.enemys.push(new y(t,"./BabyDuck.png")),b.mobsLeft+=1),this.ableToAttack=!1,s=1e4-100*b.timePlayed,s=Math.max(s,1e3),setTimeout(()=>{this.ableToAttack=!0},s)),this.factors.health<=0)this.alive=!1;else if(this.alive){this.bounds.x+=this.Velocity.x,this.Velocity.x>this.speed&&(this.Velocity.x=this.speed-.1),this.Velocity.x<-this.speed&&(this.Velocity.x=.1-this.speed);var t=Math.floor((this.bounds.x+this.bounds.w/2)/b.BLOCKSIZE),s=Math.floor(this.bounds.y/b.BLOCKSIZE),i=new u(t,s),h=e.get(i.add(1,0)),o=e.get(i.add(1,1)),n=e.get(i.add(0,0)),a=e.get(i.add(0,1)),r=[],l=Math.floor(this.bounds.h/(b.BLOCKSIZE-5)),c=Math.floor(this.bounds.w/(b.BLOCKSIZE-5));for(let s=0;s<l;s++)for(let t=0;t<c;t++)r.push(e.get(i.add(t-1,s+1)));for(let t=0;t<r.length;t++)b.debugBlocks.push(r[t]);if(this.isGrounded=!1,h&&1===h.WHATBlockAmI&&o&&1===o.WHATBlockAmI)this.bounds.x=(i.x-2)*b.BLOCKSIZE,this.Velocity.x=0;else if(n&&1===n.WHATBlockAmI&&a&&1===a.WHATBlockAmI)this.bounds.x=(i.x+1)*b.BLOCKSIZE,this.Velocity.x=0;else for(var d of r)0!==d.WHATBlockAmI&&(this.isGrounded=!0);this.currentAction&&this.currentAction(),this.isGrounded?(this.bounds.y=Math.floor(this.bounds.y/b.BLOCKSIZE)*b.BLOCKSIZE,this.Velocity.y=0,this.ableToJump=!0):this.applyGravity(),this.factors.characterPosition=this.bounds,this.factors.playerPosition=this.player.bounds;h=this.ai.update(this.factors);"attack"===h?this.currentAction=this.attack:"defend"===h?this.currentAction=this.defend:"run"===h?this.currentAction=this.runAway:"idle"===h&&(this.currentAction=this.idle),this.collision()}}hit(t){this.factors.health-=t,this.knockBack(),--b.mobsLeft}collision(){for(let t=0;t<b.bullets.length;t++){var s=new r(b.bullets[t].x,b.bullets[t].y,b.bullets[t].w,b.bullets[t].h);(this.bounds.intersects(s)||s.intersects(this.bounds))&&(this.hit(this.player.gun.damage),b.bullets.splice(t,1))}}applyGravity(){this.Velocity.y+=this.gravity,this.bounds.y+=this.Velocity.y}attack(){this.player.bounds.x>this.bounds.x?this.Velocity.x+=this.speed:this.Velocity.x-=this.speed}defend(){console.log("Defend")}runAway(){console.log("Run away"),this.bounds.x>this.player.bounds.x?this.Velocity.x+=this.speed:this.Velocity.x-=this.speed}idle(){console.log("Do nothing")}},b=new class{constructor(){this.boss=[],this.currentKey=new Map,this.mobsLeft=0,this.blocks=[],this.SCROLLX=200,this.debug=!0,this.SCROLLY=0,this.canvas=document.getElementById("canvas"),this.ctx=this.canvas.getContext("2d"),this.bullets=[],this.mouseClicked=!1,this.debugBlocks=[],this.enemys=[],this.mouseX=0,this.mouseY=0,this.PlayerToBig=!1,this.BLOCKSIZE=32,this.currentScreen="splash",this.type_distance=0,this.flicking=0,this.currentUrl=window.location.href,this.baseUrl=new URL(this.currentUrl).origin,this.timePlayed=0,this.navKey=new Map,this.currentLevel=null,this.particleEngine=new t(this.ctx,{color:"red",size:3,count:100,duration:.5}),this.GameLevel1Options=i,this.IntroOptions=X,this.zzfx=(...t)=>this.zzfxP(this.zzfxG(...t)),this.zzfxP=(...t)=>{let s=q.createBufferSource(),e=q.createBuffer(t.length,t[0].length,z);return t.map((t,s)=>e.getChannelData(s).set(t)),s.buffer=e,s.connect(q.destination),s.start(),s},this.zzfxG=(t=1,s=.05,e=220,i=0,h=0,o=.1,n=0,a=1,r=0,l=0,c=0,d=0,u=0,y=0,b=0,g=0,m=0,p=1,v=0,w=0)=>{let x=2*Math.PI,f=r*=500*x/z**2,k=(0<b?1:-1)*x/4,L=e*=(1+2*s*Math.random()-s)*x/z,T=[],S=0,A=0,B=0,I=1,C=0,M=0,E=0,O,X;for(l*=500*x/z**3,b*=x/z,c*=x/z,d*=z,u=z*u|0,X=(i=99+z*i)+(v*=z)+(h*=z)+(o*=z)+(m*=z)|0;B<X;T[B++]=E)++M%(100*g|0)||(E=n?1<n?2<n?3<n?Math.sin((S%x)**3):Math.max(Math.min(Math.tan(S),1),-1):1-(2*S/x%2+2)%2:1-4*Math.abs(Math.round(S/x)-S/x):Math.sin(S),E=(u?1-w+w*Math.sin(2*Math.PI*B/u):1)*(0<E?1:-1)*Math.abs(E)**a*t*F*(B<i?B/i:B<i+v?1-(B-i)/v*(1-p):B<i+v+h?p:B<X-m?(X-B-m)/o*p:0),E=m?E/2+(m>B?0:(B<X-m?1:(X-B)/m)*T[B-m|0]/2):E),O=(e+=r+=l)*Math.sin(A*b-k),S+=O-O*y*(1-1e9*(Math.sin(B)+1)%2),A+=O-O*y*(1-1e9*(Math.sin(B)**2+1)%2),I&&++I>d&&(e+=c,L+=c,I=0),!u||++C%u||(e=L,r=f,I=I||1);return T},this.zzfxV=.3,this.zzfxX=new(window.AudioContext||webkitAudioContext),this.zzfxM=(e,i,h,t=125)=>{let o,n,a,r,l,c,d,u,y,b,g,m,p,v,w=0,x=[],f=[],k=[],L=0,T=0,S=1,A={},B=z/t*60>>2;for(;S;L++)x=[S=u=m=0],h.map((t,s)=>{for(d=i[t][L]||[0,0,0],S|=!!i[t][L],v=m+(i[t][0].length-2-!u)*B,p=s==h.length-1,n=2,r=m;n<d.length+p;u=++n){for(l=d[n],y=n==d.length+p-1&&p||b!=(d[0]||0)|l|0,a=0;a<B&&u;a++>B-99&&y&&(g+=(g<1)/99))c=(1-g)*x[w++]/2||0,f[r]=(f[r]||0)-c*T+c,k[r]=(k[r++]||0)+c*T+c;l&&(g=l%1,T=d[1]||0,l|=0)&&(x=A[[b=d[w=0]||0,l]]=A[[b,l]]||((o=[...e[b]])[2]*=2**((l-12)/12),0<l?this.zzfxG(...o):[]))}m=v});return[f,k]}}reset(){location.reload()}},a=new class{constructor(){this.bounds=new r(700,500,30,30),this.animator=new u(0,0),this.gravity=.27,this.Yvelocity=0,this.Xvelocity=0,this.speed=2,this.friction=.75,this.jumpHeight=5,this.grounded=!1,this.timeLeft=0,this.maxSpeed=2,this.isGrounded=!1,this.ableToJump=!1,this.gun=new n(this.Xvelocity,this.bounds.x,this.bounds.y,this),this.image=new Image,this.image.src="../Assets/Player-Sheet.png",this.frameRate=60,this.frames=0,this.health=3,this.bulletsLeft=13,this.moveable=!0,this.bulletsText=new h("Bullets - ",75+b.SCROLLX,75,25,500,!1)}reset(){this.bounds=new r(700,500,30,30),this.animator=new u(0,0),this.gravity=.27,this.Yvelocity=0,this.Xvelocity=0,this.speed=2,this.friction=.75,this.jumpHeight=5,this.grounded=!1,this.timeLeft=0,this.maxSpeed=2,this.isGrounded=!1,this.ableToJump=!1,this.gun=new n(this.Xvelocity,this.bounds.x,this.bounds.y,this),this.image=new Image,this.image.src="../Assets/Player-Sheet.png",this.frameRate=60,this.frames=0,this.health=3,this.bulletsLeft=13,this.moveable=!0,this.bulletsText=new h("Bullets - ",75+b.SCROLLX,10,25,500,!1),console.log("RESET",this.gravity,this.Xvelocity,this.Yvelocity)}grow(){this.moveable=!1,this.bounds.x=700-this.bounds.w/2,this.bounds.y=500-this.bounds.h/2,this.bounds.w+=.12,this.bounds.h+=.12,setTimeout(()=>{this.bulletsLeft<13&&this.grow()},75)}draw(t){var s;0!==Math.round(this.Xvelocity)&&this.animate(),t.save(),b.ctx.filter=`grayscale(${100-7.69*this.bulletsLeft}%)`,this.gun.update(this.Xvelocity,this.bounds.x,this.bounds.y+12),t.fillStyle="red",0<this.Xvelocity?t.drawImage(this.image,this.animator.x,this.animator.y,16,16,this.bounds.x,this.bounds.y,this.bounds.w,this.bounds.h):(t.save(),t.scale(-1,1),s=-this.bounds.x-this.bounds.w,t.drawImage(this.image,this.animator.x,this.animator.y,16,16,s,this.bounds.y,this.bounds.w,this.bounds.h),t.restore()),b.debug&&(t.strokeStyle="yellow",t.lineWidth=2,t.strokeRect(this.bounds.x,this.bounds.y,this.bounds.w,this.bounds.h)),t.restore(),t.fillStyle="red",t.fillRect(75+b.SCROLLX,50,50*this.health,20),t.strokeStyle="white",t.lineWidth=4,t.strokeRect(75+b.SCROLLX,50,150,20),this.bulletsText.x=75+b.SCROLLX,this.bulletsText.text="Bullets "+this.bulletsLeft,this.bulletsText.draw(),this.bulletsText.startTyping()}animate(){this.frames+=this.frameRate,500<this.frames?(this.animator.x=16,1e3<this.frames&&(this.frames=0)):this.animator.x=0}knockback(t){Math.round(t),this.Xvelocity+=30*this.speed,this.jump(10)}jump(t){var s=this.jumpHeight;t&&(this.jumpHeight=t),this.Yvelocity=-this.jumpHeight-2,this.grounded=!1,this.bounds.y-=5,this.jumpHeight=s}collision(){for(let t=0;t<b.enemys.length;t++)(this.bounds.intersects(b.enemys[t].bounds)||b.enemys[t].bounds.intersects(this.bounds))&&(this.health-=.25,l(1.98,void 0,523,.01,.01,.07,2,1.9,-8.7,void 0,void 0,void 0,.09,void 0,36,.2,.17,.67,.04),this.knockback(this.Xvelocity)),(this.bounds.intersects(b.boss.bounds)||b.boss.bounds.intersects(this.bounds))&&(this.health-=.25,l(1.98,void 0,523,.01,.01,.07,2,1.9,-8.7,void 0,void 0,void 0,.09,void 0,36,.2,.17,.67,.04),this.knockback(this.Xvelocity))}update(t,s){this.timeLeft-=.5,this.Xvelocity*=this.friction,this.Xvelocity>this.maxSpeed&&(this.Xvelocity=this.maxSpeed),this.Xvelocity<-this.maxSpeed&&(this.Xvelocity=-this.maxSpeed);var e=Math.floor(this.bounds.x/b.BLOCKSIZE),i=Math.floor(this.bounds.y/b.BLOCKSIZE),e=new u(e,i),i=s.get(e.add(1,0)),h=s.get(e.add(1,1)),o=s.get(e.add(0,0)),n=s.get(e.add(0,1)),a=s.get(e.add(0,1)),s=s.get(e.add(1,1));b.debugBlocks.push(i),b.debugBlocks.push(h),b.debugBlocks.push(o),b.debugBlocks.push(n),b.debugBlocks.push(a),b.debugBlocks.push(s),1==i.WHATBlockAmI&&1==h.WHATBlockAmI?(this.bounds.x=e.x*b.BLOCKSIZE,this.Xvelocity=0,this.isGrounded=1==a.WHATBlockAmI):1==o.WHATBlockAmI&&1==n.WHATBlockAmI?(this.bounds.x=(e.x+1)*b.BLOCKSIZE,this.Xvelocity=0,this.isGrounded=1==s.WHATBlockAmI):this.isGrounded=1==a.WHATBlockAmI||1==s.WHATBlockAmI,this.isGrounded?(this.grounded=!0,this.Yvelocity=0,this.ableToJump=!0,this.bounds.y=e.y*b.BLOCKSIZE):(this.grounded=!1,this.moveable&&this.applyGravity()),(b.mouseClicked||b.currentKey.get("e"))&&this.gun.shoot(),this.moveable&&this.handleMovement(t),this.bounds.x+=this.Xvelocity,this.collision(),this.health<=0&&(l(2,void 0,727,.01,.03,.53,3,1.39,.9,.1,void 0,void 0,void 0,1.9,-44,.4,.39,.31,.12),alert("You died"),setTimeout(()=>{location.reload()},1e3))}handleMovement(t){(t.get("a")||t.get("ArrowLeft"))&&(this.Xvelocity-=this.speed),(t.get("d")||t.get("ArrowRight"))&&(this.Xvelocity+=this.speed),(t.get(" ")||t.get("ArrowUp")||t.get("w"))&&this.ableToJump&&this.grounded&&this.jump()}applyGravity(){this.Yvelocity+=this.gravity,this.bounds.y+=this.Yvelocity}},c=new s(100,a,{attack:15,defend:10,run:5,idle:4}),d=(b.boss=c,b.mobsLeft+=1,b.canvas.addEventListener("mousedown",t=>{b.mouseClicked=!0}),b.canvas.addEventListener("mouseup",t=>{b.mouseClicked=!1}),b.canvas.addEventListener("mousemove",t=>{b.mouseX=t.clientX,b.mouseY=t.clientY}),new e(b.blocks,b.IntroOptions.level,b.IntroOptions,"intro")),g=new e(b.blocks,b.GameLevel1Options.level,b.GameLevel1Options,"level1"),m=(console.log(b.IntroOptions),new h("The 13th Challenge",b.canvas.width/6,b.canvas.height/2-50,75,10,!1)),p=new h("JS13K by a 15 year old",b.canvas.width/4.5,b.canvas.height/2+50,50,5,!1),v=new h("Press Enter to start",b.canvas.width/3.25,b.canvas.height/2+125,35,5,!0),w=new h("As the last bullet fires and the weapon falls silent",400,100,20,15,!1),x=new h("an overwhelming dread engulfs him",600,125,20,15,!1),f=new h("and he feels himself growing larger",585,150,20,15,!1);var k=0,L=new h("This is your player",415,200,20,20,!1),T=new h("Use W A S D or The Arrow Keys",325,200,20,20,!1),S=new h("to run around and jump",400,230,20,20,!1),A=new h("You have a phobia about running out of bullets",200,200,20,20,!1),B=new h("You only have 13 left ....",400,230,20,20,!1),I=new h("Click to shoot a bullet",375,400,20,20,!1),C=new h("Whatever you do dont run out of bullets",280,400,20,20,!1),M=new h("Press Enter to skip",10,10,15,500,!0);function E(){if(b.debugBlocks=[],b.ctx.fillStyle="black",b.ctx.imageSmoothingEnabled=!1,b.ctx.clearRect(0,0,b.canvas.width,b.canvas.height),"splash"==b.currentScreen&&(m.draw(),p.draw(),v.draw(),m.startTyping(),p.startTyping(),v.startTyping(),b.currentKey.get("Enter"))&&setTimeout(()=>{b.currentScreen="intro",d.init()},10),"intro"==b.currentScreen){var t;b.ctx.save(),b.ctx.scale(1.25,1.25),b.ctx.translate(-b.SCROLLX,-b.SCROLLY),b.currentLevel=d,M.draw(),M.startTyping(),setTimeout(()=>{var t;b.currentKey.get("Enter")&&(a.reset(),b.currentScreen="game",b.currentLevel=g,t=b.currentLevel.options.song,t=b.zzfxM(...t),b.zzfxP(...t),k=null)},1e3),0===k&&(A.draw(),A.startTyping(),B.draw(),B.startTyping(),setTimeout(()=>{k=1},5e3)),1===k&&(L.draw(),L.startTyping(),setTimeout(()=>{k=2},5e3)),2===k&&(T.draw(),T.startTyping(),S.draw(),S.startTyping(),setTimeout(()=>{k=3},5e3)),3===k&&(I.draw(),I.startTyping(),setTimeout(()=>{k=4},5e3)),4===k&&(C.draw(),C.startTyping(),setTimeout(()=>{k=5},7500)),5==k&&(a.reset(),b.currentScreen="game",b.currentLevel=g,t=b.currentLevel.options.song,t=b.zzfxM(...t),b.zzfxP(...t),k=null);for(let t=0;t<b.blocks.length;t++)b.blocks[t].draw(b.ctx,b.currentLevel.options.tint.r,b.currentLevel.options.tint.g,b.currentLevel.options.tint.b);a.draw(b.ctx),b.bullets.forEach(t=>{t.update(b.ctx)}),a.update(b.currentKey,b.currentLevel),b.SCROLLX=(a.bounds.x-b.canvas.width/2)/1.4,b.ctx.restore()}if("big"===b.currentScreen&&(w.draw(),x.draw(),f.draw(),w.startTyping(),setTimeout(()=>{x.startTyping(),setTimeout(()=>{f.startTyping()},3500)},6e3)),"game"==b.currentScreen){if(b.timePlayed+=.05,b.ctx.save(),b.ctx.scale(1.25,1.25),b.ctx.translate(-b.SCROLLX,-b.SCROLLY),b.particleEngine.update(.01),a.update(b.currentKey,b.currentLevel),c.update(b.currentLevel),b.particleEngine.draw(),b.bullets.forEach(t=>{t.update(b.ctx)}),1==b.debug)for(let t=0;t<b.debugBlocks.length;t++)b.ctx.lineWidth=5,b.ctx.strokeStyle="red",4==t&&(b.ctx.strokeStyle="blue"),5==t&&(b.ctx.strokeStyle="green"),b.ctx.strokeRect(b.debugBlocks[t].bounds.x,b.debugBlocks[t].bounds.y,b.debugBlocks[t].bounds.w,b.debugBlocks[t].bounds.h);for(let t=0;t<b.blocks.length;t++)b.blocks[t].draw(b.ctx,b.currentLevel.options.tint.r,b.currentLevel.options.tint.g,b.currentLevel.options.tint.b);a.draw(b.ctx,b.particleEngine);for(let t=0;t<b.enemys.length;t++)b.enemys[t].draw(),b.enemys[t].update(b.currentLevel);b.PlayerToBig&&(b.currentScreen="big"),b.PlayerToBig||new h(b.currentLevel.id,350,200,75,500,!1).draw(),c.draw(),b.SCROLLX=(a.bounds.x-b.canvas.width/2)/1.4,b.ctx.restore()}console.log(b.mobsLeft),b.mobsLeft,b.navKey.clear(),requestAnimationFrame(E)}window.addEventListener("keydown",t=>{b.currentKey.set(t.key,!0),b.navKey.set(t.key,!0)}),window.addEventListener("keyup",t=>{b.currentKey.set(t.key,!1),b.navKey.set(t.key,!1)}),E()})();
+(() => {
+  // Utils/JudeUtils.js
+  var Point = class _Point {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+    }
+    floor() {
+      return new _Point(Math.floor(this.x), Math.floor(this.y));
+    }
+    add(x, y) {
+      return new _Point(this.x + x, this.y + y);
+    }
+  };
+  var Rect = class {
+    constructor(x, y, w, h) {
+      this.x = x;
+      this.y = y;
+      this.w = w;
+      this.h = h;
+    }
+    intersects(otherRect) {
+      return this.contains(new Point(otherRect.x, otherRect.y)) || this.contains(new Point(otherRect.x + otherRect.w, otherRect.y)) || this.contains(new Point(otherRect.x, otherRect.y + otherRect.h)) || this.contains(
+        new Point(otherRect.x + otherRect.w, otherRect.y + otherRect.h)
+      ) || otherRect.contains(new Point(this.x, this.y)) || otherRect.contains(new Point(this.x + this.w, this.y)) || otherRect.contains(new Point(this.x, this.y + this.h)) || otherRect.contains(new Point(this.x + this.w, this.y + this.h));
+    }
+    contains(pt) {
+      return pt.x >= this.x && pt.x <= this.x + this.w && pt.y >= this.y && pt.y <= this.y + this.h;
+    }
+  };
+
+  // Utils/particalEngine.js
+  var ParticleEngine = class {
+    constructor(ctx, options) {
+      this.ctx = ctx;
+      this.color = options.color || "white";
+      this.size = options.size || 5;
+      this.count = options.count || 10;
+      this.duration = options.duration || 1;
+      this.particles = [];
+      this.spawnParticles();
+    }
+    spawnParticles(x, y) {
+      for (let i = 0; i < this.count; i++) {
+        const angle = Math.random() * 2 * Math.PI;
+        const speed = Math.random() * 2 + 1;
+        this.particles.push({
+          x,
+          y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          size: this.size,
+          life: Math.random() * this.duration,
+          maxLife: this.duration
+        });
+      }
+    }
+    update(deltaTime) {
+      this.particles = this.particles.filter((particle) => particle.life > 0);
+      this.particles.forEach((particle) => {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        particle.life -= deltaTime;
+      });
+    }
+    draw() {
+      this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+      this.particles.forEach((particle) => {
+        this.ctx.fillStyle = this.color;
+        this.ctx.beginPath();
+        this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        this.ctx.fill();
+      });
+    }
+  };
+
+  // Utils/globals.js
+  var rowPattern = [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0
+  ];
+  var FullEmptyRow = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  var emptyRowLedge = [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0];
+  var emptyRowLedgeOther = [1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0];
+  var zzfxR = 44100;
+  var GameLevel1 = [];
+  var Intro = [
+    FullEmptyRow,
+    FullEmptyRow,
+    FullEmptyRow,
+    FullEmptyRow,
+    FullEmptyRow,
+    FullEmptyRow,
+    FullEmptyRow,
+    FullEmptyRow,
+    FullEmptyRow,
+    FullEmptyRow,
+    FullEmptyRow,
+    FullEmptyRow,
+    FullEmptyRow,
+    FullEmptyRow,
+    FullEmptyRow,
+    FullEmptyRow,
+    emptyRowLedge,
+    FullEmptyRow,
+    FullEmptyRow,
+    FullEmptyRow,
+    FullEmptyRow,
+    emptyRowLedgeOther,
+    FullEmptyRow,
+    FullEmptyRow,
+    rowPattern,
+    rowPattern
+  ];
+  var GameLevel1Options = {
+    level: GameLevel1,
+    tint: {
+      r: 200,
+      g: 200,
+      b: 0
+    },
+    song: [[[, 0, 77, , , 0.7, 2, 0.41, , , , , , , , 0.06], [, 0, 43, 0.01, , 0.3, 2, , , , , , , , , 0.02, 0.01], [, 0, 170, 3e-3, , 8e-3, , 0.97, -35, 53, , , , , , 0.1], [0.8, 0, 270, , , 0.12, 3, 1.65, -2, , , , , 4.5, , 0.02], [, 0, 86, , , , , 0.7, , , , 0.5, , 6.7, 1, 0.05], [, 0, 41, , 0.05, 0.4, 2, 0, , , 9, 0.01, , , , 0.08, 0.02], [, 0, 2200, , , 0.04, 3, 2, , , 800, 0.02, , 4.8, , 0.01, 0.1], [0.3, 0, 16, , , 0.3, 3]], [[[1, -1, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33], [3, 1, 22, , , , , , , , , , , , , , , , , , , , , , , , , , , , 24, , , , 24, , , , , , , , , , , , , , , , , , , , , , , , 22, , 22, , 22, , , ,], [5, -1, 21, , , , , , , , , , , , , , , , , , , , , , , , , , , , 24, , , , 23, , , , , , , , , , , , , , , , , , , , , , , , 24, , 23, , 21, , , ,], [, 1, 21, , , , , , , , , , , , , , , , , , , , , , , , , , , , 24, , , , 23, , , , , , , , , , , , , , , , , , , , , , , , 24, , 23, , 21, , , ,]], [[1, -1, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33], [3, 1, 24, , , , , , , , 27, , , , , , , , , , , , , , , , 27, , , , 24, , , , 24, , , , , , , , 27, , , , , , , , , , , , , , , , 24, , 24, , 24, , , ,], [5, -1, 21, , , , , , , , , , , , , , , , , , , , , , , , , , , , 24, , , , 23, , , , , , , , , , , , , , , , , , , , , , , , 24, , 23, , 21, , , ,], [, 1, 21, , , , , , , , , , , , , , , , , , , , , , , , , , , , 24, , , , 23, , , , , , , , , , , , , , , , , , , , , , , , 24, , 23, , 21, , , ,], [6, 1, , , 34, 34, 34, , , , , , 34, 34, , , , , 34, , , , 34, 34, , , , , 34, , , , 34, , , , 34, 34, 34, , , , , , 34, , , , , , 34, 34, , , 34, 34, , , , , , , , , 34, 34], [4, 1, , , , , , , 24, , , , , , 24, , 24, , , , 24, , , , 24, , , , , , , , , , , , , , , , 24, , , , , , 24, , 24, , , , 24, , , , 24, , , , , , , , , ,]], [[1, -1, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 23, 23, 35, 23, 23, 36, 23, 23, 35, 23, 23, 36, 23, 23, 35, 35, 23, 23, 35, 23, 23, 35, 23, 23, 36, 23, 23, 35, 23, 23, 36, 36], [5, -1, 21, , , 19, , , 21, , , , , , , , , , 21, , , 19, , , 17, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,], [3, 1, 24, , , 24, , , 24, , , , , , , , , , 24, , , 24, , , 24, , , , 24.75, 24.5, 24.26, 24.01, 24.01, 24.01, , , , , 25, , , , , , , , 25, , , , , , , , 25, , , , , , , , 25, 25, 25, 25], [4, -1, , , , , , , , , , , , , , , , , , , , , , , , , , , 24.75, 24.5, 24.26, 24.01, 24.01, 24.01, 24.01, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, , 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, 24], [7, -1, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , 23, , 21, 23, , 35, , 23, , 21, 23, , 35, , 35, , 23, , 21, 23, , 35, , 21, 23, , 35, , 21, 23, , ,], [6, 1, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , 34, 36, 34, , 33, 34, 34, 36, 31, 36, 34, , 31, 34, 32, , 33, 36, 34, , 31, 34, 34, 36, 33, 36, 33, , 31, , ,]], [[1, -1, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 17, 17, 29, 17, 17, 29, 17, 17, 29, 17, 17, 29, 17, 17, 29, 29, 17, 17, 29, 17, 17, 29, 17, 17, 29, 17, 17, 29, 17, 17, 29, 29], [4, 1, 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, , 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, 24, 24, , , 24, 24, , 24, , 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, 24], [7, -1, 21, , 19, 21, , 33, , 21, , 19, 21, , 33, , 33, , 21, , 19, 21, , 33, , 21, , 19, 21, , 33, , 33, , 17, , 17, 17, 29, 17, 17, 29, 17, , 17, 17, 29, 17, 17, 29, 17, , 17, 17, 29, 17, 17, 29, 17, , 17, 17, 29, 17, 17, 29], [2, 1, , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, , , , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, , ,], [6, 1, , , 36, , , , , , 36, , 36, , , , , , , , 36, , , , , , 36, , 36, , , , , , , , 36, , , , , , , , , , , , , , , , 36, , , , , , 36, , 36, , , , , ,], [3, 1, , , , , 25, , , , , , , , 25, , , , , , , , 25, , , , , , , , 25, 25, 25, 25, , , , , 25, , , , , 25, , , 25, , , , , , , , 25, , , , , , , , 25, 25, 25, 25]], [[1, -1, 14, 14, 26, 14, 14, 26, 14, 14, 26, 14, 14, 26, 14, 14, 26, 26, 14, 14, 26, 14, 14, 26, 14, 14, 26, 14, 14, 26, 14, 14, 26, 26, 17, 17, 29, 17, 17, 29, 17, 17, 29, 17, 17, 29, 17, 17, 29, 29, 19, 19, 31, 19, 19, 31, 19, 19, 31, 19, 19, 31, 19, 19, 31, 31], [4, 1, 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, , 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 36, , 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, 24], [7, -1, 14, , 14, 14, 26, 14, 14, 26, 14, , 14, 14, 26, 14, 14, 26, 14, , 14, 14, 26, 14, 14, 26, 14, , 14, 14, 26, 14, 14, 26, 17, , 17, 17, 29, 17, 17, 29, 17, , 17, 17, 29, 17, 17, 29, 19, , 19, 19, 31, 19, 19, 31, 19, , 19, 19, 31, 19, 19, 31], [2, 1, , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, , , , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, , ,], [3, 1, , , , , 25, , , , , , , , 25, , , , , , , , 25, , , , , , , , 25, 25, 25, 25, , , , , 25, , , , , , , , 25, , , , , , , , 25, , , , , , , , 25, 25, 25, 25], [6, 1, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , 34, , , , , , 34, , 34, , , , , , , , 34, , , , , , 34, , 34, , , , , ,]]], [0, 1, 1, 2, 3, 4, 4], , { "title": "Depp", "Notes": "Unknown author" }]
+  };
+  var IntroOptions = {
+    level: Intro,
+    tint: {
+      r: 255,
+      g: 0,
+      b: 0
+    },
+    song: [[[, 0, 77, , , 0.7, 2, 0.41, , , , , , , , 0.06], [, 0, 43, 0.01, , 0.3, 2, , , , , , , , , 0.02, 0.01], [, 0, 170, 3e-3, , 8e-3, , 0.97, -35, 53, , , , , , 0.1], [0.8, 0, 270, , , 0.12, 3, 1.65, -2, , , , , 4.5, , 0.02], [, 0, 86, , , , , 0.7, , , , 0.5, , 6.7, 1, 0.05], [, 0, 41, , 0.05, 0.4, 2, 0, , , 9, 0.01, , , , 0.08, 0.02], [, 0, 2200, , , 0.04, 3, 2, , , 800, 0.02, , 4.8, , 0.01, 0.1], [0.3, 0, 16, , , 0.3, 3]], [[[1, -1, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33], [3, 1, 22, , , , , , , , , , , , , , , , , , , , , , , , , , , , 24, , , , 24, , , , , , , , , , , , , , , , , , , , , , , , 22, , 22, , 22, , , ,], [5, -1, 21, , , , , , , , , , , , , , , , , , , , , , , , , , , , 24, , , , 23, , , , , , , , , , , , , , , , , , , , , , , , 24, , 23, , 21, , , ,], [, 1, 21, , , , , , , , , , , , , , , , , , , , , , , , , , , , 24, , , , 23, , , , , , , , , , , , , , , , , , , , , , , , 24, , 23, , 21, , , ,]], [[1, -1, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33], [3, 1, 24, , , , , , , , 27, , , , , , , , , , , , , , , , 27, , , , 24, , , , 24, , , , , , , , 27, , , , , , , , , , , , , , , , 24, , 24, , 24, , , ,], [5, -1, 21, , , , , , , , , , , , , , , , , , , , , , , , , , , , 24, , , , 23, , , , , , , , , , , , , , , , , , , , , , , , 24, , 23, , 21, , , ,], [, 1, 21, , , , , , , , , , , , , , , , , , , , , , , , , , , , 24, , , , 23, , , , , , , , , , , , , , , , , , , , , , , , 24, , 23, , 21, , , ,], [6, 1, , , 34, 34, 34, , , , , , 34, 34, , , , , 34, , , , 34, 34, , , , , 34, , , , 34, , , , 34, 34, 34, , , , , , 34, , , , , , 34, 34, , , 34, 34, , , , , , , , , 34, 34], [4, 1, , , , , , , 24, , , , , , 24, , 24, , , , 24, , , , 24, , , , , , , , , , , , , , , , 24, , , , , , 24, , 24, , , , 24, , , , 24, , , , , , , , , ,]], [[1, -1, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 23, 23, 35, 23, 23, 36, 23, 23, 35, 23, 23, 36, 23, 23, 35, 35, 23, 23, 35, 23, 23, 35, 23, 23, 36, 23, 23, 35, 23, 23, 36, 36], [5, -1, 21, , , 19, , , 21, , , , , , , , , , 21, , , 19, , , 17, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,], [3, 1, 24, , , 24, , , 24, , , , , , , , , , 24, , , 24, , , 24, , , , 24.75, 24.5, 24.26, 24.01, 24.01, 24.01, , , , , 25, , , , , , , , 25, , , , , , , , 25, , , , , , , , 25, 25, 25, 25], [4, -1, , , , , , , , , , , , , , , , , , , , , , , , , , , 24.75, 24.5, 24.26, 24.01, 24.01, 24.01, 24.01, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, , 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, 24], [7, -1, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , 23, , 21, 23, , 35, , 23, , 21, 23, , 35, , 35, , 23, , 21, 23, , 35, , 21, 23, , 35, , 21, 23, , ,], [6, 1, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , 34, 36, 34, , 33, 34, 34, 36, 31, 36, 34, , 31, 34, 32, , 33, 36, 34, , 31, 34, 34, 36, 33, 36, 33, , 31, , ,]], [[1, -1, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 21, 21, 33, 33, 17, 17, 29, 17, 17, 29, 17, 17, 29, 17, 17, 29, 17, 17, 29, 29, 17, 17, 29, 17, 17, 29, 17, 17, 29, 17, 17, 29, 17, 17, 29, 29], [4, 1, 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, , 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, 24, 24, , , 24, 24, , 24, , 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, 24], [7, -1, 21, , 19, 21, , 33, , 21, , 19, 21, , 33, , 33, , 21, , 19, 21, , 33, , 21, , 19, 21, , 33, , 33, , 17, , 17, 17, 29, 17, 17, 29, 17, , 17, 17, 29, 17, 17, 29, 17, , 17, 17, 29, 17, 17, 29, 17, , 17, 17, 29, 17, 17, 29], [2, 1, , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, , , , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, 34, 34, , 34, , ,], [6, 1, , , 36, , , , , , 36, , 36, , , , , , , , 36, , , , , , 36, , 36, , , , , , , , 36, , , , , , , , , , , , , , , , 36, , , , , , 36, , 36, , , , , ,], [3, 1, , , , , 25, , , , , , , , 25, , , , , , , , 25, , , , , , , , 25, 25, 25, 25, , , , , 25, , , , , 25, , , 25, , , , , , , , 25, , , , , , , , 25, 25, 25, 25]], [[1, -1, 14, 14, 26, 14, 14, 26, 14, 14, 26, 14, 14, 26, 14, 14, 26, 26, 14, 14, 26, 14, 14, 26, 14, 14, 26, 14, 14, 26, 14, 14, 26, 26, 17, 17, 29, 17, 17, 29, 17, 17, 29, 17, 17, 29, 17, 17, 29, 29, 19, 19, 31, 19, 19, 31, 19, 19, 31, 19, 19, 31, 19, 19, 31, 31], [4, 1, 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, , 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 36, , 24, 24, , 24, 24, , 24, 24, 24, 24, , 24, 24, , 24, 24], [7, -1, 14, , 14, 14, 26, 14, 14, 26, 14, , 14, 14, 26, 14, 14, 26, 14, , 14, 14, 26, 14, 14, 26, 14, , 14, 14, 26, 14, 14, 26, 17, , 17, 17, 29, 17, 17, 29, 17, , 17, 17, 29, 17, 17, 29, 19, , 19, 19, 31, 19, 19, 31, 19, , 19, 19, 31, 19, 19, 31], [2, 1, , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, , , , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, 36, 36, , 36, , ,], [3, 1, , , , , 25, , , , , , , , 25, , , , , , , , 25, , , , , , , , 25, 25, 25, 25, , , , , 25, , , , , , , , 25, , , , , , , , 25, , , , , , , , 25, 25, 25, 25], [6, 1, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , 34, , , , , , 34, , 34, , , , , , , , 34, , , , , , 34, , 34, , , , , ,]]], [0, 1, 1, 2, 3, 4, 4], , { "title": "Depp", "Notes": "Unknown author" }]
+  };
+  var Globals = class {
+    constructor() {
+      this.boss = [];
+      this.currentKey = /* @__PURE__ */ new Map();
+      this.mobsLeft = 0;
+      this.blocks = [];
+      this.SCROLLX = 200;
+      this.debug = false;
+      this.SCROLLY = 0;
+      this.canvas = document.getElementById("canvas");
+      this.ctx = this.canvas.getContext("2d");
+      this.bullets = [];
+      this.mouseClicked = false;
+      this.debugBlocks = [];
+      this.enemys = [];
+      this.mouseX = 0;
+      this.mouseY = 0;
+      this.PlayerToBig = false;
+      this.kills = 0;
+      this.BLOCKSIZE = 32;
+      this.currentScreen = "splash";
+      this.type_distance = 0;
+      this.flicking = 0;
+      this.currentUrl = window.location.href;
+      this.baseUrl = new URL(this.currentUrl).origin;
+      this.timePlayed = 0;
+      this.navKey = /* @__PURE__ */ new Map();
+      this.currentLevel = null;
+      this.particleEngine = new ParticleEngine(this.ctx, {
+        color: "red",
+        size: 3,
+        count: 100,
+        duration: 0.5
+        // 2 seconds
+      });
+      this.GameLevel1Options = GameLevel1Options;
+      this.IntroOptions = IntroOptions;
+      this.zzfx = (...t) => this.zzfxP(this.zzfxG(...t));
+      this.zzfxP = (...t) => {
+        let e = zzfxX.createBufferSource(), f = zzfxX.createBuffer(t.length, t[0].length, zzfxR);
+        t.map((d, i) => f.getChannelData(i).set(d)), e.buffer = f, e.connect(zzfxX.destination), e.start();
+        return e;
+      };
+      this.zzfxG = (q = 1, k = 0.05, c = 220, e = 0, t = 0, u = 0.1, r = 0, F = 1, v = 0, z = 0, w = 0, A = 0, l = 0, B = 0, x = 0, G = 0, d = 0, y = 1, m = 0, C = 0) => {
+        let b = 2 * Math.PI, H = v *= 500 * b / zzfxR ** 2, I = (0 < x ? 1 : -1) * b / 4, D = c *= (1 + 2 * k * Math.random() - k) * b / zzfxR, Z = [], g = 0, E = 0, a = 0, n = 1, J = 0, K = 0, f = 0, p, h;
+        e = 99 + zzfxR * e;
+        m *= zzfxR;
+        t *= zzfxR;
+        u *= zzfxR;
+        d *= zzfxR;
+        z *= 500 * b / zzfxR ** 3;
+        x *= b / zzfxR;
+        w *= b / zzfxR;
+        A *= zzfxR;
+        l = zzfxR * l | 0;
+        for (h = e + m + t + u + d | 0; a < h; Z[a++] = f) ++K % (100 * G | 0) || (f = r ? 1 < r ? 2 < r ? 3 < r ? Math.sin((g % b) ** 3) : Math.max(Math.min(Math.tan(g), 1), -1) : 1 - (2 * g / b % 2 + 2) % 2 : 1 - 4 * Math.abs(Math.round(g / b) - g / b) : Math.sin(g), f = (l ? 1 - C + C * Math.sin(2 * Math.PI * a / l) : 1) * (0 < f ? 1 : -1) * Math.abs(f) ** F * q * zzfxV * (a < e ? a / e : a < e + m ? 1 - (a - e) / m * (1 - y) : a < e + m + t ? y : a < h - d ? (h - a - d) / u * y : 0), f = d ? f / 2 + (d > a ? 0 : (a < h - d ? 1 : (h - a) / d) * Z[a - d | 0] / 2) : f), p = (c += v += z) * Math.sin(E * x - I), g += p - p * B * (1 - 1e9 * (Math.sin(a) + 1) % 2), E += p - p * B * (1 - 1e9 * (Math.sin(a) ** 2 + 1) % 2), n && ++n > A && (c += w, D += w, n = 0), !l || ++J % l || (c = D, v = H, n = n || 1);
+        return Z;
+      };
+      this.zzfxV = 0.3;
+      this.zzfxX = new (window.AudioContext || webkitAudioContext)();
+      this.zzfxM = (n, f, t, e = 125) => {
+        let l, o, z, r, g, h, x, a, u, c, d, i, m, p, G, M = 0, R = [], b = [], j = [], k = 0, q = 0, s = 1, v = {}, w = zzfxR / e * 60 >> 2;
+        for (; s; k++) R = [s = a = d = m = 0], t.map((e2, d2) => {
+          for (x = f[e2][k] || [0, 0, 0], s |= !!f[e2][k], G = m + (f[e2][0].length - 2 - !a) * w, p = d2 == t.length - 1, o = 2, r = m; o < x.length + p; a = ++o) {
+            for (g = x[o], u = o == x.length + p - 1 && p || c != (x[0] || 0) | g | 0, z = 0; z < w && a; z++ > w - 99 && u ? i += (i < 1) / 99 : 0) h = (1 - i) * R[M++] / 2 || 0, b[r] = (b[r] || 0) - h * q + h, j[r] = (j[r++] || 0) + h * q + h;
+            g && (i = g % 1, q = x[1] || 0, (g |= 0) && (R = v[[c = x[M = 0] || 0, g]] = v[[c, g]] || (l = [...n[c]], l[2] *= 2 ** ((g - 12) / 12), g > 0 ? this.zzfxG(...l) : [])));
+          }
+          m = G;
+        });
+        return [b, j];
+      };
+    }
+    reset() {
+      location.reload();
+    }
+  };
+  var zzfxV = 0.3;
+  var zzfxX = new AudioContext();
+  var zzfx = (
+    // play sound
+    (p = 1, k = 0.05, b = 220, e = 0, r = 0, t = 0.1, q = 0, D = 1, u = 0, y = 0, v = 0, z = 0, l = 0, E = 0, A = 0, F = 0, c = 0, w = 1, m = 0, B = 0, N = 0) => {
+      let M = Math, d = 2 * M.PI, R = 44100, G = u *= 500 * d / R / R, C = b *= (1 - k + 2 * k * M.random(k = [])) * d / R, g = 0, H = 0, a = 0, n = 1, I = 0, J = 0, f = 0, h = N < 0 ? -1 : 1, x = d * h * N * 2 / R, L = M.cos(x), Z = M.sin, K = Z(x) / 4, O = 1 + K, X = -2 * L / O, Y = (1 - K) / O, P = (1 + h * L) / 2 / O, Q = -(h + L) / O, S = P, T = 0, U = 0, V = 0, W = 0;
+      e = R * e + 9;
+      m *= R;
+      r *= R;
+      t *= R;
+      c *= R;
+      y *= 500 * d / R ** 3;
+      A *= d / R;
+      v *= d / R;
+      z *= R;
+      l = R * l | 0;
+      p *= zzfxV;
+      for (h = e + m + r + t + c | 0; a < h; k[a++] = f * p) ++J % (100 * F | 0) || (f = q ? 1 < q ? 2 < q ? 3 < q ? Z(g ** 3) : M.max(M.min(M.tan(g), 1), -1) : 1 - (2 * g / d % 2 + 2) % 2 : 1 - 4 * M.abs(M.round(g / d) - g / d) : Z(g), f = (l ? 1 - B + B * Z(d * a / l) : 1) * (f < 0 ? -1 : 1) * M.abs(f) ** D * (a < e ? a / e : a < e + m ? 1 - (a - e) / m * (1 - w) : a < e + m + r ? w : a < h - c ? (h - a - c) / t * w : 0), f = c ? f / 2 + (c > a ? 0 : (a < h - c ? 1 : (h - a) / c) * k[a - c | 0] / 2 / p) : f, N ? f = W = S * T + Q * (T = U) + P * (U = f) - Y * V - X * (V = W) : 0), x = (b += u += y) * M.cos(A * H++), g += x + x * E * Z(a ** 5), n && ++n > z && (b += v, C += v, n = 0), !l || ++I % l || (b = C, u = G, n = n || 1);
+      p = zzfxX.createBuffer(1, h, R);
+      p.getChannelData(0).set(k);
+      b = zzfxX.createBufferSource();
+      b.buffer = p;
+      b.connect(zzfxX.destination);
+      b.start();
+    }
+  );
+
+  // Utils/font.js
+  var Text = class {
+    constructor(text, x, y, size, typing_speed, AmFlickering) {
+      this.speed = typing_speed;
+      this.distance = -0.1;
+      this.text = text;
+      this.x = x;
+      this.y = y;
+      this.size = size;
+      this.AmFlickering = AmFlickering;
+      this.flicking = 0;
+    }
+    startTyping() {
+      this.distance += this.speed / 100;
+    }
+    draw() {
+      let ctx = globals.ctx;
+      const font = new Image();
+      font.src = "./WhiteFont.png";
+      for (let t = 0; t < this.text.length; t++) {
+        if (t > this.distance) {
+          break;
+        }
+        let newText = this.text[t].toLowerCase();
+        let char = newText;
+        let charX = 0;
+        if (getIndex(char) !== null) {
+          charX = getIndex(char);
+        }
+        let charY = 0;
+        if (this.AmFlickering) {
+          this.flicking += 0.1;
+          if (this.flicking > 10) {
+            ctx.drawImage(font, charX * 5 - 5 - 0.1, charY * 5, 5, 5, this.x + t * this.size, this.y + 3, this.size, this.size);
+            setTimeout(() => {
+              this.flicking = 0;
+            }, 1e3);
+          }
+        } else {
+          ctx.drawImage(font, charX * 5 - 5 - 0.1, charY * 5, 5, 5, this.x + t * this.size, this.y + 3, this.size, this.size);
+        }
+      }
+    }
+  };
+  function getIndex(char) {
+    if (char >= "a" && char <= "z") {
+      return char.charCodeAt(0) - "a".charCodeAt(0) + 1;
+    } else if (char >= "0" && char <= "9") {
+      return char.charCodeAt(0) - "0".charCodeAt(0) + 27;
+    } else {
+      return null;
+    }
+  }
+
+  // Characters/player.js
+  var Bullet = class {
+    constructor(gunSpeed, directionX, x, y) {
+      this.visible = true;
+      this.speed = gunSpeed;
+      this.x = x;
+      this.y = y;
+      this.w = 5;
+      this.h = 5;
+      this.directionX = directionX;
+    }
+    update(ctx) {
+      ctx.fillStyle = "white";
+      ctx.fillRect(this.x, this.y, this.w, this.h);
+      this.x += this.directionX * this.speed;
+    }
+  };
+  var Gun = class {
+    constructor(direction, x, y, player2) {
+      this.timeLeft = 0;
+      this.gunSpeed = 10;
+      this.direction = direction;
+      this.pos = new Point(x, y);
+      this.width = 40;
+      this.height = 10;
+      this.angle = 10;
+      this.directionX = 0;
+      this.player = player2;
+      this.damage = 15;
+    }
+    shoot() {
+      if (this.player.bulletsLeft > 0) {
+        if (this.timeLeft <= 0) {
+          this.player.bulletsLeft -= 1;
+          zzfx(...[2.04, , 475, 0.01, 0.03, 0.06, 4, 1.9, -8.7, , , , 0.09, , 36, 0.2, 0.17, 0.67, 0.04]);
+          this.directionX = Math.cos(this.angle);
+          this.directionY = Math.sin(this.angle);
+          globals.bullets.push(new Bullet(this.gunSpeed, this.directionX, this.pos.x, this.pos.y));
+          this.timeLeft = 10;
+        }
+      } else {
+        if (globals.currentScreen !== "intro") {
+          globals.PlayerToBig = true;
+        }
+      }
+    }
+    update(direction, x, y) {
+      this.pos.x = x;
+      this.pos.y = y;
+      this.directionX = direction;
+      this.timeLeft -= 0.5;
+      if (direction > 0) {
+        this.angle = 0;
+      } else if (direction < 0) {
+        this.angle = Math.PI;
+      }
+    }
+  };
+  var Player = class {
+    constructor() {
+      this.bounds = new Rect(700, 500, 30, 30);
+      this.animator = new Point(0, 0);
+      this.gravity = 0.27;
+      this.Yvelocity = 0;
+      this.Xvelocity = 0;
+      this.speed = 2;
+      this.friction = 0.75;
+      this.jumpHeight = 5;
+      this.grounded = false;
+      this.timeLeft = 0;
+      this.maxSpeed = 2;
+      this.isGrounded = false;
+      this.ableToJump = false;
+      this.gun = new Gun(this.Xvelocity, this.bounds.x, this.bounds.y, this);
+      this.image = new Image();
+      this.image.src = "../Assets/Player-Sheet.png";
+      this.frameRate = 60;
+      this.frames = 0;
+      this.health = 3;
+      this.bulletsLeft = 13;
+      this.moveable = true;
+      this.bulletsText = new Text("Bullets - ", 75 + globals.SCROLLX, 75, 25, 500, false);
+    }
+    reset() {
+      this.bounds = new Rect(700, 500, 30, 30);
+      this.animator = new Point(0, 0);
+      this.gravity = 0.27;
+      this.Yvelocity = 0;
+      this.Xvelocity = 0;
+      this.speed = 2;
+      this.friction = 0.75;
+      this.jumpHeight = 5;
+      this.grounded = false;
+      this.timeLeft = 0;
+      this.maxSpeed = 2;
+      this.isGrounded = false;
+      this.ableToJump = false;
+      this.gun = new Gun(this.Xvelocity, this.bounds.x, this.bounds.y, this);
+      this.image = new Image();
+      this.image.src = "../Assets/Player-Sheet.png";
+      this.frameRate = 60;
+      this.frames = 0;
+      this.health = 3;
+      this.bulletsLeft = 13;
+      this.moveable = true;
+      this.bulletsText = new Text("Bullets - ", 75 + globals.SCROLLX, 10, 25, 500, false);
+      console.log("RESET", this.gravity, this.Xvelocity, this.Yvelocity);
+    }
+    grow() {
+      this.moveable = false;
+      this.bounds.x = 700 - this.bounds.w / 2;
+      this.bounds.y = 500 - this.bounds.h / 2;
+      this.bounds.w += 0.12;
+      this.bounds.h += 0.12;
+      setTimeout(() => {
+        if (this.bulletsLeft < 13) {
+          this.grow();
+        }
+      }, 75);
+    }
+    draw(ctx) {
+      if (Math.round(this.Xvelocity) !== 0) {
+        this.animate();
+      }
+      ctx.save();
+      globals.ctx.filter = `grayscale(${100 - this.bulletsLeft * 7.69}%)`;
+      this.gun.update(this.Xvelocity, this.bounds.x, this.bounds.y + 12);
+      ctx.fillStyle = "red";
+      if (this.Xvelocity > 0) {
+        ctx.drawImage(this.image, this.animator.x, this.animator.y, 16, 16, this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
+      } else {
+        ctx.save();
+        ctx.scale(-1, 1);
+        const flippedX = -this.bounds.x - this.bounds.w;
+        ctx.drawImage(this.image, this.animator.x, this.animator.y, 16, 16, flippedX, this.bounds.y, this.bounds.w, this.bounds.h);
+        ctx.restore();
+      }
+      if (globals.debug) {
+        ctx.strokeStyle = "yellow";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
+      }
+      ctx.restore();
+      ctx.fillStyle = "red";
+      ctx.fillRect(75 + globals.SCROLLX, 50, this.health * 50, 20);
+      ctx.strokeStyle = "white";
+      ctx.lineWidth = 4;
+      ctx.strokeRect(75 + globals.SCROLLX, 50, 150, 20);
+      this.bulletsText.x = 75 + globals.SCROLLX;
+      this.bulletsText.text = "Bullets " + this.bulletsLeft;
+      this.bulletsText.draw();
+      this.bulletsText.startTyping();
+    }
+    animate() {
+      this.frames += this.frameRate;
+      if (this.frames > 500) {
+        this.animator.x = 16;
+        if (this.frames > 1e3) {
+          this.frames = 0;
+        }
+      } else {
+        this.animator.x = 0;
+      }
+    }
+    knockback(Xvelocity) {
+      if (Math.round(Xvelocity) == 0) {
+        this.Xvelocity += this.speed * 30;
+        this.jump(10);
+      } else {
+        this.Xvelocity += this.speed * 30;
+        this.jump(10);
+      }
+    }
+    jump(h) {
+      const savedJumped = this.jumpHeight;
+      if (h) {
+        this.jumpHeight = h;
+      }
+      this.Yvelocity = -this.jumpHeight - 2;
+      this.grounded = false;
+      this.bounds.y -= 5;
+      this.jumpHeight = savedJumped;
+    }
+    collision() {
+      for (let i = 0; i < globals.enemys.length; i++) {
+        if (this.bounds.intersects(globals.enemys[i].bounds) || globals.enemys[i].bounds.intersects(this.bounds)) {
+          this.health -= 0.25;
+          zzfx(...[1.98, , 523, 0.01, 0.01, 0.07, 2, 1.9, -8.7, , , , 0.09, , 36, 0.2, 0.17, 0.67, 0.04]);
+          this.knockback(this.Xvelocity);
+        }
+        if (this.bounds.intersects(globals.boss.bounds) || globals.boss.bounds.intersects(this.bounds)) {
+          this.health -= 0.25;
+          zzfx(...[1.98, , 523, 0.01, 0.01, 0.07, 2, 1.9, -8.7, , , , 0.09, , 36, 0.2, 0.17, 0.67, 0.04]);
+          this.knockback(this.Xvelocity);
+        }
+      }
+    }
+    update(currentKey, level) {
+      this.timeLeft -= 0.5;
+      this.Xvelocity *= this.friction;
+      if (this.Xvelocity > this.maxSpeed) {
+        this.Xvelocity = this.maxSpeed;
+      }
+      if (this.Xvelocity < -this.maxSpeed) {
+        this.Xvelocity = -this.maxSpeed;
+      }
+      const tileX = Math.floor(this.bounds.x / globals.BLOCKSIZE);
+      const tileY = Math.floor(this.bounds.y / globals.BLOCKSIZE);
+      const tileIndex = new Point(tileX, tileY);
+      const right_tile1 = level.get(tileIndex.add(1, 0));
+      const right_tile2 = level.get(tileIndex.add(1, 1));
+      const left_tile1 = level.get(tileIndex.add(0, 0));
+      const left_tile2 = level.get(tileIndex.add(0, 1));
+      const bottom1 = level.get(tileIndex.add(0, 1));
+      const bottom2 = level.get(tileIndex.add(1, 1));
+      globals.debugBlocks.push(right_tile1);
+      globals.debugBlocks.push(right_tile2);
+      globals.debugBlocks.push(left_tile1);
+      globals.debugBlocks.push(left_tile2);
+      globals.debugBlocks.push(bottom1);
+      globals.debugBlocks.push(bottom2);
+      if (right_tile1.WHATBlockAmI == 1 && right_tile2.WHATBlockAmI == 1) {
+        this.bounds.x = tileIndex.x * globals.BLOCKSIZE;
+        this.Xvelocity = 0;
+        this.isGrounded = bottom1.WHATBlockAmI == 1;
+      } else if (left_tile1.WHATBlockAmI == 1 && left_tile2.WHATBlockAmI == 1) {
+        this.bounds.x = (tileIndex.x + 1) * globals.BLOCKSIZE;
+        this.Xvelocity = 0;
+        this.isGrounded = bottom2.WHATBlockAmI == 1;
+      } else {
+        this.isGrounded = bottom1.WHATBlockAmI == 1 || bottom2.WHATBlockAmI == 1;
+      }
+      if (this.isGrounded) {
+        this.grounded = true;
+        this.Yvelocity = 0;
+        this.ableToJump = true;
+        this.bounds.y = tileIndex.y * globals.BLOCKSIZE;
+      } else {
+        this.grounded = false;
+        if (this.moveable) {
+          this.applyGravity();
+        }
+      }
+      if (!this.isGrounded) {
+        if (right_tile1.WHATBlockAmI == 1 || right_tile2.WHATBlockAmI == 1) {
+          this.Yvelocity = 2;
+        }
+      }
+      if (globals.mouseClicked || globals.currentKey.get("e")) {
+        this.gun.shoot();
+      }
+      if (this.moveable) {
+        this.handleMovement(currentKey);
+      }
+      this.bounds.x += this.Xvelocity;
+      this.collision();
+      if (this.health <= 0) {
+        zzfx(...[2, , 727, 0.01, 0.03, 0.53, 3, 1.39, 0.9, 0.1, , , , 1.9, -44, 0.4, 0.39, 0.31, 0.12]);
+        globals.currentScreen = "end";
+      }
+    }
+    handleMovement(currentKey) {
+      if (currentKey.get("a") || currentKey.get("ArrowLeft")) {
+        this.Xvelocity -= this.speed;
+      }
+      if (currentKey.get("d") || currentKey.get("ArrowRight")) {
+        this.Xvelocity += this.speed;
+      }
+      if ((currentKey.get(" ") || currentKey.get("ArrowUp") || currentKey.get("w")) && this.ableToJump && this.grounded) {
+        this.jump();
+      }
+    }
+    applyGravity() {
+      this.Yvelocity += this.gravity;
+      this.bounds.y += this.Yvelocity;
+    }
+  };
+
+  // Utils/level.js
+  var Block = class {
+    constructor(x, y, WHATBlockAmI) {
+      this.bounds = new Rect(x, y, globals.BLOCKSIZE, globals.BLOCKSIZE);
+      this.tileSet = new Image();
+      this.tileSet.src = "./Tileset.png";
+      this.WHATBlockAmI = WHATBlockAmI;
+    }
+    draw(ctx, r, g, b) {
+      if (this.WHATBlockAmI == 1) {
+        ctx.drawImage(this.tileSet, 32, 8, 8, 8, this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
+        ctx.save();
+        ctx.globalCompositeOperation = "source-atop";
+        ctx.fillStyle = "rgba(" + r + ", " + g + ", " + b + ", 0.5)";
+        ctx.fillRect(this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
+        ctx.restore();
+      }
+    }
+  };
+  var Level = class {
+    constructor(b, l, o, id) {
+      this.width;
+      this.height;
+      this.blocks = b;
+      this.level = l;
+      this.x = 1;
+      this.y = 1;
+      this.options = o;
+      this.id = id;
+    }
+    get(tileIndex) {
+      let x = tileIndex.x;
+      let y = tileIndex.y;
+      for (let block of this.blocks) {
+        if (block.bounds.x === x * globals.BLOCKSIZE && block.bounds.y === y * globals.BLOCKSIZE) {
+          return block;
+        }
+      }
+      return null;
+    }
+    init() {
+      console.log("Level is", this.id);
+      this.height = this.level.length;
+      this.width = this.level[0].length;
+      for (let i = 0; i < this.level.length; i++) {
+        for (let w = 0; w < this.level[i].length; w++) {
+          let block = this.level[i][w];
+          this.x = w;
+          this.y = i;
+          this.blocks.push(new Block(this.x * globals.BLOCKSIZE, this.y * globals.BLOCKSIZE, block));
+        }
+      }
+    }
+  };
+
+  // Characters/enemy.js
+  var Enemy = class {
+    constructor(follow, src) {
+      this.bounds = new Rect(Math.random() * 1e3 + 100, 500, 40, 40);
+      this.gravity = 0.27;
+      this.Yvelocity = 0;
+      this.Xvelocity = 0;
+      this.speed = 0.75;
+      this.jumpHeight = 3;
+      this.grounded = false;
+      this.player = follow;
+      this.sprite = new Image();
+      this.sprite.src = src;
+      this.alive = true;
+    }
+    update(level) {
+      if (!this.alive) {
+        globals.enemys.splice(globals.enemys.indexOf(this), 1);
+      }
+      for (let i = 0; i < globals.bullets.length; i++) {
+        let bulletBounds = new Rect(globals.bullets[i].x, globals.bullets[i].y, globals.bullets[i].w, globals.bullets[i].h);
+        if (bulletBounds.intersects(this.bounds) || this.bounds.intersects(bulletBounds)) {
+          globals.bullets.splice(i, 1);
+          this.alive = false;
+          globals.mobsLeft -= 1;
+          globals.kills += 1;
+        }
+      }
+      this.bounds.y += this.Yvelocity;
+      this.bounds.x += this.Xvelocity;
+      const tileX = Math.floor(this.bounds.x / globals.BLOCKSIZE);
+      const tileY = Math.floor(this.bounds.y / globals.BLOCKSIZE);
+      const tileIndex = new Point(tileX, tileY);
+      const tileContents = level.get(tileIndex);
+      const right_tile1 = level.get(tileIndex.add(1, 0));
+      const right_tile2 = level.get(tileIndex.add(1, 1));
+      const left_tile1 = level.get(tileIndex.add(0, 0));
+      const left_tile2 = level.get(tileIndex.add(0, 1));
+      let bottom1 = level.get(tileIndex.add(0, 1));
+      const bottom2 = level.get(tileIndex.add(1, 1));
+      if (right_tile1.WHATBlockAmI == 1 && right_tile2.WHATBlockAmI == 1) {
+        this.bounds.x = tileIndex.x * globals.BLOCKSIZE;
+        this.Xvelocity = 0;
+        this.isGrounded = bottom1.WHATBlockAmI == 1;
+      } else if (left_tile1.WHATBlockAmI == 1 && left_tile2.WHATBlockAmI == 1) {
+        this.bounds.x = (tileIndex.x + 1) * globals.BLOCKSIZE;
+        this.Xvelocity = 0;
+        this.isGrounded = bottom2.WHATBlockAmI == 1;
+      } else {
+        this.isGrounded = bottom1.WHATBlockAmI == 1 || bottom2.WHATBlockAmI == 1;
+      }
+      if (this.isGrounded) {
+        this.grounded = true;
+        this.Yvelocity = 0;
+        this.ableToJump = true;
+        this.bounds.y = tileIndex.y * globals.BLOCKSIZE;
+      } else {
+        this.grounded = false;
+        this.applyGravity();
+      }
+      this.followPlayer();
+      if (this.bounds.y > this.player.bounds.y) {
+        this.jump();
+      }
+    }
+    followPlayer() {
+      const randomnessFactor = 5;
+      if (this.player.bounds.x > this.bounds.x) {
+        this.Xvelocity = this.speed + (Math.random() * randomnessFactor - randomnessFactor / 2);
+      } else {
+        this.Xvelocity = -this.speed + (Math.random() * randomnessFactor - randomnessFactor / 2);
+      }
+    }
+    applyGravity() {
+      this.Yvelocity += this.gravity;
+    }
+    jump() {
+      if (this.grounded) {
+        this.Yvelocity -= this.jumpHeight;
+        this.grounded = false;
+      }
+    }
+    draw() {
+      if (globals.debug == true) {
+        globals.ctx.strokeStyle = "red";
+        globals.ctx.strokeRect(this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
+      }
+      if (this.Xvelocity < 0) {
+        globals.ctx.drawImage(this.sprite, this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
+      } else {
+        globals.ctx.save();
+        globals.ctx.scale(-1, 1);
+        const flippedX = -this.bounds.x - this.bounds.w;
+        globals.ctx.drawImage(this.sprite, flippedX, this.bounds.y, this.bounds.w, this.bounds.h);
+        globals.ctx.restore();
+      }
+    }
+  };
+
+  // Utils/utilityAI.js
+  function calculateDistance(rect1, rect2) {
+    const centerX1 = rect1.x + rect1.width / 2;
+    const centerY1 = rect1.y + rect1.height / 2;
+    const centerX2 = rect2.x + rect2.width / 2;
+    const centerY2 = rect2.y + rect2.height / 2;
+    const dx = centerX2 - centerX1;
+    const dy = centerY2 - centerY1;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+  function determineGameState(health) {
+    if (health > 50) return "safe";
+    if (health > 25) return "warning";
+    return "risky";
+  }
+  function evaluateAction(action, factors) {
+    let score = 0;
+    switch (action) {
+      case "attack":
+        if (factors.health > 50) {
+          score += 5;
+          if (factors.position === "closeToEnemy") {
+            score += 10;
+          }
+        }
+        break;
+      case "defend":
+        if (factors.health < 50) {
+          score += 10;
+        }
+        break;
+      case "run":
+        if (factors.health < 30) {
+          score += 15;
+          if (factors.position === "closeToEnemy") {
+            score += 5;
+          }
+        }
+        break;
+      case "idle":
+        score = 1;
+        break;
+      default:
+        console.warn(`Unknown action: ${action}`);
+    }
+    return Math.max(0, score);
+  }
+  var UtilityAI = class {
+    constructor(actionWeights) {
+      this.actionWeights = actionWeights;
+      this.actions = Object.keys(actionWeights);
+      this.timer = 10;
+    }
+    update(factors) {
+      this.timer += 0.1;
+      const distance = calculateDistance(factors.characterPosition, factors.playerPosition);
+      const closeDistanceThreshold = 25;
+      factors.position = distance < closeDistanceThreshold ? "closeToEnemy" : "farFromEnemy";
+      factors.gameState = determineGameState(factors.health);
+      const scores = this.actions.map((action) => {
+        const utilityScore = evaluateAction(action, factors);
+        const weight = this.actionWeights[action] || 1;
+        return utilityScore * weight;
+      });
+      const totalScore = scores.reduce((sum, score) => sum + score, 0);
+      if (totalScore === 0) return this.actions[0];
+      let randomValue = Math.random() * totalScore;
+      let accumulatedScore = 0;
+      for (let i = 0; i < this.actions.length; i++) {
+        accumulatedScore += scores[i];
+        if (randomValue < accumulatedScore) {
+          if (this.timer > 15) {
+            this.timer = 0;
+            return this.actions[i];
+          }
+        }
+      }
+    }
+  };
+
+  // Utils/boss.js
+  function spawnEnemy(player2, e) {
+    let newE = e.toLowerCase();
+    if (newE == "chicken" || newE == "duck") {
+      globals.enemys.push(new Enemy(player2, "./Duck.png"));
+      globals.mobsLeft += 1;
+    }
+    if (newE == "baby chicken" || newE == "baby duck") {
+      globals.enemys.push(new Enemy(player2, "./BabyDuck.png"));
+      globals.mobsLeft += 1;
+    }
+  }
+  var Boss = class {
+    constructor(health, player2, actions2) {
+      this.bounds = new Rect(0, 150, 100, 100);
+      this.speed = 1;
+      this.actions = actions2;
+      this.Velocity = new Point(0, 0);
+      this.gravity = 0.2;
+      this.image = new Image();
+      this.image.src = "./BabyDuck.png";
+      this.factors = {
+        health,
+        characterPosition: this.bounds,
+        playerPosition: player2.bounds,
+        position: "",
+        // Will be set in the update method
+        gameState: ""
+        // Will be set in the update method
+      };
+      this.ableToAttack = false;
+      setTimeout(() => {
+        this.ableToAttack = true;
+      }, 3e3);
+      this.ai = new UtilityAI(this.actions);
+      this.player = player2;
+      this.alive = true;
+      this.isGrounded = false;
+      this.currentAction = null;
+    }
+    knockBack() {
+      if (this.Velocity.x > 0) {
+        this.bounds.x -= this.speed * 50;
+      } else {
+        this.bounds.x += this.speed * 50;
+      }
+    }
+    draw() {
+      if (this.alive) {
+        globals.ctx.drawImage(this.image, this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
+      }
+    }
+    update(level) {
+      const BASE_COOLDOWN = 1e4;
+      const MIN_COOLDOWN = 1e3;
+      if (this.ableToAttack) {
+        spawnEnemy(this.player, "baby duck");
+        this.ableToAttack = false;
+        let cooldownPeriod = BASE_COOLDOWN - globals.timePlayed * 100;
+        cooldownPeriod = Math.max(cooldownPeriod, MIN_COOLDOWN);
+        setTimeout(() => {
+          this.ableToAttack = true;
+        }, cooldownPeriod);
+      }
+      if (this.factors.health <= 0) {
+        this.alive = false;
+        return;
+      }
+      if (this.alive) {
+        this.bounds.x += this.Velocity.x;
+        if (this.Velocity.x > this.speed) {
+          this.Velocity.x = this.speed - 0.1;
+        }
+        if (this.Velocity.x < -this.speed) {
+          this.Velocity.x = -this.speed + 0.1;
+        }
+        const tileX = Math.floor((this.bounds.x + this.bounds.w / 2) / globals.BLOCKSIZE);
+        const tileY = Math.floor(this.bounds.y / globals.BLOCKSIZE);
+        const tileIndex = new Point(tileX, tileY);
+        const right_tile1 = level.get(tileIndex.add(1, 0));
+        const right_tile2 = level.get(tileIndex.add(1, 1));
+        const left_tile1 = level.get(tileIndex.add(0, 0));
+        const left_tile2 = level.get(tileIndex.add(0, 1));
+        let bottomTiles = [];
+        const numRows = Math.floor(this.bounds.h / (globals.BLOCKSIZE - 5));
+        const numCols = Math.floor(this.bounds.w / (globals.BLOCKSIZE - 5));
+        for (let i = 0; i < numRows; i++) {
+          for (let j = 0; j < numCols; j++) {
+            bottomTiles.push(level.get(tileIndex.add(j - 1, i + 1)));
+          }
+        }
+        for (let i = 0; i < bottomTiles.length; i++) {
+          globals.debugBlocks.push(bottomTiles[i]);
+        }
+        this.isGrounded = false;
+        if (right_tile1 && right_tile1.WHATBlockAmI === 1 && right_tile2 && right_tile2.WHATBlockAmI === 1) {
+          this.bounds.x = (tileIndex.x - 2) * globals.BLOCKSIZE;
+          this.Velocity.x = 0;
+        } else if (left_tile1 && left_tile1.WHATBlockAmI === 1 && left_tile2 && left_tile2.WHATBlockAmI === 1) {
+          this.bounds.x = (tileIndex.x + 1) * globals.BLOCKSIZE;
+          this.Velocity.x = 0;
+        } else {
+          for (let tile of bottomTiles) {
+            if (tile.WHATBlockAmI !== 0) {
+              this.isGrounded = true;
+            }
+          }
+        }
+        if (this.currentAction) {
+          this.currentAction();
+        }
+        if (this.isGrounded) {
+          this.bounds.y = Math.floor(this.bounds.y / globals.BLOCKSIZE) * globals.BLOCKSIZE;
+          this.Velocity.y = 0;
+          this.ableToJump = true;
+        } else {
+          this.applyGravity();
+        }
+        this.factors.characterPosition = this.bounds;
+        this.factors.playerPosition = this.player.bounds;
+        let action = this.ai.update(this.factors);
+        if (action === "attack") {
+          this.currentAction = this.attack;
+        } else if (action === "defend") {
+          this.currentAction = this.defend;
+        } else if (action === "run") {
+          this.currentAction = this.runAway;
+        } else if (action === "idle") {
+          this.currentAction = this.idle;
+        }
+        this.collision();
+      }
+    }
+    hit(n) {
+      this.factors.health -= n;
+      this.knockBack();
+      globals.mobsLeft -= 1;
+    }
+    collision() {
+      for (let i = 0; i < globals.bullets.length; i++) {
+        let bulletRect = new Rect(globals.bullets[i].x, globals.bullets[i].y, globals.bullets[i].w, globals.bullets[i].h);
+        if (this.bounds.intersects(bulletRect) || bulletRect.intersects(this.bounds)) {
+          this.hit(this.player.gun.damage);
+          globals.bullets.splice(i, 1);
+        }
+      }
+    }
+    applyGravity() {
+      this.Velocity.y += this.gravity;
+      this.bounds.y += this.Velocity.y;
+    }
+    attack() {
+      if (this.player.bounds.x > this.bounds.x) {
+        this.Velocity.x += this.speed;
+      } else {
+        this.Velocity.x -= this.speed;
+      }
+    }
+    defend() {
+      console.log("Defend");
+    }
+    runAway() {
+      console.log("Run away");
+      if (this.bounds.x > this.player.bounds.x) {
+        this.Velocity.x += this.speed;
+      } else {
+        this.Velocity.x -= this.speed;
+      }
+    }
+    idle() {
+      console.log("Do nothing");
+    }
+  };
+
+  // main.js
+  var globals = new Globals();
+  var player = new Player();
+  var actions = {
+    "attack": 15,
+    "defend": 10,
+    "run": 5,
+    "idle": 4
+  };
+  var boss = new Boss(100, player, actions);
+  globals.boss = boss;
+  globals.mobsLeft += 1;
+  globals.canvas.addEventListener("mousedown", (_) => {
+    globals.mouseClicked = true;
+  });
+  globals.canvas.addEventListener("mouseup", (_) => {
+    globals.mouseClicked = false;
+  });
+  globals.canvas.addEventListener("mousemove", (e) => {
+    globals.mouseX = e.clientX;
+    globals.mouseY = e.clientY;
+  });
+  var intro = new Level(globals.blocks, globals.IntroOptions.level, globals.IntroOptions, "intro");
+  var level1 = new Level(globals.blocks, globals.GameLevel1Options.level, globals.GameLevel1Options, "level1");
+  console.log(globals.IntroOptions);
+  var challangeText = new Text("The 13th Bullet", globals.canvas.width / 5, globals.canvas.height / 2 - 50, 75, 10, false);
+  var js13k = new Text("JS13K by a 15 year old", globals.canvas.width / 4.5, globals.canvas.height / 2 + 50, 50, 5, false);
+  var pressEnter = new Text("Press Enter to start", globals.canvas.width / 3.25, globals.canvas.height / 2 + 125, 35, 5, true);
+  var AsTheLast = new Text("As the last bullet fires and the weapon falls silent", 400, 100, 20, 15, false);
+  var AnOverwhelming = new Text("an overwhelming dread engulfs him", 600, 125, 20, 15, false);
+  var AndHeFeels = new Text("and he feels himself growing larger", 585, 150, 20, 15, false);
+  function keyboardInit() {
+    window.addEventListener("keydown", (e) => {
+      globals.currentKey.set(e.key, true);
+      globals.navKey.set(e.key, true);
+    });
+    window.addEventListener("keyup", (e) => {
+      globals.currentKey.set(e.key, false);
+      globals.navKey.set(e.key, false);
+    });
+  }
+  var part = 0;
+  var IntroText1 = new Text("This is your player", 415, 200, 20, 20, false);
+  var KeyboardText1 = new Text("Use W A S D or The Arrow Keys", 325, 200, 20, 20, false);
+  var RunAroundJump = new Text("to run around and jump", 400, 230, 20, 20, false);
+  var PhobiaText = new Text("You have a phobia about running out of bullets", 200, 200, 20, 20, false);
+  var PhobiaText2 = new Text("You only have 13 left ....", 400, 230, 20, 20, false);
+  var BulletText = new Text("Click to shoot a bullet", 375, 400, 20, 20, false);
+  var DontRunOut = new Text("Whatever you do dont run out of bullets", 280, 400, 20, 20, false);
+  var PressEnterToSkip = new Text("Press Enter to skip", 10, 10, 15, 500, true);
+  var end = new Text("You died with " + globals.kills + " kill", 700, 200, 25, 20, false);
+  function loop() {
+    globals.debugBlocks = [];
+    globals.ctx.fillStyle = "black";
+    globals.ctx.imageSmoothingEnabled = false;
+    globals.ctx.clearRect(0, 0, globals.canvas.width, globals.canvas.height);
+    if (globals.currentScreen == "splash") {
+      challangeText.draw();
+      js13k.draw();
+      pressEnter.draw();
+      challangeText.startTyping();
+      js13k.startTyping();
+      pressEnter.startTyping();
+      if (globals.currentKey.get("Enter")) {
+        setTimeout(() => {
+          globals.currentScreen = "intro";
+          intro.init();
+        }, 10);
+      }
+    }
+    if (globals.currentScreen == "end") {
+      end.text = "You died with " + globals.kills + " kill";
+      end.draw();
+      end.startTyping();
+    }
+    if (globals.currentScreen == "intro") {
+      globals.ctx.save();
+      globals.ctx.scale(1.25, 1.25);
+      globals.ctx.translate(-globals.SCROLLX, -globals.SCROLLY);
+      globals.currentLevel = intro;
+      PressEnterToSkip.draw();
+      PressEnterToSkip.startTyping();
+      setTimeout(() => {
+        if (globals.currentKey.get("Enter")) {
+          player.reset();
+          globals.currentScreen = "game";
+          globals.currentLevel = level1;
+          const song = globals.currentLevel.options.song;
+          let mySongData = globals.zzfxM(...song);
+          let myAudioNode = globals.zzfxP(...mySongData);
+          part = null;
+        }
+      }, 1e3);
+      if (part === 0) {
+        PhobiaText.draw();
+        PhobiaText.startTyping();
+        PhobiaText2.draw();
+        PhobiaText2.startTyping();
+        setTimeout(() => {
+          part = 1;
+        }, 5e3);
+      }
+      if (part === 1) {
+        IntroText1.draw();
+        IntroText1.startTyping();
+        setTimeout(() => {
+          part = 2;
+        }, 5e3);
+      }
+      if (part === 2) {
+        KeyboardText1.draw();
+        KeyboardText1.startTyping();
+        RunAroundJump.draw();
+        RunAroundJump.startTyping();
+        setTimeout(() => {
+          part = 3;
+        }, 5e3);
+      }
+      if (part === 3) {
+        BulletText.draw();
+        BulletText.startTyping();
+        setTimeout(() => {
+          part = 4;
+        }, 5e3);
+      }
+      if (part === 4) {
+        DontRunOut.draw();
+        DontRunOut.startTyping();
+        setTimeout(() => {
+          part = 5;
+        }, 7500);
+      }
+      if (part == 5) {
+        player.reset();
+        globals.currentScreen = "game";
+        globals.currentLevel = level1;
+        const song = globals.currentLevel.options.song;
+        let mySongData = globals.zzfxM(...song);
+        let myAudioNode = globals.zzfxP(...mySongData);
+        part = null;
+      }
+      for (let i = 0; i < globals.blocks.length; i++) {
+        globals.blocks[i].draw(globals.ctx, globals.currentLevel.options.tint.r, globals.currentLevel.options.tint.g, globals.currentLevel.options.tint.b);
+      }
+      player.draw(globals.ctx);
+      globals.bullets.forEach((bullet) => {
+        bullet.update(globals.ctx);
+      });
+      player.update(globals.currentKey, globals.currentLevel);
+      globals.SCROLLX = (player.bounds.x - globals.canvas.width / 2) / 1.4;
+      globals.ctx.restore();
+    }
+    if (globals.currentScreen === "big") {
+      AsTheLast.draw();
+      AnOverwhelming.draw();
+      AndHeFeels.draw();
+      AsTheLast.startTyping();
+      setTimeout(() => {
+        AnOverwhelming.startTyping();
+        setTimeout(() => {
+          AndHeFeels.startTyping();
+        }, 3500);
+      }, 6e3);
+    }
+    if (globals.currentScreen == "game") {
+      globals.timePlayed += 0.05;
+      globals.ctx.save();
+      globals.ctx.scale(1.25, 1.25);
+      globals.ctx.translate(-globals.SCROLLX, -globals.SCROLLY);
+      globals.particleEngine.update(0.01);
+      player.update(globals.currentKey, globals.currentLevel);
+      boss.update(globals.currentLevel);
+      globals.particleEngine.draw();
+      globals.bullets.forEach((bullet) => {
+        bullet.update(globals.ctx);
+      });
+      if (globals.debug == true) {
+        for (let i = 0; i < globals.debugBlocks.length; i++) {
+          globals.ctx.lineWidth = 5;
+          globals.ctx.strokeStyle = "red";
+          if (i == 4) {
+            globals.ctx.strokeStyle = "blue";
+          }
+          if (i == 5) {
+            globals.ctx.strokeStyle = "green";
+          }
+          globals.ctx.strokeRect(globals.debugBlocks[i].bounds.x, globals.debugBlocks[i].bounds.y, globals.debugBlocks[i].bounds.w, globals.debugBlocks[i].bounds.h);
+        }
+      }
+      for (let i = 0; i < globals.blocks.length; i++) {
+        globals.blocks[i].draw(globals.ctx, globals.currentLevel.options.tint.r, globals.currentLevel.options.tint.g, globals.currentLevel.options.tint.b);
+      }
+      player.draw(globals.ctx, globals.particleEngine);
+      for (let i = 0; i < globals.enemys.length; i++) {
+        globals.enemys[i].draw();
+        globals.enemys[i].update(globals.currentLevel);
+      }
+      if (globals.PlayerToBig) {
+        globals.currentScreen = "big";
+      }
+      if (!globals.PlayerToBig) {
+        let leveltext = new Text(globals.currentLevel.id, 350, 200, 75, 500, false);
+        leveltext.draw();
+      }
+      boss.draw();
+      globals.SCROLLX = (player.bounds.x - globals.canvas.width / 2) / 1.4;
+      globals.ctx.restore();
+    }
+    console.log(globals.mobsLeft);
+    if (globals.mobsLeft < 1) {
+    }
+    globals.navKey.clear();
+    requestAnimationFrame(loop);
+  }
+  function init() {
+    keyboardInit();
+    loop();
+  }
+  init();
+})();

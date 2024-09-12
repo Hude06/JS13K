@@ -1,8 +1,10 @@
 import { ParticleEngine } from "./particalEngine.js";
-const rowPattern = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
-const FullEmptyRow = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-const emptyRowLedge = [1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1];
-const emptyRowLedgeOther = [1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1];
+const rowPattern = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0
+
+];
+const FullEmptyRow = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,];
+const emptyRowLedge = [1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,];
+const emptyRowLedgeOther = [1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,];
 
 let zzfxR=44100
 
@@ -62,7 +64,7 @@ export class Globals {
         this.mobsLeft = 0;
         this.blocks = [];
         this.SCROLLX = 200;
-        this.debug = true;
+        this.debug = false;
         this.SCROLLY = 0;
         this.canvas = document.getElementById("canvas");
         this.ctx = this.canvas.getContext("2d");
@@ -73,6 +75,7 @@ export class Globals {
         this.mouseX = 0;
         this.mouseY = 0;
         this.PlayerToBig = false;
+        this.kills = 0;
         this.BLOCKSIZE = 32;
         this.currentScreen = "splash";
         this.type_distance = 0;

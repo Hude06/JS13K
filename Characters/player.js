@@ -45,10 +45,7 @@ class Gun {
             }
         } else {
             if (globals.currentScreen !== "intro") {
-                this.player.grow();
-                setTimeout(() => {
-                    globals.PlayerToBig = true;
-                },5000)
+                globals.PlayerToBig = true;
             }
         }
     }
@@ -227,8 +224,9 @@ export class Player {
         const right_tile2 = level.get(tileIndex.add(1, 1));
         const left_tile1 = level.get(tileIndex.add(0, 0));
         const left_tile2 = level.get(tileIndex.add(0, 1));
-        let bottom1 = level.get(tileIndex.add(0, 1));
+        const bottom1 = level.get(tileIndex.add(0, 1));
         const bottom2 = level.get(tileIndex.add(1, 1));
+
         globals.debugBlocks.push(right_tile1)
         globals.debugBlocks.push(right_tile2)
         globals.debugBlocks.push(left_tile1)
@@ -260,6 +258,11 @@ export class Player {
                 this.applyGravity();
             }
         }
+        if (!this.isGrounded) {
+            if (right_tile1.WHATBlockAmI == 1 || right_tile2.WHATBlockAmI == 1) {
+                this.Yvelocity = 2;
+            }
+        }
         if (globals.mouseClicked || globals.currentKey.get("e")) {
             this.gun.shoot();
         }
@@ -270,10 +273,8 @@ export class Player {
         this.collision();
         if (this.health <= 0) {
             zzfx(...[2,,727,.01,.03,.53,3,1.39,.9,.1,,,,1.9,-44,.4,.39,.31,.12]); // Explosion 334
-            alert("You died")
-            setTimeout(() => {
-                location.reload();
-            },1000)
+            globals.currentScreen = "end";
+
         }
     }
  

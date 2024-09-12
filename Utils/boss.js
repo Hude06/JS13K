@@ -16,7 +16,7 @@ function spawnEnemy(player,e) {
 }
 export class Boss {
     constructor(health, player, actions) {
-        this.bounds = new Rect(200, 150, 100, 100);
+        this.bounds = new Rect(0, 150, 100, 100);
         this.speed = 1;
         this.actions = actions;
         this.Velocity = new Point(0, 0);

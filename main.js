@@ -27,7 +27,7 @@ globals.canvas.addEventListener("mousemove", (e) => {
 let intro = new Level(globals.blocks,globals.IntroOptions.level,globals.IntroOptions,"intro");
 let level1 = new Level(globals.blocks,globals.GameLevel1Options.level,globals.GameLevel1Options,"level1");
 console.log(globals.IntroOptions)
-let challangeText = new Text("The 13th Challenge",globals.canvas.width/6,globals.canvas.height/2-50,75,10,false);
+let challangeText = new Text("The 13th Bullet",globals.canvas.width/5,globals.canvas.height/2-50,75,10,false);
 let js13k = new Text("JS13K by a 15 year old",globals.canvas.width/4.5,globals.canvas.height/2+50,50,5,false);
 let pressEnter = new Text("Press Enter to start",globals.canvas.width/3.25,globals.canvas.height/2+125,35,5,true);
 
@@ -53,7 +53,7 @@ let PhobiaText2 = new Text("You only have 13 left ....",400,230,20,20,false)
 let BulletText = new Text("Click to shoot a bullet",375,400,20,20,false)
 let DontRunOut = new Text("Whatever you do dont run out of bullets",280,400,20,20,false)
 let PressEnterToSkip = new Text("Press Enter to skip",10,10,15,500,true)
-
+let end = new Text("You died with " + globals.kills + " kill", 700, 200, 25, 20, false);
 function loop() {
     globals.debugBlocks = []
     globals.ctx.fillStyle = "black";
@@ -73,6 +73,11 @@ function loop() {
                 
             }, 10);
         }
+    }
+    if (globals.currentScreen == "end") {
+        end.text = "You died with " + globals.kills + " kill";
+        end.draw();
+        end.startTyping();
     }
     if (globals.currentScreen == "intro") {
         globals.ctx.save()
