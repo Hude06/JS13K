@@ -98,26 +98,3 @@ export class UtilityAI {
         }
     }
 }
-
-// Example usage
-// const actionWeights = {
-//     "attack": 10, // Weight for 'attack'
-//     "defend": 3, // Weight for 'defend'
-//     "run": 1,    // Weight for 'run'
-//     "idle": 3  // Weight for 'idle'
-// };
-
-// // Define positions using Rect
-// const characterPosition = new Rect(10, 10, 10, 10); // Example position for character
-// const playerPosition = new Rect(100, 20, 10, 10); // Example position for player
-
-// const factors = {
-//     health: 65, // Example health value (critically low)
-//     characterPosition: characterPosition,
-//     playerPosition: playerPosition,
-//     position: '', // Will be set in the update method
-//     gameState: '' // Will be set in the update method
-// };
-
-// // const bossAI = new UtilityAI(actionWeights);
-// // const nextAction = bossAI.update(factors);

@@ -30,7 +30,8 @@ export class Boss {
             position: '', // Will be set in the update method
             gameState: '' // Will be set in the update method
         };
-        this.ableToAttack = true;
+        this.ableToAttack = false;
+        setTimeout(() => {this.ableToAttack = true},3000)
         this.ai = new UtilityAI(this.actions);
         this.player = player;
         this.alive = true;
@@ -51,6 +52,26 @@ export class Boss {
     }
 
     update(level) {
+        const BASE_COOLDOWN = 10000; // 10 seconds in milliseconds
+        const MIN_COOLDOWN = 1000; // 1 second in milliseconds
+        
+        if (this.ableToAttack) {
+            spawnEnemy(this.player, "baby duck");
+            this.ableToAttack = false;
+        
+            // Calculate cooldown based on playtime
+            // globals.timePlayed is updated every frame, so this will be a continuous decrease
+            let cooldownPeriod = BASE_COOLDOWN - (globals.timePlayed * 100); // Adjust multiplier as needed
+        
+            // Ensure cooldown doesn't drop below minimum value
+            cooldownPeriod = Math.max(cooldownPeriod, MIN_COOLDOWN);
+        
+            // Set the timeout for the attack cooldown
+            setTimeout(() => {
+                this.ableToAttack = true;
+            }, cooldownPeriod);
+        }
+
         if (this.factors.health <= 0) {
             this.alive = false;
             return;
@@ -140,7 +161,7 @@ export class Boss {
     collision() {
         for (let i = 0; i < globals.bullets.length; i++) {
             let bulletRect = new Rect(globals.bullets[i].x, globals.bullets[i].y, globals.bullets[i].w, globals.bullets[i].h);
-            if (this.bounds.intersects(bulletRect)) {
+            if (this.bounds.intersects(bulletRect) || bulletRect.intersects(this.bounds)) {
                 this.hit(this.player.gun.damage);
                 globals.bullets.splice(i, 1);
                 // Optionally, you can remove or deactivate the bullet here
@@ -156,15 +177,6 @@ export class Boss {
     }
 
     attack() {
-        if (this.ableToAttack) {
-            spawnEnemy(this.player, "baby duck");
-            this.ableToAttack = false
-            setTimeout(() => {
-                this.ableToAttack = true;
-            },2000);
-        }
-
-        
         if (this.player.bounds.x > this.bounds.x) {
             this.Velocity.x += this.speed;
         }

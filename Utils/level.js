@@ -47,9 +47,9 @@ export class Level {
   }
 
   init() {
+    console.log("Level is",this.id);
     this.height = this.level.length;
     this.width = this.level[0].length;
-
     for (let i = 0; i < this.level.length; i++) {
       for (let w = 0; w < this.level[i].length; w++) {
         let block = this.level[i][w];

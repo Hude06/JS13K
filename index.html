@@ -1,13 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="zzfx.js"></script>
-    <script src="zzfxm.min.js"></script>
-    <script type="module" src="Utils/utilityAI.js"></script>
     <script type="module" src="main.js"></script>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <canvas id = "canvas" width="1920" height="1080"></canvas>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+        }
+        #canvas {
+            max-width: 100%;
+            max-height: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
 </body>
 </html>

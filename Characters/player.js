@@ -66,7 +66,7 @@ class Gun {
 }
 export class Player {
     constructor() {
-        this.bounds = new Rect(500, 500, 30, 30);
+        this.bounds = new Rect(700, 500, 30, 30);
         this.animator = new Point(0, 0);
         this.gravity = 0.27;
         this.Yvelocity = 0;
@@ -91,7 +91,7 @@ export class Player {
 
     }
     reset() {
-        this.bounds = new Rect(500, 500, 30, 30);
+        this.bounds = new Rect(700, 500, 30, 30);
         this.animator = new Point(0, 0);
         this.gravity = 0.27;
         this.Yvelocity = 0;
@@ -114,16 +114,6 @@ export class Player {
         this.moveable = true;
         this.bulletsText = new Text("Bullets - ", 75 + globals.SCROLLX, 10, 25, 500, false);
         console.log("RESET",this.gravity,this.Xvelocity,this.Yvelocity)
-    }
-    toBig() {
-        setTimeout(() => {
-            console.log("Drawing")
-            drawText("As the last bullet fires and the weapon falls silent",200,100,10)
-            drawText("an overwhelming dread engulfs him",200,125,10)
-            drawText("and he feels himself growing larger",200,150,10)
-            drawText("a physical manifestation of his terror at running out of ammunition.",200,200,10)
-            this.toBig();
-        },10)
     }
     grow() {
         this.moveable = false;
@@ -208,7 +198,7 @@ export class Player {
     }
     collision() {
         for (let i = 0; i < globals.enemys.length; i++) {
-            if (this.bounds.intersects(globals.enemys[i].bounds)) {
+            if (this.bounds.intersects(globals.enemys[i].bounds) || globals.enemys[i].bounds.intersects(this.bounds)) {
                 this.health -= 0.25;
                 zzfx(...[1.98,,523,.01,.01,.07,2,1.9,-8.7,,,,.09,,36,.2,.17,.67,.04]); // Hit 118
                 this.knockback(this.Xvelocity)
