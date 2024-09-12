@@ -5,11 +5,11 @@ import { UtilityAI } from "./utilityAI.js";
 function spawnEnemy(player,e) {
     let newE = e.toLowerCase();
     if (newE == "chicken" || newE == "duck") {
-        globals.enemys.push(new Enemy(player,"../Assets/Duck.png"))
+        globals.enemys.push(new Enemy(player,"./Duck.png"))
         globals.mobsLeft += 1
     }
     if (newE == "baby chicken" || newE == "baby duck") {
-        globals.enemys.push(new Enemy(player,"../Assets/BabyDuck.png"))
+        globals.enemys.push(new Enemy(player,"./BabyDuck.png"))
         globals.mobsLeft += 1
     }
 
@@ -22,7 +22,7 @@ export class Boss {
         this.Velocity = new Point(0, 0);
         this.gravity = 0.2;
         this.image = new Image();
-        this.image.src = "../Assets/BabyDuck.png";
+        this.image.src = "./BabyDuck.png";
         this.factors = {
             health: health,
             characterPosition: this.bounds,
@@ -164,8 +164,6 @@ export class Boss {
             if (this.bounds.intersects(bulletRect) || bulletRect.intersects(this.bounds)) {
                 this.hit(this.player.gun.damage);
                 globals.bullets.splice(i, 1);
-                // Optionally, you can remove or deactivate the bullet here
-                // globals.bullets.splice(globals.bullets.indexOf(bullet), 1);
             }
         }
     }

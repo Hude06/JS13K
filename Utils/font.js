@@ -17,7 +17,7 @@ export class Text {
     draw() {
         let ctx = globals.ctx;
         const font = new Image();
-        font.src = "../Assets/WhiteFont.png";
+        font.src = "./WhiteFont.png";
             for (let t = 0; t < this.text.length; t++) {
                 if(t > this.distance) {
                     break;

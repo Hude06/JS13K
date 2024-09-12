@@ -4,12 +4,13 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "mkdir -p minified && esbuild main.js --bundle --outfile=./minified/out.js && cp ./mini.html ./minified/index.html && cp ./zzfx.js ./minified/zzfx.js && cp ./zzfxm.min.js ./minified/zzfxm.min.js",
+    "kill": "rm -rf minified && rm -rf minified.zip",
+    "build": "mkdir -p minified && esbuild main.js --bundle --outfile=./minified/out.js && cp ./mini.html ./minified/index.html",
     "minify": "google-closure-compiler -O ADVANCED ./minified/out.js --js_output_file ./minified/out.js",
     "uglify": "uglifyjs --output ./minified/out.js --compress --mangle -- ./minified/out.js ",
     "compress": "zip -r ./minified.zip ./minified && ls -l ./minified.zip",
     "assets":"cp -r ./assets/*.png ./minified/",
-    "everything": "npm run build && npm run minify && npm run uglify && npm run compress"
+    "everything": "npm run kill && npm run build && npm run minify && npm run uglify && npm run compress"
   },
   "author": "",
   "license": "ISC",
